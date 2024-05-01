@@ -1,0 +1,47 @@
+package com.luzhu.truck.controller.insurancecompany;
+
+import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
+import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
+import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
+import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
+import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
+import com.luzhu.truck.response.PageResult;
+import com.luzhu.truck.response.ResponseModel;
+import com.luzhu.truck.service.insurancecompany.InsuranceCompanyService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/insuranceCompany")
+public class InsuranceCompanyController {
+    @Autowired
+    private InsuranceCompanyService insuranceCompanyService;
+    @GetMapping("/getInsuranceCompany")
+    public ResponseModel<PageResult<InsuranceCompany>> getInsuranceCompany(@RequestBody BaseParam param) {
+        PageResult<InsuranceCompany> insuranceCompany = insuranceCompanyService.getInsuranceCompany(param);
+        return new ResponseModel<>(insuranceCompany);
+    }
+
+    @PostMapping("/addInsuranceCompany")
+    public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddInsuranceComParam addInsuranceComParam) {
+        insuranceCompanyService.addInsuranceCom(addInsuranceComParam);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/updateInsuranceCompany")
+    public ResponseModel<Object> updateInsuranceCompany(@RequestBody @Valid UpdateInsuranceComParam updateCarAgencyParam) {
+        insuranceCompanyService.updateInsuranceCompany(updateCarAgencyParam);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/deleteInsuranceCompany/{id}")
+    public ResponseModel<Object> deleteInsuranceCompany(@PathVariable int id) {
+        insuranceCompanyService.deleteInsuranceCompany(id);
+
+        return new ResponseModel<>();
+    }
+}
