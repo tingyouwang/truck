@@ -11,5 +11,10 @@ public interface CarFeeDao extends BaseDao<CarFee, String> {
     nativeQuery = true)
     List<CarFee> getUsingCarFee();
 
+    @Query(value = "SELECT * FROM car_fee WHERE car_license_num IN (SELECT license_number FROM car WHERE is_using = 1)" +
+            "AND manage_fee > 0",
+            nativeQuery = true)
+    List<CarFee> getUsingCarFeeForManageFee();
+
 
 }

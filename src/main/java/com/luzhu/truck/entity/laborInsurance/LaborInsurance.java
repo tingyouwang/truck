@@ -1,5 +1,6 @@
 package com.luzhu.truck.entity.laborInsurance;
 
+import com.luzhu.truck.entity.BaseCompositePk;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "labor_insurance")
-@IdClass(LaborInsuranceCompositePk.class)
+@IdClass(BaseCompositePk.class)
 @Data
 public class LaborInsurance {
     @Id
