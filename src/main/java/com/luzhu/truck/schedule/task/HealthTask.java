@@ -35,7 +35,7 @@ public class HealthTask {
 
         List<CarFee> usingCarFee = carFeeDao.getUsingCarFee();
 
-        log.info(String.format("排程:每月月初產出勞健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee));
+        log.info(String.format("[排程HealthTask]每月月初產出勞健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee));
         LocalDateTime start = LocalDateTime.now();
         try {
             healthFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
@@ -44,7 +44,7 @@ public class HealthTask {
             log.error("每月月初產出勞健保費用錯誤:" + e.getMessage());
         }
         LocalDateTime end = LocalDateTime.now();
-        log.info("排程:每月月初產出勞健保費用結束, 花費時間:" + Duration.between(start, end).getSeconds());
+        log.info("[排程HealthTask]每月月初產出勞健保費用結束, 花費時間:" + Duration.between(start, end).getSeconds());
 
     }
 }
