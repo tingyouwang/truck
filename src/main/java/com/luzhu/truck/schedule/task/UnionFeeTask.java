@@ -35,11 +35,12 @@ public class UnionFeeTask {
                 usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
-            unionFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
+            int i = unionFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
+            LocalDateTime end = LocalDateTime.now();
+            log.info("[UnionFeeTask] 花費時間:" + Duration.between(start, end).getSeconds() + "公會費筆數:" + i);
         } catch (Exception e) {
             log.error("[UnionFeeTask] generateMonthBill 錯誤:" + e.getMessage());
         }
-        LocalDateTime end = LocalDateTime.now();
-        log.info("[UnionFeeTask] 花費時間:" + Duration.between(start, end).getSeconds());
+
     }
 }

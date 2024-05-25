@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class LaborInsuranceService {
     @Autowired
     private LaborInsuranceDao laborInsuranceDao;
-    public void monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
+    public int monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
         List<LaborInsurance> laborInsurances = new ArrayList<>();
 
         usingCarFee.stream().peek(dto -> {
@@ -33,7 +33,7 @@ public class LaborInsuranceService {
         }).collect(Collectors.toList());
 
         //每月勞保
-        laborInsuranceDao.saveAll(laborInsurances);
+        return laborInsuranceDao.saveAll(laborInsurances).size();
 
     }
 }

@@ -34,12 +34,12 @@ public class ManageFeeTask {
                 usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
-            manageFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
+            int i = manageFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
+            LocalDateTime end = LocalDateTime.now();
+            log.info("[ManageFeeTask] 花費時間:" + Duration.between(start, end).getSeconds() + "插入管理費筆數:" + i);
         } catch (Exception e) {
             log.error("[ManageFeeTask] generateMonthBill 錯誤:" + e.getMessage());
         }
-        LocalDateTime end = LocalDateTime.now();
-        log.info("[ManageFeeTask] 花費時間:" + Duration.between(start, end).getSeconds());
 
     }
 }

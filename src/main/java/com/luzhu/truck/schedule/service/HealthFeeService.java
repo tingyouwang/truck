@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class HealthFeeService {
     @Autowired
     private HealthFeeDao healthFeeDao;
-    public void monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
+    public int monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
         List<HealthFee> healthFees = new ArrayList<>();
 
         usingCarFee.stream().peek(dto -> {
@@ -35,7 +35,7 @@ public class HealthFeeService {
         }).collect(Collectors.toList());
 
         //每月健保
-        healthFeeDao.saveAll(healthFees);
+        return healthFeeDao.saveAll(healthFees).size();
     }
 
 }

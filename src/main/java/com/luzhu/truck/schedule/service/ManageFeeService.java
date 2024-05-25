@@ -18,7 +18,7 @@ public class ManageFeeService {
     @Autowired
     private ManageFeeDao manageFeeDao;
 
-    public void monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
+    public int monthlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
         List<ManageFee> manageFees = new ArrayList<>();
 
         usingCarFee.stream().peek(dto -> {
@@ -31,6 +31,6 @@ public class ManageFeeService {
             manageFees.add(manageFee);
         }).collect(Collectors.toList());
 
-        manageFeeDao.saveAll(manageFees);
+        return manageFeeDao.saveAll(manageFees).size();
     }
 }
