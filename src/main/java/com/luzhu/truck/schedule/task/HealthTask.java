@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -29,13 +30,12 @@ public class HealthTask {
 //    @Scheduled(cron = "0/10 * * * * *")
     public void generateHealthFee() {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 
         List<CarFee> usingCarFee = carFeeDao.getUsingCarFee();
 
-        log.info(String.format("[排程HealthTask]每月月初產出勞健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee));
+        log.info(String.format("[排程HealthTask]每月月初產出勞健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
             healthFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);
