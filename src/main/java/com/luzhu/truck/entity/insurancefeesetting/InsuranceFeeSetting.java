@@ -45,10 +45,10 @@ public class InsuranceFeeSetting {
     private LocalDate quitDate;
 
     @Column(name = "create_time", updatable = false, insertable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDate createTime;
+    private Long createTime;
 
     @Column(name = "update_time", insertable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDate updateTime;
+    private Long updateTime;
 
     @Column(name = "update_by")
     private String updateBy;

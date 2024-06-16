@@ -2,13 +2,18 @@ package com.luzhu.truck.service.insurancefeesetting;
 
 import com.luzhu.truck.dao.insurancefee.InsuranceFeeDao;
 import com.luzhu.truck.dao.insurnacefeesetting.InsuranceFeeSettingDao;
+import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
+import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +53,18 @@ public class InsuranceFeeSettingService {
         //todo 如何檢查插入成功
         insuranceFeeDao.save(insuranceFee);
 
+    }
+
+    public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(BaseParam param) {
+        Page<InsuranceFeeSetting> allInsuranceFeeSetting = insuranceFeeSettingDao.getAllInsuranceFeeSetting(param.getPageable());
+        return new PageResult<>(allInsuranceFeeSetting);
+
+    }
+
+    @Transactional
+    public void deleteInsuranceFeeSetting(DeleteInsuranceSettingParam param) {
+        int deleteCount = insuranceFeeSettingDao.deleteInsuranceFeeSettingById(param.getCarLicenseNum(), param.getInsuranceCardNum());
+        Validator.isFalseThrow(1 == deleteCount,
+                new AppException(SystemExceptionEnum.DELETE_ERROR));
     }
 }

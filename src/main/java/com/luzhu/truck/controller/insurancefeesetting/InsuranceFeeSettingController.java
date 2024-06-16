@@ -1,13 +1,11 @@
 package com.luzhu.truck.controller.insurancefeesetting;
 
 import com.luzhu.truck.dto.BaseParam;
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
-import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
-import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
+import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
-import com.luzhu.truck.service.insurancecompany.InsuranceCompanyService;
 import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +17,11 @@ public class InsuranceFeeSettingController {
     @Autowired
     private InsuranceFeeSettingService insuranceFeeSettingService;
 
-    //todo
-//    @GetMapping("/getInsuranceCompany")
-//    public ResponseModel<PageResult<InsuranceCompany>> getInsuranceCompany(@RequestBody BaseParam param) {
-//        PageResult<InsuranceCompany> insuranceCompany = insuranceCompanyService.getInsuranceCompany(param);
-//        return new ResponseModel<>(insuranceCompany);
-//    }
+    @GetMapping("/getInsuranceFeeSetting")
+    public ResponseModel<PageResult<InsuranceFeeSetting>> getInsuranceCompany(@RequestBody BaseParam param) {
+        PageResult<InsuranceFeeSetting> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
+        return new ResponseModel<>(insuranceFeeSetting);
+    }
 
     @PostMapping("/addInsuranceFeeSetting")
     public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddInsuranceFeeSettingParam addInsuranceFeeSettingParam) {
@@ -40,10 +37,10 @@ public class InsuranceFeeSettingController {
 //        return new ResponseModel<>();
 //    }
 //
-//    @PostMapping("/deleteInsuranceCompany/{id}")
-//    public ResponseModel<Object> deleteInsuranceCompany(@PathVariable int id) {
-//        insuranceCompanyService.deleteInsuranceCompany(id);
-//
-//        return new ResponseModel<>();
-//    }
+    @PostMapping("/deleteInsuranceFeeSetting")
+    public ResponseModel<Object> deleteInsuranceCompany(@RequestBody @Valid DeleteInsuranceSettingParam param) {
+        insuranceFeeSettingService.deleteInsuranceFeeSetting(param);
+
+        return new ResponseModel<>();
+    }
 }
