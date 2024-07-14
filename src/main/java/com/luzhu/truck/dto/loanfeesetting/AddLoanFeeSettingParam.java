@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class AddLoanFeeSettingParam {
@@ -14,9 +15,9 @@ public class AddLoanFeeSettingParam {
     @NotBlank(message = "需填入貸款公司")
     private String loanCompany;
     @NotNull
-    private LocalDate startDate;
+    private LocalDateTime startDatetime;
     @NotNull
-    private LocalDate endDate;
+    private LocalDateTime endDatetime;
     @NotNull
     private BigDecimal totalAmount;
     @NotNull

@@ -12,6 +12,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+
 @RestController
 @RequestMapping("/loanFeeSetting")
 public class LoanFeeSettingController {
@@ -23,8 +26,8 @@ public class LoanFeeSettingController {
         return new ResponseModel<>(insuranceCompany);
     }
     @PostMapping("/addLoanFeeSetting")
-    public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddLoanFeeSettingParam addInsuranceComParam) {
-        loanFeeSettingService.addInsuranceCom(addInsuranceComParam);
+    public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddLoanFeeSettingParam addLoanFeeSettingParam) {
+        loanFeeSettingService.addLoanFeeSetting(addLoanFeeSettingParam);
 
         return new ResponseModel<>();
     }

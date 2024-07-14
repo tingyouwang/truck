@@ -1,6 +1,5 @@
 package com.luzhu.truck.schedule.task;
 
-import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
@@ -34,7 +33,7 @@ public class LoanFeeTask {
         String yearMonth = now.format(formatter);
 
         List<LoanFeeSetting> usingLoanFeeSetting = loanFeeSettingDao.getUsingLoanFeeSetting(now);
-        log.info(String.format("[LoanFeeTask] generateMonthBill param:yearMonth:%s, now:%s, 產出公會費的車號:%s", yearMonth, now,
+        log.info(String.format("[LoanFeeTask] generateMonthBill param:yearMonth:%s, now:%s, 產出車貸的車號:%s", yearMonth, now,
                 usingLoanFeeSetting.stream().map(LoanFeeSetting::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
