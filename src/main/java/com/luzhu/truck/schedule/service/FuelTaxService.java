@@ -23,7 +23,7 @@ public class FuelTaxService {
 
         usingCarFee.stream().peek(dto -> {
             FuelTax fuelTax = new FuelTax();
-            fuelTax.setAmount(BigDecimal.valueOf(dto.getHealthyFee()));
+            fuelTax.setAmount(BigDecimal.valueOf(dto.getFuelTaxSpring()));
             fuelTax.setCarLicenseNum(dto.getCarLicenseNum());
             fuelTax.setExpenseYearMonth(yearMonth);
             fuelTax.setCreateTime(String.valueOf(now.toEpochSecond(ZoneOffset.UTC)));
