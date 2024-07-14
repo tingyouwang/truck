@@ -30,15 +30,15 @@ public class FuelTaxTask {
 
         List<CarFee> usingCarFee = carFeeDao.getUsingCarFee();
 
-        log.info(String.format("[排程FuelTaxTask]每季建立燃料費開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
+        log.info(String.format("[排程FuelTaxTask]每季建立燃料費開始: param:yearMonth:%s, now:%s, 產出燃料稅的車號:%s", yearMonth, now, usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
             int i = fuelTaxService.seasonlyInsertFee(yearMonth, now, usingCarFee);
             LocalDateTime end = LocalDateTime.now();
             log.info("[排程FuelTaxTask]每季建立燃料費結束, 花費時間:" + Duration.between(start, end).getSeconds()
-                    + "健保筆數:" + i);
+                    + "燃料稅筆數:" + i);
         } catch (Exception e) {
-            log.error("每季產出勞健保費用錯誤:" + e.getMessage());
+            log.error("每季產出燃料稅錯誤:" + e.getMessage());
         }
 
     }
