@@ -1,17 +1,12 @@
 package com.luzhu.truck.schedule.service;
 
 import com.luzhu.truck.dao.loanfee.LoanFeeDao;
-import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
-import com.luzhu.truck.dao.unionfee.UnionFeeDao;
-import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.loanfee.LoanFee;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
-import com.luzhu.truck.entity.unionfee.UnionFee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;

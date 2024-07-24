@@ -3,7 +3,6 @@ package com.luzhu.truck.schedule.service;
 import com.luzhu.truck.dao.fueltax.FuelTaxDao;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.fuel.FuelTax;
-import com.luzhu.truck.entity.healthfee.HealthFee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
