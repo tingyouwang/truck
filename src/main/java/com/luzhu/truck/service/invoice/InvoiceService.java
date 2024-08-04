@@ -21,7 +21,8 @@ public class InvoiceService {
 
         int insertCount = invoiceDao.insertInvoice(param.getInvoiceNum(), param.getInvoiceDate(), param.getHandleDate(),
                 param.getInvoiceAmount(), param.getInvoiceTax(), param.getCarAgency(), param.getCarAgencyNum(),
-                param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum());
+                param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum()
+        , param.getType());
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }

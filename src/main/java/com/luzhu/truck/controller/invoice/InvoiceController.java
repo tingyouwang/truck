@@ -1,6 +1,5 @@
 package com.luzhu.truck.controller.invoice;
 
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.invoice.AddInvoiceParam;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.invoice.InvoiceService;
