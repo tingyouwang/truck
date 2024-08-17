@@ -1,0 +1,24 @@
+package com.luzhu.truck.dao.lendmoney;
+
+import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+@Repository
+public interface LendMoneyDao extends BaseDao<LendMoney, Integer> {
+    @Modifying
+    @Query(value = "INSERT INTO `lend_money` (`car_license_num`, `lend_date`, `amount`, `type`, `expire_date`, `interest_amount`, `note`, `create_time`, `last_modify_time`) " +
+            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)", nativeQuery = true)
+    int insertLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String type,
+                      String expireDate, BigDecimal interestAmount, String note, long createTime, long lastModifyTime);
+
+    @Query(value = "SELECT amount, amount_tax FROM lend_money WHERE car_license_num = ?1 AND " +
+            "lend_date between ?2 AND ?3" , nativeQuery = true)
+    List<LendMoney> getLendMoney(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type);
+}
