@@ -5,6 +5,7 @@ import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/car")
+@CrossOrigin("*")
 public class CarController {
     @Autowired
     private CarCache carCache;

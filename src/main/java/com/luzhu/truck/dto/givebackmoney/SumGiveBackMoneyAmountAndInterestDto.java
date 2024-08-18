@@ -1,2 +1,8 @@
-package com.luzhu.truck.dto.givebackmoney;public interface SumGiveBackMoneyAmountAndInterestDto {
+package com.luzhu.truck.dto.givebackmoney;
+
+import java.math.BigDecimal;
+
+public interface SumGiveBackMoneyAmountAndInterestDto {
+    BigDecimal getSum();
+    BigDecimal getInterestSum();
 }

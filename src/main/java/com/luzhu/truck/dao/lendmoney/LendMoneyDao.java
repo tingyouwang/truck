@@ -1,6 +1,7 @@
 package com.luzhu.truck.dao.lendmoney;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.lendmoney.SumAmountAndTaxDto;
 import com.luzhu.truck.entity.lendmoney.LendMoney;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Repository
 public interface LendMoneyDao extends BaseDao<LendMoney, Integer> {
@@ -18,7 +18,7 @@ public interface LendMoneyDao extends BaseDao<LendMoney, Integer> {
     int insertLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String type,
                       String expireDate, BigDecimal interestAmount, String note, long createTime, long lastModifyTime);
 
-    @Query(value = "SELECT amount, amount_tax FROM lend_money WHERE car_license_num = ?1 AND " +
+    @Query(value = "SELECT SUM(amount) AS sum, SUM(interest_amount) AS interestSum FROM lend_money WHERE car_license_num = ?1 AND " +
             "lend_date between ?2 AND ?3" , nativeQuery = true)
-    List<LendMoney> getLendMoney(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type);
+    SumAmountAndTaxDto getLendMoney(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
 }

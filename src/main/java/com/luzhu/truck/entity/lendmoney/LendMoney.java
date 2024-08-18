@@ -1,6 +1,5 @@
 package com.luzhu.truck.entity.lendmoney;
 
-import com.luzhu.truck.entity.BaseCompositePk;
 import jakarta.persistence.*;
 import lombok.Data;
 
