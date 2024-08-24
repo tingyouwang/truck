@@ -29,8 +29,8 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
 
     @Query(value = "SELECT SUM(amount) AS sum, SUM(amount_tax) TaxSum FROM invoice WHERE car_license_num = ?1 AND " +
             "handle_date between ?2 AND ?3" +
-            " AND TYPE = ?4", nativeQuery = true)
-    InvoiceSumAmountAndTaxDto getSumAmountByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type);
+            " AND TYPE = ?4 AND disable = ?5", nativeQuery = true)
+    InvoiceSumAmountAndTaxDto getSumAmountByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type, int disable);
 
     @Query(value = "SELECT * FROM invoice WHERE car_license_num = ?1 AND " +
             "handle_date between ?2 AND ?3" +

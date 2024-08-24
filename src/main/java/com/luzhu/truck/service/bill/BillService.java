@@ -106,13 +106,13 @@ public class BillService {
         //三種發票
         LocalDate monthFirst = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atDay(1);
         LocalDate monthEnd = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atEndOfMonth();
-        InvoiceSumAmountAndTaxDto gasInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.GAS.getType());
+        InvoiceSumAmountAndTaxDto gasInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.GAS.getType(), 0);
         res.setInvoiceGasAmount(gasInvoice.getSum());
         res.setInvoiceGasAmountTax(gasInvoice.getTaxSum());
-        InvoiceSumAmountAndTaxDto saleInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.SALE.getType());
+        InvoiceSumAmountAndTaxDto saleInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.SALE.getType(), 0);
         res.setInvoiceSaleAmount(saleInvoice.getSum());
         res.setInvoiceSaleAmountTax(saleInvoice.getTaxSum());
-        InvoiceSumAmountAndTaxDto offsetInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.OFFSET.getType());
+        InvoiceSumAmountAndTaxDto offsetInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.OFFSET.getType(), 0);
         res.setInvoiceOffsetAmount(offsetInvoice.getSum());
         res.setInvoiceOffsetAmountTax(offsetInvoice.getTaxSum());
 
