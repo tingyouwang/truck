@@ -3,6 +3,8 @@ package com.luzhu.truck.dao.invoice;
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.entity.invoice.Invoice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -29,5 +31,10 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
             "handle_date between ?2 AND ?3" +
             " AND TYPE = ?4", nativeQuery = true)
     InvoiceSumAmountAndTaxDto getSumAmountByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type);
+
+    @Query(value = "SELECT * FROM invoice WHERE car_license_num = ?1 AND " +
+            "handle_date between ?2 AND ?3" +
+            " AND TYPE = ?4", nativeQuery = true)
+    Page<Invoice> getAllByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type, Pageable pageable);
 
 }
