@@ -1,14 +1,13 @@
 package com.luzhu.truck.controller.car;
 
 import com.luzhu.truck.cache.CarCache;
+import com.luzhu.truck.dto.car.AddCarParam;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.car.CarService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -19,9 +18,16 @@ import java.util.concurrent.ExecutionException;
 public class CarController {
     @Autowired
     private CarCache carCache;
+    @Autowired
+    private CarService carService;
     @PostMapping("/carInfo")
     public ResponseModel<List<CarInfo>> getCarInfo() throws ExecutionException {
         List<CarInfo> all = carCache.getAllCars("all");
         return new ResponseModel<>(all);
+    }
+    @PostMapping("/addCar")
+    public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) throws ExecutionException {
+        carService.addCar(param);
+        return new ResponseModel<>();
     }
 }

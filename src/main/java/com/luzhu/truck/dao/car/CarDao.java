@@ -3,6 +3,7 @@ package com.luzhu.truck.dao.car;
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.entity.Car;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public interface CarDao extends BaseDao<Car, Integer> {
     @Query(value = "SELECT * FROM car WHERE id = ?1",
     nativeQuery = true)
     Car getCarById(long id);
+
+    @Modifying
+    @Query(value = "INSERT INTO car (license_number, is_using, owner_name, car_agency, join_date, quit_date, join_amount, quit_amount, car_from, quit_place, license_issue_date, manufacture_date, brand, ton, cc, engine_num, inspection_date, renew_license_date, car_type_outlooking, pass_license, car_weight, loading_weight, car_type, inspection_type, violation_date, report_stop_date, report_scrap_date, old_license_number, note1, note2) " +
+            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30)",
+            nativeQuery = true)
+    int addCar(String licenseNumber, int isUsing, String ownerName, String carAgency, String joinDate, String quitDate, Double joinAmount, Double quitAmount, String carFrom, String quitPlace, String licenseIssueDate, String manufactureDate, String brand, String ton, Double cc, String engineNum, String inspectionDate, String renewLicenseDate, String carTypeOutlooking, String passLicense, String carWeight, String loadingWeight, String carType, Double inspectionType, String violationDate, String reportStopDate, String reportScrapDate, String oldLicenseNumber, String note1, String note2);
 
 
 }

@@ -51,9 +51,9 @@ public class Car {
 //    @Temporal(TemporalType.DATE)
     private String licenseIssueDate;
 
-    @Column(name = "manufactute_date", nullable = false)
+    @Column(name = "manufacture_date", nullable = false)
 //    @Temporal(TemporalType.DATE)
-    private String manufactuteDate;
+    private String manufactureDate;
 
     @Column(name = "brand", nullable = false, length = 100)
     private String brand;
