@@ -2,6 +2,8 @@ package com.luzhu.truck.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Map;
+
 public class ResponseModel<T> {
 
     private static final long serialVersionUID = -7147650333527797098L;
@@ -14,6 +16,12 @@ public class ResponseModel<T> {
     public ResponseModel() {
         this.setCode(ResponseEnum.SUCCESS.getCode());
         this.setMessage(ResponseEnum.SUCCESS.getMessage());
+        this.printLog = Boolean.FALSE;
+    }
+
+    public ResponseModel(ResponseEnum responseEnum) {
+        this.setCode(responseEnum.getCode());
+        this.setMessage(responseEnum.getMessage());
         this.printLog = Boolean.FALSE;
     }
 
@@ -156,6 +164,14 @@ public class ResponseModel<T> {
         this.message = message;
         this.data = data;
         this.printLog = printLog;
+    }
+
+    public ResponseModel validFail(String errorMessage, ResponseEnum responseEnum) {
+        this.code = responseEnum.getCode();
+        this.message = errorMessage;
+        this.printLog = false;
+
+        return this;
     }
 
     public static class ResponseModelBuilder<T> {
