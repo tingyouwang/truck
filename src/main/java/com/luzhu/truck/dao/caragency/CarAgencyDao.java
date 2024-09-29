@@ -17,8 +17,8 @@ public interface CarAgencyDao extends BaseDao<CarAgency, Integer> {
 
     @Modifying
     @Query(value = "INSERT INTO car_agency (agency_name, address, " +
-            "owner, tax_id, phone1, phone2, mobile, fax) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)", nativeQuery = true)
-    int insertCarAgency(String agencyName, String address, String owner, String taxId, String phone1, String phone2, String mobile, String fax);
+            "owner, tax_id, phone1, phone2, mobile, fax, agency_short_name) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)", nativeQuery = true)
+    int insertCarAgency(String agencyName, String address, String owner, String taxId, String phone1, String phone2, String mobile, String fax, String shortName);
 
     @Modifying
     @Query(value = "DELETE FROM car_agency WHERE id = ?1",

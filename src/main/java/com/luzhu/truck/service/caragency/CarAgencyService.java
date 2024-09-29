@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class CarAgencyService {
     @Autowired
@@ -27,7 +29,7 @@ public class CarAgencyService {
     @Transactional
     public void addCarAgency(AddCarAgencyParam addCarAgencyParam) {
         int insertCount = carAgencyDao.insertCarAgency(addCarAgencyParam.getAgencyName(), addCarAgencyParam.getAddress(), addCarAgencyParam.getOwner(), addCarAgencyParam.getTaxId(),
-                addCarAgencyParam.getPhone1(), addCarAgencyParam.getPhone2(), addCarAgencyParam.getMobile(), addCarAgencyParam.getFax());
+                addCarAgencyParam.getPhone1(), addCarAgencyParam.getPhone2(), addCarAgencyParam.getMobile(), addCarAgencyParam.getFax(), addCarAgencyParam.getAgencyShortName());
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
@@ -54,6 +56,14 @@ public class CarAgencyService {
         Validator.isFalseThrow(1 == deleteCount,
                 new AppException(SystemExceptionEnum.DELETE_ERROR));
     }
+
+//    public static void main(String[] args) {
+//        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd")
+//                .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
+//
+//        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy/MM/dd")
+//                .withChronology()
+//    }
 
 
 }

@@ -10,6 +10,8 @@ public class AddCarAgencyParam {
     @NotBlank
     private String agencyName;
     @NotBlank
+    private String agencyShortName;
+    @NotBlank
     private String address;
     @NotBlank
     private String owner;

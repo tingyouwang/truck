@@ -12,6 +12,7 @@ public class CarAgency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String agencyName;
+    private String agencyShortName;
     private String address;
     private String owner;
     private String taxId;
