@@ -2,6 +2,7 @@ package com.luzhu.truck.dto.car;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -21,8 +22,10 @@ public class AddCarParam {
     private String carFrom;
     private String quitPlace;
     @NotBlank(message = "發照日期必填")
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String licenseIssueDate;
     @NotBlank(message = "出廠日期必填")
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String manufactureDate;
     @NotNull(message = "出廠年分(西元)必填")
     private Integer westYear;
@@ -35,8 +38,10 @@ public class AddCarParam {
     @NotBlank(message = "引擎號碼必填")
     private String engineNum;
     @NotBlank(message = "驗車日期必填")
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String inspectionDate;
     @NotBlank(message = "換照日期必填")
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String renewLicenseDate;
     @NotBlank(message = "車身式樣必填")
     private String carTypeOutlooking;
