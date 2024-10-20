@@ -64,4 +64,34 @@ public class MonthBillResponse {
     private BigDecimal receiveOffset;
     //入款退回
     private BigDecimal returnMoney;
+    //本月欠款
+    private BigDecimal totalSum;
+    public void calculateTotalSum() {
+        this.totalSum = BigDecimal.ZERO
+                .add(lastMonthOweAmount != null ? lastMonthOweAmount : BigDecimal.ZERO)
+                .add(manageFee != null ? manageFee : BigDecimal.ZERO)
+                .add(unionFee != null ? unionFee : BigDecimal.ZERO)
+                .add(loanFee != null ? loanFee : BigDecimal.ZERO)
+                .add(laborInsuranceFee != null ? laborInsuranceFee : BigDecimal.ZERO)
+                .add(healthFee != null ? healthFee : BigDecimal.ZERO)
+                .add(insuranceFee != null ? insuranceFee : BigDecimal.ZERO)
+                .add(licenseTaxFee != null ? licenseTaxFee : BigDecimal.ZERO)
+                .add(fuelTaxFee != null ? fuelTaxFee : BigDecimal.ZERO)
+                .add(invoiceGasAmount != null ? invoiceGasAmount : BigDecimal.ZERO)
+                .add(invoiceGasAmountTax != null ? invoiceGasAmountTax : BigDecimal.ZERO)
+                .add(invoiceSaleAmount != null ? invoiceSaleAmount : BigDecimal.ZERO)
+                .add(invoiceSaleAmountTax != null ? invoiceSaleAmountTax : BigDecimal.ZERO)
+                .add(invoiceOffsetAmount != null ? invoiceOffsetAmount : BigDecimal.ZERO)
+                .add(invoiceOffsetAmountTax != null ? invoiceOffsetAmountTax : BigDecimal.ZERO)
+                .add(lendMoney != null ? lendMoney : BigDecimal.ZERO)
+                .add(lendMoneyInterest != null ? lendMoneyInterest : BigDecimal.ZERO)
+                .add(giveBackMoney != null ? giveBackMoney : BigDecimal.ZERO)
+                .add(giveBackInterest != null ? giveBackInterest : BigDecimal.ZERO)
+                .add(otherLendMoneyAmount != null ? otherLendMoneyAmount : BigDecimal.ZERO)
+                .add(otherGiveBackMoneyAmount != null ? otherGiveBackMoneyAmount : BigDecimal.ZERO)
+                .add(trafficSum != null ? trafficSum : BigDecimal.ZERO)
+                .add(payInterest != null ? payInterest : BigDecimal.ZERO)
+                .add(receiveOffset != null ? receiveOffset : BigDecimal.ZERO)
+                .add(returnMoney != null ? returnMoney : BigDecimal.ZERO);
+    }
 }

@@ -152,6 +152,9 @@ public class BillService {
         BigDecimal returnMoneySum = returnMoneyDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
         res.setReturnMoney(returnMoneySum);
 
+        //本月欠款
+        res.calculateTotalSum();
+
         return res;
     }
 
