@@ -1,34 +1,34 @@
-package com.luzhu.truck.entity.otherlendmoney;
+package com.luzhu.truck.entity.payinterest;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "other_lend_money")
+@Table(name = "pay_interest")
 @Data
-public class OtherLendMoney {
+public class PayInterest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "car_license_num", length = 50)
     private String carLicenseNum;
 
-    @Column(name = "lend_date", nullable = false)
-    private String lendDate;
+    @Column(name = "pay_date", nullable = false)
+    private String payDate; // Using String as per preference
+
+    @Column(name = "expense_year_month", length = 7, nullable = false)
+    private String expenseYearMonth;
 
     @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
+    private Double amount;
 
     @Column(name = "note", length = 150)
     private String note;
 
     @Column(name = "create_time", nullable = false)
-    private long createTime;
+    private Long createTime;
 
     @Column(name = "last_modify_time", nullable = false)
-    private long lastModifyTime;
+    private Long lastModifyTime;
 }

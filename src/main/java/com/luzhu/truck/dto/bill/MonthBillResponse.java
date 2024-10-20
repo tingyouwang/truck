@@ -58,4 +58,10 @@ public class MonthBillResponse {
     private BigDecimal otherGiveBackMoneyAmount;
     // 罰單
     private BigDecimal trafficSum;
+    //代支利息
+    private BigDecimal payInterest;
+    //收據底收
+    private BigDecimal receiveOffset;
+    //入款退回
+    private BigDecimal returnMoney;
 }

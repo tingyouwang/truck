@@ -14,6 +14,9 @@ import com.luzhu.truck.dao.loanfee.LoanFeeDao;
 import com.luzhu.truck.dao.managefee.ManageFeeDao;
 import com.luzhu.truck.dao.othergivebackmoney.OtherGiveBackMoneyDao;
 import com.luzhu.truck.dao.otherlendmoney.OtherLendMoneyDao;
+import com.luzhu.truck.dao.payinterest.PayInterestDao;
+import com.luzhu.truck.dao.receiveoffset.ReceiveOffsetDao;
+import com.luzhu.truck.dao.returnmoney.ReturnMoneyDao;
 import com.luzhu.truck.dao.trafficticket.TrafficTicketDao;
 import com.luzhu.truck.dao.unionfee.UnionFeeDao;
 import com.luzhu.truck.dto.bill.MonthBillReq;
@@ -69,6 +72,12 @@ public class BillService {
     private OtherGiveBackMoneyDao otherGiveBackMoneyDao;
     @Autowired
     private TrafficTicketDao trafficTicketDao;
+    @Autowired
+    private PayInterestDao payInterestDao;
+    @Autowired
+    private ReceiveOffsetDao receiveOffsetDao;
+    @Autowired
+    private ReturnMoneyDao returnMoneyDao;
     public MonthBillResponse getMonthBill(MonthBillReq req) {
         Car searchCar = carDao.getCarById(req.getId());
 
@@ -133,6 +142,15 @@ public class BillService {
         //罰單
         BigDecimal trafficSum = trafficTicketDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
         res.setTrafficSum(trafficSum);
+        //代支利息
+        BigDecimal payInterestSum = payInterestDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
+        res.setPayInterest(payInterestSum);
+        //收據底收
+        BigDecimal receiveOffsetSum = receiveOffsetDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
+        res.setReceiveOffset(receiveOffsetSum);
+        //入款退回
+        BigDecimal returnMoneySum = returnMoneyDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
+        res.setReturnMoney(returnMoneySum);
 
         return res;
     }

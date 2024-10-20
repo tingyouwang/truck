@@ -15,6 +15,6 @@ public class MonthBillReq {
     private String carLicenseNum;
     @NotBlank(message = "車主姓名不可為空")
     private String ownerName;
-    @NotNull(message = "帳單日期不可為空")
+    @NotBlank(message = "帳單日期不可為空")
     private String billDate;
 }
