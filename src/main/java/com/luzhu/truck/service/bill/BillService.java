@@ -85,8 +85,14 @@ public class BillService {
 
         String billDate = req.getBillDate();
         DateTimeValidate.checkYearMonth(billDate);
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        YearMonth yearMonth = YearMonth.parse(billDate, dateTimeFormatter);
+
+        String lastMonthBillDate = yearMonth.minusMonths(1).format(dateTimeFormatter);
+
         //上月欠款
-        BigDecimal lastMonthOweAmount = lastMonthOweDao.getAmountById(req.getCarLicenseNum(), billDate);
+        BigDecimal lastMonthOweAmount = lastMonthOweDao.getAmountById(req.getCarLicenseNum(), lastMonthBillDate);
         res.setLastMonthOweAmount(lastMonthOweAmount);
         //管理費
         BigDecimal manageFee = manageFeeDao.getFeeById(req.getCarLicenseNum(), billDate);
@@ -113,8 +119,8 @@ public class BillService {
         BigDecimal fuelTaxFee = fuelTaxDao.getFeeById(req.getCarLicenseNum(), billDate);
         res.setFuelTaxFee(fuelTaxFee);
         //三種發票
-        LocalDate monthFirst = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atDay(1);
-        LocalDate monthEnd = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atEndOfMonth();
+        LocalDate monthFirst = yearMonth.atDay(1);
+        LocalDate monthEnd = yearMonth.atEndOfMonth();
         InvoiceSumAmountAndTaxDto gasInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.GAS.getType(), 0);
         res.setInvoiceGasAmount(gasInvoice.getSum());
         res.setInvoiceGasAmountTax(gasInvoice.getTaxSum());
