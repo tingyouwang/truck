@@ -1,13 +1,12 @@
 package com.luzhu.truck.dto.car;
 
+import com.luzhu.truck.annotation.JpaDto;
 import lombok.Data;
-import lombok.Getter;
-import org.springframework.stereotype.Component;
 
-
-//@Getter
-public interface CarInfo {
-    long getId();
-    String getLicenseNumber();
-    String getOwnerName();
+@Data
+@JpaDto
+public class CarInfo {
+    private long id;
+    private String licenseNumber;
+    private String ownerName;
 }
