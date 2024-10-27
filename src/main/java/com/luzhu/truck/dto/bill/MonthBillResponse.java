@@ -38,7 +38,7 @@ public class MonthBillResponse {
     private BigDecimal invoiceSaleAmountTax;
     // 抵發票額
     private BigDecimal invoiceOffsetAmount;
-    // 抵發票稅
+    // 抵發稅額
     private BigDecimal invoiceOffsetAmountTax;
     // 抵油單額
     private BigDecimal invoiceGasAmount;
@@ -60,7 +60,7 @@ public class MonthBillResponse {
     private BigDecimal trafficSum;
     //代支利息
     private BigDecimal payInterest;
-    //收據底收
+    //收據抵收
     private BigDecimal receiveOffset;
     //入款退回
     private BigDecimal returnMoney;
@@ -78,20 +78,20 @@ public class MonthBillResponse {
                 .add(licenseTaxFee != null ? licenseTaxFee : BigDecimal.ZERO)
                 .add(fuelTaxFee != null ? fuelTaxFee : BigDecimal.ZERO)
                 .add(invoiceGasAmount != null ? invoiceGasAmount : BigDecimal.ZERO)
-                .add(invoiceGasAmountTax != null ? invoiceGasAmountTax : BigDecimal.ZERO)
+                .subtract(invoiceGasAmountTax != null ? invoiceGasAmountTax : BigDecimal.ZERO)
                 .add(invoiceSaleAmount != null ? invoiceSaleAmount : BigDecimal.ZERO)
                 .add(invoiceSaleAmountTax != null ? invoiceSaleAmountTax : BigDecimal.ZERO)
                 .add(invoiceOffsetAmount != null ? invoiceOffsetAmount : BigDecimal.ZERO)
-                .add(invoiceOffsetAmountTax != null ? invoiceOffsetAmountTax : BigDecimal.ZERO)
+                .subtract(invoiceOffsetAmountTax != null ? invoiceOffsetAmountTax : BigDecimal.ZERO)
                 .add(lendMoney != null ? lendMoney : BigDecimal.ZERO)
                 .add(lendMoneyInterest != null ? lendMoneyInterest : BigDecimal.ZERO)
-                .add(giveBackMoney != null ? giveBackMoney : BigDecimal.ZERO)
+                .subtract(giveBackMoney != null ? giveBackMoney : BigDecimal.ZERO)
                 .add(giveBackInterest != null ? giveBackInterest : BigDecimal.ZERO)
                 .add(otherLendMoneyAmount != null ? otherLendMoneyAmount : BigDecimal.ZERO)
-                .add(otherGiveBackMoneyAmount != null ? otherGiveBackMoneyAmount : BigDecimal.ZERO)
+                .subtract(otherGiveBackMoneyAmount != null ? otherGiveBackMoneyAmount : BigDecimal.ZERO)
                 .add(trafficSum != null ? trafficSum : BigDecimal.ZERO)
                 .add(payInterest != null ? payInterest : BigDecimal.ZERO)
-                .add(receiveOffset != null ? receiveOffset : BigDecimal.ZERO)
+                .subtract(receiveOffset != null ? receiveOffset : BigDecimal.ZERO)
                 .add(returnMoney != null ? returnMoney : BigDecimal.ZERO);
     }
 }
