@@ -40,4 +40,5 @@ public class GiveBackMoney {
 
     @Column(name = "last_modify_time", nullable = false)
     private long lastModifyTime;
+    private String expenseYearMonth;
 }

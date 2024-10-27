@@ -3,6 +3,7 @@ package com.luzhu.truck.dao.invoice;
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.entity.invoice.Invoice;
+import com.luzhu.truck.entity.unionfee.UnionFee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,12 +29,12 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
     List<Invoice> getVoiceByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type);
 
     @Query(value = "SELECT SUM(amount) AS sum, SUM(amount_tax) TaxSum FROM invoice WHERE car_license_num = ?1 AND " +
-            "handle_date between ?2 AND ?3" +
-            " AND TYPE = ?4 AND disable = ?5", nativeQuery = true)
+            "invoice_date between ?2 AND ?3" +
+            " AND type = ?4 AND disable = ?5", nativeQuery = true)
     InvoiceSumAmountAndTaxDto getSumAmountByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type, int disable);
 
     @Query(value = "SELECT * FROM invoice WHERE car_license_num = ?1 AND " +
-            "handle_date between ?2 AND ?3" +
+            "invoice_date between ?2 AND ?3" +
             " AND TYPE = ?4", nativeQuery = true)
     Page<Invoice> getAllByType(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, String type, Pageable pageable);
 
@@ -53,5 +54,9 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
                       String note,
                       int disable,
                       String taxMonth, long now);
+
+    @Query(value = "SELECT * FROM invoice WHERE car_license_num = ?1 AND invoice_date between ?2 AND ?3 AND disable = ?4"
+            , nativeQuery = true)
+    List<Invoice> getDetailByInvoiceDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, int disable);
 
 }

@@ -3,6 +3,7 @@ package com.luzhu.truck.entity.lendmoney;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -21,7 +22,7 @@ public class LendMoney {
     private LocalDate lendDate;
 
     @Column(name = "amount", nullable = false)
-    private double amount;
+    private BigDecimal amount;
 
     @Column(name = "type", nullable = false, length = 100)
     private String type;
@@ -30,14 +31,15 @@ public class LendMoney {
     private LocalDate expireDate;
 
     @Column(name = "interest_amount", nullable = false)
-    private double interestAmount;
+    private BigDecimal interestAmount;
 
     @Column(name = "note", length = 150)
     private String note;
 
     @Column(name = "create_time", nullable = false)
-    private LocalDate createTime;
+    private long createTime;
 
     @Column(name = "last_modify_time", nullable = false)
-    private LocalDate lastModifyTime;
+    private long lastModifyTime;
+    private String expenseYearMonth;
 }

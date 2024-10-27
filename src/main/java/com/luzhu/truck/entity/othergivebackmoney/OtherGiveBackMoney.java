@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "other_give_back_money")
@@ -18,7 +19,7 @@ public class OtherGiveBackMoney {
     private String carLicenseNum;
 
     @Column(name = "give_back_date", nullable = false)
-    private String giveBackDate;
+    private LocalDate giveBackDate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
@@ -31,4 +32,5 @@ public class OtherGiveBackMoney {
 
     @Column(name = "last_modify_time", nullable = false)
     private long lastModifyTime;
+    private String expenseYearMonth;
 }

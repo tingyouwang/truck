@@ -4,6 +4,7 @@ import com.luzhu.truck.entity.BaseCompositePk;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -20,7 +21,7 @@ public class InsuranceFee {
     private String expenseYearMonth;
 
     @Column(name = "amount")
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(name = "create_time")
     private long createTime;

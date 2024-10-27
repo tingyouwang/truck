@@ -3,6 +3,7 @@ package com.luzhu.truck.entity.invoice;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -30,10 +31,10 @@ public class Invoice {
     private LocalDate handleDate;
 
     @Column(name = "amount", nullable = false)
-    private double amount;
+    private BigDecimal amount;
 
     @Column(name = "amount_tax", nullable = false)
-    private double amountTax;
+    private BigDecimal amountTax;
 
     @Column(name = "car_agency", nullable = false, length = 90)
     private String carAgency;
@@ -48,4 +49,6 @@ public class Invoice {
     private String note;
     @Column(name = "taxMonth", nullable = false, length = 150)
     private String taxMonth;
+    private String expenseYearMonth;
+    private String type;
 }

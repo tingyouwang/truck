@@ -2,6 +2,7 @@ package com.luzhu.truck.dao.otherlendmoney;
 
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.entity.invoice.Invoice;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,7 @@ public interface OtherLendMoneyDao extends BaseDao<OtherLendMoney, Integer> {
     @Query(value = "SELECT SUM(amount) FROM other_lend_money WHERE car_license_num = ?1 AND " +
             "lend_date between ?2 AND ?3" , nativeQuery = true)
     BigDecimal getSumAmount(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+    @Query(value = "SELECT * FROM other_lend_money WHERE car_license_num = ?1 AND lend_date between ?2 AND ?3"
+            , nativeQuery = true)
+    List<OtherLendMoney> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
 }

@@ -1,16 +1,12 @@
 package com.luzhu.truck.service.car;
 
-import com.luzhu.truck.cache.CarCache;
 import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
 import com.luzhu.truck.dto.car.AddCarParam;
 import com.luzhu.truck.dto.car.CarInfo;
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
-import com.luzhu.truck.entity.Car;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

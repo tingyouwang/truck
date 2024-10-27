@@ -1,13 +1,16 @@
 package com.luzhu.truck.dao.trafficticket;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.trafficticket.TrafficTicket;
+import com.luzhu.truck.entity.unionfee.UnionFee;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface TrafficTicketDao extends BaseDao<TrafficTicket, Integer> {
@@ -20,4 +23,8 @@ public interface TrafficTicketDao extends BaseDao<TrafficTicket, Integer> {
     @Query(value = "SELECT SUM(amount) FROM traffic_ticket WHERE car_license_num = ?1 AND " +
             "handle_date between ?2 AND ?3" , nativeQuery = true)
     BigDecimal getSumAmount(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3"
+            , nativeQuery = true)
+    List<TrafficTicket> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
 }

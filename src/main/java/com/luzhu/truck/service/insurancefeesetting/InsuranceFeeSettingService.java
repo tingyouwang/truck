@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -46,7 +47,7 @@ public class InsuranceFeeSettingService {
 
         InsuranceFee insuranceFee = new InsuranceFee();
         insuranceFee.setCarLicenseNum(param.getCarLicenseNum());
-        insuranceFee.setAmount(param.getAmount());
+        insuranceFee.setAmount(new BigDecimal(param.getAmount()));
         insuranceFee.setExpenseYearMonth(yearMonth);
         insuranceFee.setCreateTime(l);
 

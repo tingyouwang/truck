@@ -19,12 +19,28 @@ import com.luzhu.truck.dao.receiveoffset.ReceiveOffsetDao;
 import com.luzhu.truck.dao.returnmoney.ReturnMoneyDao;
 import com.luzhu.truck.dao.trafficticket.TrafficTicketDao;
 import com.luzhu.truck.dao.unionfee.UnionFeeDao;
-import com.luzhu.truck.dto.bill.MonthBillReq;
-import com.luzhu.truck.dto.bill.MonthBillResponse;
+import com.luzhu.truck.dto.bill.*;
 import com.luzhu.truck.dto.givebackmoney.SumGiveBackMoneyAmountAndInterestDto;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.dto.lendmoney.SumAmountAndTaxDto;
 import com.luzhu.truck.entity.Car;
+import com.luzhu.truck.entity.fuel.FuelTax;
+import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
+import com.luzhu.truck.entity.healthfee.HealthFee;
+import com.luzhu.truck.entity.insurancefee.InsuranceFee;
+import com.luzhu.truck.entity.invoice.Invoice;
+import com.luzhu.truck.entity.laborInsurance.LaborInsurance;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
+import com.luzhu.truck.entity.licensetax.LicenseTax;
+import com.luzhu.truck.entity.loanfee.LoanFee;
+import com.luzhu.truck.entity.managefee.ManageFee;
+import com.luzhu.truck.entity.othergivebackmoney.OtherGiveBackMoney;
+import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
+import com.luzhu.truck.entity.payinterest.PayInterest;
+import com.luzhu.truck.entity.receiveoffset.ReceiveOffset;
+import com.luzhu.truck.entity.returnmoney.ReturnMoney;
+import com.luzhu.truck.entity.trafficticket.TrafficTicket;
+import com.luzhu.truck.entity.unionfee.UnionFee;
 import com.luzhu.truck.enums.InvoiceType;
 import com.luzhu.truck.util.DateTimeValidate;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +49,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -151,7 +171,7 @@ public class BillService {
         //代支利息
         BigDecimal payInterestSum = payInterestDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
         res.setPayInterest(payInterestSum);
-        //收據底收
+        //收據抵收
         BigDecimal receiveOffsetSum = receiveOffsetDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
         res.setReceiveOffset(receiveOffsetSum);
         //入款退回
@@ -164,13 +184,163 @@ public class BillService {
         return res;
     }
 
-    public static void main(String[] args) {
-//        LocalDate parse = LocalDate.parse("2024-08", DateTimeFormatter.ofPattern("yyyy-MM"));
-        String billDate = "2024-08";
+    //todo 產出報表明細
+    public MonthsBillDetailResponse getBillDetail(MonthBillDetailReq req) {
+        List<String> billDateList = req.getBillDateList();
+        List<MonthsBillDetailDto> res = new ArrayList<>();
 
-        LocalDate localDate = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atDay(1);
-        LocalDate localDate1 = YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atEndOfMonth();
-        String a = "a";
+        for (String billDate : billDateList) {
+            DateTimeValidate.checkYearMonth(billDate);
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth yearMonth = YearMonth.parse(billDate, dateTimeFormatter);
+
+            String carLicenseNum = req.getCarLicenseNum();
+            List<String> date = List.of(billDate);
+            //管理費
+            List<ManageFee> manageFees = manageFeeDao.getDetailByExpenseYearMonth(carLicenseNum, date);
+            res.addAll(manageFees.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("管理費")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //公會費
+            List<UnionFee> unionFees = unionFeeDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(unionFees.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("公會費")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //車貸
+            List<LoanFee> loanFees = loanFeeDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(loanFees.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("車貸款")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //勞保
+            List<LaborInsurance> laborInsurances = laborInsuranceDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(laborInsurances.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("勞保費")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //健保費
+            List<HealthFee> healthFees = healthFeeDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(healthFees.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("健保費")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //保費
+            List<InsuranceFee> insuranceFees = insuranceFeeDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(insuranceFees.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("保險費")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //牌照稅
+            List<LicenseTax> licenseTaxes = licenseTaxDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(licenseTaxes.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("牌照稅")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //燃料稅
+            List<FuelTax> fuelTaxes = fuelTaxDao.getDetailByExpenseYearMonth(req.getCarLicenseNum(), date);
+            res.addAll(fuelTaxes.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("燃料稅")
+                    .receiveAmount(fee.getAmount()).build()).toList());
+            //三種發票
+            LocalDate monthFirst = yearMonth.atDay(1);
+            LocalDate monthEnd = yearMonth.atEndOfMonth();
+            List<Invoice> invoices = invoiceDao.getDetailByInvoiceDate(req.getCarLicenseNum(), monthFirst, monthEnd, 0);
+            List<MonthsBillDetailDto> invoiceRes = invoices.stream().map(fee -> {
+                MonthsBillDetailDto.MonthsBillDetailDtoBuilder builder = MonthsBillDetailDto.builder();
+                if (fee.getType().equals("SALE")) {
+                    builder.name("銷發發票").receiveAmount(fee.getAmountTax());
+                } else if (fee.getType().equals("GAS")) {
+                    builder.name("油單發票").offsetAmount(fee.getAmountTax());
+                } else if (fee.getType().equals("OFFSET")) {
+                    builder.name("抵發發票").offsetAmount(fee.getAmountTax());
+                }
+                return builder.expenseYearMonth(fee.getExpenseYearMonth()).note(fee.getNote())
+                        .date(fee.getInvoiceDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        .build();
+            }).toList();
+            res.addAll(invoiceRes);
+
+            //借款金額
+            List<LendMoney> lendMoneyList = lendMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("借款金額")
+                    .receiveAmount(fee.getAmount())
+                    .date(fee.getLendDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+            res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("借款利息")
+                    .receiveAmount(fee.getInterestAmount())
+                    .date(fee.getLendDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+
+            //入款金額
+            List<GiveBackMoney> giveBackMoneyList = giveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(giveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("入款金額")
+                    .offsetAmount(fee.getAmount())
+                    .date(fee.getGiveBackDate())
+                    .note(fee.getNote())
+                    .build()).toList());
+            res.addAll(giveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("入票利息")
+                    .receiveAmount(fee.getInterestAmount())
+                    .date(fee.getGiveBackDate())
+                    .note(fee.getNote())
+                    .build()).toList());
+            //其他應收
+            List<OtherLendMoney> otherLendMoneyList = otherLendMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(otherLendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("其他應收")
+                    .receiveAmount(fee.getAmount())
+                    .date(fee.getLendDate())
+                    .note(fee.getNote())
+                    .build()).toList());
+
+            //其他抵收
+            List<OtherGiveBackMoney> otherGiveBackMoneyList = otherGiveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(otherGiveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("其他抵收")
+                    .offsetAmount(fee.getAmount())
+                    .date(fee.getGiveBackDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+
+            //罰單
+            List<TrafficTicket> ticketList = trafficTicketDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(ticketList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("罰單")
+                    .receiveAmount(fee.getAmount())
+                    .date(fee.getHandleDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+            //代支利息
+            List<PayInterest> payInterestList = payInterestDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(payInterestList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("代支利息")
+                    .receiveAmount(fee.getAmount())
+                    .date(fee.getPayDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+            //收據抵收
+            List<ReceiveOffset> receiveOffsetList = receiveOffsetDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(receiveOffsetList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("收據抵收")
+                    .offsetAmount(fee.getReceiptAmount())
+                    .date(fee.getPayDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+            //入款退回
+            List<ReturnMoney> returnMoneyList = returnMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
+            res.addAll(returnMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(fee.getExpenseYearMonth())
+                    .name("入款退回")
+                    .receiveAmount(fee.getAmount())
+                    .date(fee.getPayDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .note(fee.getNote())
+                    .build()).toList());
+        }
+
+        double sum = res.stream().map(dto -> dto.getReceiveAmount().subtract(dto.getOffsetAmount()))
+                .mapToDouble(BigDecimal::doubleValue).sum();
+
+        return new MonthsBillDetailResponse(res, sum);
     }
 
 

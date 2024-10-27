@@ -3,6 +3,9 @@ package com.luzhu.truck.entity.receiveoffset;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "receive_offset")
 @Data
@@ -15,16 +18,16 @@ public class ReceiveOffset {
     private String carLicenseNum;
 
     @Column(name = "pay_date", nullable = false)
-    private String payDate; // Using String as per preference
+    private LocalDate payDate;
 
     @Column(name = "expense_year_month", length = 7, nullable = false)
     private String expenseYearMonth;
 
     @Column(name = "amount", nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(name = "receipt_amount", nullable = false)
-    private Double receiptAmount;
+    private BigDecimal receiptAmount;
 
     @Column(name = "note", length = 150)
     private String note;

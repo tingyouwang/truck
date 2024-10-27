@@ -3,6 +3,9 @@ package com.luzhu.truck.entity.returnmoney;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "return_money")
 @Data
@@ -15,13 +18,13 @@ public class ReturnMoney {
     private String carLicenseNum;
 
     @Column(name = "pay_date", nullable = false)
-    private String payDate; // Using String as per preference
+    private LocalDate payDate; // Using String as per preference
 
     @Column(name = "expense_year_month", length = 7, nullable = false)
     private String expenseYearMonth;
 
     @Column(name = "amount", nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Column(name = "note", length = 150)
     private String note;

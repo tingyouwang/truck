@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "traffic_ticket")
@@ -18,7 +19,7 @@ public class TrafficTicket {
     private String carLicenseNum;
 
     @Column(name = "handle_date", nullable = false)
-    private String handleDate;
+    private LocalDate handleDate;
 
     @Column(name = "ticket_date", nullable = false)
     private String ticketDate;
@@ -43,4 +44,5 @@ public class TrafficTicket {
 
     @Column(name = "last_modify_time", nullable = false)
     private long lastModifyTime;
+    private String expenseYearMonth;
 }

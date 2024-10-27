@@ -1,11 +1,14 @@
 package com.luzhu.truck.util;
 
+import com.luzhu.truck.entity.licensetax.LicenseTax;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class DateTimeUtil {
@@ -22,6 +25,14 @@ public class DateTimeUtil {
                 .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
 
         return LocalDate.parse(date, minguoFormatter);
+    }
+
+    public static List<String> transferWestDateStr(List<?> dates) {
+        List<String> result = new ArrayList<>(dates.size());
+        for (Object date : dates) {
+            result.add(transferWestDateStr(date.toString()));
+        }
+        return result;
     }
 
     public static String transferWestDateStr(String date) {

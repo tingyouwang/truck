@@ -1,12 +1,14 @@
 package com.luzhu.truck.dao.othergivebackmoney;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.othergivebackmoney.OtherGiveBackMoney;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface OtherGiveBackMoneyDao extends BaseDao<OtherGiveBackMoney, Integer> {
     @Modifying
@@ -17,4 +19,7 @@ public interface OtherGiveBackMoneyDao extends BaseDao<OtherGiveBackMoney, Integ
     @Query(value = "SELECT SUM(amount) FROM other_give_back_money WHERE car_license_num = ?1 AND " +
             "give_back_date between ?2 AND ?3" , nativeQuery = true)
     BigDecimal getSumAmount(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+    @Query(value = "SELECT * FROM other_give_back_money WHERE car_license_num = ?1 AND give_back_date between ?2 AND ?3"
+            , nativeQuery = true)
+    List<OtherGiveBackMoney> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
 }
