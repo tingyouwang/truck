@@ -1,6 +1,5 @@
 package com.luzhu.truck.util;
 
-import com.luzhu.truck.entity.licensetax.LicenseTax;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -55,7 +54,6 @@ public class DateTimeUtil {
         } catch (DateTimeParseException e) {
             log.error(String.format("input 日期格式錯誤:%s, 自行拼接日期01:%s", date, forFormatDate));
             throw e;
-//            return "";
         }
     }
     private static String tryParseFullDate(String date, DateTimeFormatter inputFormatter) {
@@ -66,4 +64,28 @@ public class DateTimeUtil {
             return "";
         }
     }
+
+    public static String parseToMinguoDate(LocalDate westDate) {
+        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
+                .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
+        return westDate.format(minguoFormatter);
+    }
+
+    /**
+     * 西元年月轉成民國年月
+     * @param yearMonthStr 2024-06
+     * @return
+     */
+    public static String parseToMinguoDateYearMonth(String yearMonthStr) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        yearMonthStr = yearMonthStr + "-01";
+
+        LocalDate west = LocalDate.parse(yearMonthStr, dateTimeFormatter);
+
+        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy-MM")
+                .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
+
+        return west.format(minguoFormatter);
+    }
+
 }

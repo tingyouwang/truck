@@ -14,4 +14,8 @@ public class MonthBillDetailReq {
     private String carLicenseNum;
     @NotNull(message = "帳單日期不可為空")
     private List<String> billDateList;
+    @NotBlank(message = "列印選項不可為空")
+    private String print;
+    @NotBlank(message = "車主必填")
+    private String ownerName;
 }

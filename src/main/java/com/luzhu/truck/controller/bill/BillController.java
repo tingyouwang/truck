@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.bill;
 
 import com.luzhu.truck.cache.CarCache;
+import com.luzhu.truck.controller.report.ReportService;
 import com.luzhu.truck.dto.bill.MonthBillDetailReq;
 import com.luzhu.truck.dto.bill.MonthBillReq;
 import com.luzhu.truck.dto.bill.MonthBillResponse;
@@ -9,11 +10,13 @@ import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.response.ResponseEnum;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.bill.BillService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +29,8 @@ public class BillController {
     private CarCache carCache;
     @Autowired
     private BillService billService;
+    @Autowired
+    private ReportService reportService;
     @PostMapping("/monthBill")
     public ResponseModel<MonthBillResponse> getMonthBill(@RequestBody @Valid MonthBillReq req) throws ExecutionException {
         List<CarInfo> allCars = carCache.getAllCars("all");
@@ -45,13 +50,22 @@ public class BillController {
     }
 
     @PostMapping("/monthBillDetail")
-    public ResponseModel<MonthsBillDetailResponse> getMonthBillDetail(@RequestBody @Valid MonthBillDetailReq req) throws ExecutionException {
+    public ResponseModel<MonthsBillDetailResponse> getMonthBillDetail(@RequestBody @Valid MonthBillDetailReq req, HttpServletResponse response) throws Exception {
         List<CarInfo> allCars = carCache.getAllCars("all");
 
         Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getId() == req.getId()).findFirst();
 
         if (searchCarOpt.isPresent()) {
             MonthsBillDetailResponse billDetail = billService.getBillDetail(req);
+            if ("Y".equals(req.getPrint())) {
+
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition", "attachment; filename=report.pdf");
+                OutputStream out = response.getOutputStream();
+                reportService.billDetailPDF(out, billDetail, req);
+                out.flush();
+            }
+
             return new ResponseModel<>(billDetail);
         } else {
             log.info("查無此車主");
