@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Aspect
@@ -61,6 +63,20 @@ public class MinguoDateTimeAspect extends BaseAop{
         }
         if (value instanceof String) {
             field.set(paramObject, DateTimeUtil.transferWestDateStr(value.toString()));
+            field.setAccessible(false);
+        }
+        if (value instanceof List<?>) {
+
+            List<?> listValue = (List<?>) value;
+            List<Object> convertedList = new ArrayList<>();
+            for (Object item : listValue) {
+                if (item instanceof String) {
+                    convertedList.add(DateTimeUtil.transferWestDateStr(item.toString()));
+                } else {
+                    convertedList.add(item); // 保留非字串的元素
+                }
+            }
+            field.set(paramObject, convertedList);
             field.setAccessible(false);
         }
     }
