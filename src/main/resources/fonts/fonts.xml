@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="SansSerif">
+        <normal>fonts/STSONG.TTF</normal>
+        <pdfEncoding>Identity-H</pdfEncoding>
+        <pdfEmbedded>true</pdfEmbedded>
+        <exportFonts>
+            <export key="net.sf.jasperreports.html">Arial, Helvetica, sans-serif</export>
+			<export key="net.sf.jasperreports.xhtml">Arial, Helvetica, sans-serif</export>
+        </exportFonts>
+    </fontFamily>
+</fontFamilies>
