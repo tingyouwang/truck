@@ -329,7 +329,7 @@ public class BillService {
             res.addAll(receiveOffsetList.stream().map(fee -> MonthsBillDetailDto.builder()
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("收據抵收")
-                    .offsetAmount(fee.getReceiptAmount().intValue())
+                    .offsetAmount(fee.getAmount().intValue())
                     .date(DateTimeUtil.parseToMinguoDate(fee.getPayDate()))
                     .note(fee.getNote())
                     .build()).toList());
