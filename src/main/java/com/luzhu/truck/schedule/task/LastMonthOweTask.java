@@ -3,6 +3,7 @@ package com.luzhu.truck.schedule.task;
 import com.luzhu.truck.schedule.service.LastMonthOweService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,11 @@ import java.util.concurrent.ExecutionException;
 public class LastMonthOweTask {
     @Autowired
     private LastMonthOweService lastMonthOweService;
-    @Scheduled(cron = "0 30 0 1 * ?")
+    @Value("${env.time.offset}")
+    private String timeOffset;
+    @Scheduled(cron = "0 30 0 1 * ?", zone = "Asia/Taipei")
     public void generateLastMonthOwe() throws ExecutionException {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
         log.info(String.format("start task generateLastMonthOwe : startTime: %s", now));

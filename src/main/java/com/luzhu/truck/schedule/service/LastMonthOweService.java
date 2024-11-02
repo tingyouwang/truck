@@ -7,9 +7,11 @@ import com.luzhu.truck.dto.bill.MonthBillResponse;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.entity.lastmonthowe.LastMonthOwe;
 import com.luzhu.truck.service.bill.BillService;
+import com.luzhu.truck.util.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -27,8 +29,10 @@ public class LastMonthOweService {
     private CarCache carCache;
     @Autowired
     private LastMonthOweDao lastMonthOweDao;
+    @Transactional
     public void addLastMonthOwe(String yearMonth, LocalDateTime now) throws ExecutionException {
         List<CarInfo> allCars = carCache.getAllCars("all");
+        long utcEpochSecond = DateTimeUtil.toUtcEpochSecond(now);
 
         List<LastMonthOwe> lastMonthOwes = new ArrayList<>();
         for (CarInfo car : allCars) {
@@ -46,15 +50,14 @@ public class LastMonthOweService {
                 lastMonthOwe.setCarLicenseNum(car.getLicenseNumber());
                 lastMonthOwe.setCreateTime(String.valueOf(now.toEpochSecond(ZoneOffset.UTC)));
 
+                log.info(String.format("task generateLastMonthOwe: sql param: amount:%s, carLicenseNum:%s", lastMonthOwe.getAmount()
+                        ,lastMonthOwe.getCarLicenseNum()));
+
                 return lastMonthOwe;
             });
             lastMonthOwes.add(future.join());
         }
         log.info(String.format("task generateLastMonthOwe: lastMonthOwes 數量:%s", lastMonthOwes.size()));
-        for (var lastMonthOwe : lastMonthOwes) {
-            log.info(String.format("task generateLastMonthOwe: sql param: amount:%s, carLicenseNum:%s", lastMonthOwe.getAmount()
-                    ,lastMonthOwe.getCarLicenseNum()));
-        }
         lastMonthOweDao.saveAll(lastMonthOwes);
     }
 }
