@@ -3,8 +3,10 @@ package com.luzhu.truck.schedule.service;
 import com.luzhu.truck.dao.fueltax.FuelTaxDao;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.fuel.FuelTax;
+import com.luzhu.truck.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,18 +19,20 @@ import java.util.stream.Collectors;
 public class FuelTaxService {
     @Autowired
     private FuelTaxDao fuelTaxDao;
+    @Transactional
     public int seasonlyInsertFee(String yearMonth, LocalDateTime now, List<CarFee> usingCarFee) {
-        List<FuelTax> fuelTaxes = new ArrayList<>();
+        long utcEpochSecond = DateTimeUtil.toUtcEpochSecond(now);
 
-        usingCarFee.stream().peek(dto -> {
-            FuelTax fuelTax = new FuelTax();
-            fuelTax.setAmount(BigDecimal.valueOf(dto.getFuelTaxSpring()));
-            fuelTax.setCarLicenseNum(dto.getCarLicenseNum());
-            fuelTax.setExpenseYearMonth(yearMonth);
-            fuelTax.setCreateTime(String.valueOf(now.toEpochSecond(ZoneOffset.UTC)));
-
-            fuelTaxes.add(fuelTax);
-        }).collect(Collectors.toList());
+        List<FuelTax> fuelTaxes = usingCarFee.stream()
+                .map(dto -> {
+                    FuelTax fuelTax = new FuelTax();
+                    fuelTax.setAmount(BigDecimal.valueOf(dto.getFuelTaxSpring()));
+                    fuelTax.setCarLicenseNum(dto.getCarLicenseNum());
+                    fuelTax.setExpenseYearMonth(yearMonth);
+                    fuelTax.setCreateTime(utcEpochSecond);
+                    return fuelTax;
+                })
+                .collect(Collectors.toList());
 
         return fuelTaxDao.saveAll(fuelTaxes).size();
     }

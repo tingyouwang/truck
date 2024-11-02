@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -48,7 +47,7 @@ public class LastMonthOweService {
                 lastMonthOwe.setExpenseYearMonth(yearMonth);
                 lastMonthOwe.setAmount(monthBill.getTotalSum());
                 lastMonthOwe.setCarLicenseNum(car.getLicenseNumber());
-                lastMonthOwe.setCreateTime(String.valueOf(now.toEpochSecond(ZoneOffset.UTC)));
+                lastMonthOwe.setCreateTime(utcEpochSecond);
 
                 log.info(String.format("task generateLastMonthOwe: sql param: amount:%s, carLicenseNum:%s", lastMonthOwe.getAmount()
                         ,lastMonthOwe.getCarLicenseNum()));

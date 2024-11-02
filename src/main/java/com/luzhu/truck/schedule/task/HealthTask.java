@@ -6,6 +6,7 @@ import com.luzhu.truck.schedule.service.HealthFeeService;
 import com.luzhu.truck.service.laborinsurance.LaborInsuranceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -25,17 +26,18 @@ public class HealthTask {
     private LaborInsuranceService laborInsuranceService;
     @Autowired
     private CarFeeDao carFeeDao;
+    @Value("${env.time.offset}")
+    private String timeOffset;
 
-    @Scheduled(cron = "0 1 0 1 * ?")
-//    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0 1 0 1 * ?", zone = "Asia/Taipei")
     public void generateHealthFee() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 
         List<CarFee> usingCarFee = carFeeDao.getUsingCarFee();
 
-        log.info(String.format("[排程HealthTask]每月月初產出勞健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
+        log.info(String.format("[排程HealthTask]每月月初產出勞保,健保費用開始: param:yearMonth:%s, now:%s, 產出勞健保的車號:%s", yearMonth, now, usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
             int i = healthFeeService.monthlyInsertFee(yearMonth, now, usingCarFee);

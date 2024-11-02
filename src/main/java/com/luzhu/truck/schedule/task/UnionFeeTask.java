@@ -6,6 +6,7 @@ import com.luzhu.truck.schedule.service.ManageFeeService;
 import com.luzhu.truck.schedule.service.UnionFeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,10 +24,12 @@ public class UnionFeeTask {
     private CarFeeDao carFeeDao;
     @Autowired
     private UnionFeeService unionFeeService;
+    @Value("${env.time.offset}")
+    private String timeOffset;
 
-    @Scheduled(cron = "0 5 0 1 * ?")
+    @Scheduled(cron = "0 5 0 1 * ?", zone = "Asia/Taipei")
     public void generateMonthBill() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 

@@ -7,6 +7,7 @@ import com.luzhu.truck.schedule.service.LoanFeeService;
 import com.luzhu.truck.schedule.service.UnionFeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +26,12 @@ public class LoanFeeTask {
     private LoanFeeSettingDao loanFeeSettingDao;
     @Autowired
     private LoanFeeService loanFeeService;
+    @Value("${env.time.offset}")
+    private String timeOffset;
 
     @Scheduled(cron = "0 6 0 1 * ?")
     public void generateMonthBill() {
-        LocalDate now = LocalDate.now(ZoneOffset.ofHours(0));
+        LocalDate now = LocalDate.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 
@@ -37,7 +40,7 @@ public class LoanFeeTask {
                 usingLoanFeeSetting.stream().map(LoanFeeSetting::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {
-            int insertCount = loanFeeService.monthlyInsertFee(yearMonth, start, usingLoanFeeSetting);
+            int insertCount = loanFeeService.monthlyInsertFee(yearMonth, now, usingLoanFeeSetting);
             LocalDateTime end = LocalDateTime.now();
             log.info("[LoanFeeTask] 花費時間:" + Duration.between(start, end).getSeconds() + "成功插入筆數:" + insertCount);
         } catch (Exception e) {

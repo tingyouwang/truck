@@ -5,6 +5,7 @@ import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.schedule.service.ManageFeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,15 +23,17 @@ public class ManageFeeTask {
     private CarFeeDao carFeeDao;
     @Autowired
     private ManageFeeService manageFeeService;
+    @Value("${env.time.offset}")
+    private String timeOffset;
 
-    @Scheduled(cron = "0 4 0 1 * ?")
+    @Scheduled(cron = "0 4 0 1 * ?", zone = "Asia/Taipei")
     public void generateMonthBill() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 
         List<CarFee> usingCarFee = carFeeDao.getUsingCarFeeForManageFee();
-        log.info(String.format("[ManageFeeTask] generateMonthBill param:yearMonth:%s, now:%s, 產出公會費的車號:%s", yearMonth, now,
+        log.info(String.format("[ManageFeeTask] generateMonthBill param:yearMonth:%s, now:%s, 產出管理費的車號:%s", yearMonth, now,
                 usingCarFee.stream().map(CarFee::getCarLicenseNum).collect(Collectors.toList())));
         LocalDateTime start = LocalDateTime.now();
         try {

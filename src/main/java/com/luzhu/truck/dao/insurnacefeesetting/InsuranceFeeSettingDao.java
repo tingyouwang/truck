@@ -37,5 +37,9 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
             nativeQuery = true)
     int deleteInsuranceFeeSettingById(String carLicenseNum, String insuranceCardNum);
 
+    @Query(value = "SELECT * FROM insurance_fee_setting WHERE ?1 BETWEEN start_date AND end_date",
+            nativeQuery = true)
+    List<InsuranceFeeSetting> getUsingInsuranceFeeSetting(LocalDate now);
+
 
 }

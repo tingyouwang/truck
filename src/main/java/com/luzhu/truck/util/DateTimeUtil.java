@@ -1,9 +1,9 @@
 package com.luzhu.truck.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -11,6 +11,8 @@ import java.util.List;
 
 @Slf4j
 public class DateTimeUtil {
+    @Value("${env.time.offset}")
+    private static String timeOffset;
     public static LocalDate getMonthFirst(String billDate) {
         return YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atDay(1);
     }
@@ -86,6 +88,19 @@ public class DateTimeUtil {
                 .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
 
         return west.format(minguoFormatter);
+    }
+
+    public static long toUtcEpochSecond(LocalDate now) {
+        LocalDateTime localDateTime = now.atStartOfDay();
+        return toUtcEpochSecond(localDateTime);
+    }
+
+    public static long toUtcEpochSecond(LocalDateTime now) {
+        // 将其转换为 UTC+0 的 ZonedDateTime
+        ZonedDateTime utcTime = now.atZone(ZoneOffset.ofHours(Integer.parseInt(timeOffset))).withZoneSameInstant(ZoneOffset.UTC);
+
+        // 转换为 epoch second
+        return utcTime.toEpochSecond();
     }
 
 }

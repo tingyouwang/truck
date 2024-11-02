@@ -5,6 +5,7 @@ import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.schedule.service.FuelTaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +23,11 @@ public class FuelTaxTask {
     private FuelTaxService fuelTaxService;
     @Autowired
     private CarFeeDao carFeeDao;
-    @Scheduled(cron = "0 1 0 1 3,6,9,12 ?")
+    @Value("${env.time.offset}")
+    private String timeOffset;
+    @Scheduled(cron = "0 1 0 1 3,6,9,12 ?", zone = "Asia/Taipei")
     public void generateFuelTax() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(0));
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 

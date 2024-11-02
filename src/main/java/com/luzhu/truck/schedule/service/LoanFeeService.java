@@ -3,10 +3,13 @@ package com.luzhu.truck.schedule.service;
 import com.luzhu.truck.dao.loanfee.LoanFeeDao;
 import com.luzhu.truck.entity.loanfee.LoanFee;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
+import com.luzhu.truck.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -18,17 +21,18 @@ public class LoanFeeService {
     @Autowired
     private LoanFeeDao loanFeeDao;
 
-    public int monthlyInsertFee(String yearMonth, LocalDateTime now, List<LoanFeeSetting> loanFeeSettings) {
-        List<LoanFee> loanFees = new ArrayList<>();
+    @Transactional
+    public int monthlyInsertFee(String yearMonth, LocalDate now, List<LoanFeeSetting> loanFeeSettings) {
+        long utcEpochSecond = DateTimeUtil.toUtcEpochSecond(now);
 
-        loanFeeSettings.stream().peek(dto -> {
+        List<LoanFee> loanFees = loanFeeSettings.stream().map(dto -> {
             LoanFee loanFee = new LoanFee();
             loanFee.setAmount(BigDecimal.valueOf(dto.getMonthPayAmount()));
             loanFee.setCarLicenseNum(dto.getCarLicenseNum());
             loanFee.setExpenseYearMonth(yearMonth);
-            loanFee.setCreateTime(String.valueOf(now.toEpochSecond(ZoneOffset.UTC)));
+            loanFee.setCreateTime(utcEpochSecond);
 
-            loanFees.add(loanFee);
+            return loanFee;
         }).collect(Collectors.toList());
 
         return loanFeeDao.saveAll(loanFees).size();

@@ -10,6 +10,7 @@ import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
+import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -67,5 +70,22 @@ public class InsuranceFeeSettingService {
         int deleteCount = insuranceFeeSettingDao.deleteInsuranceFeeSettingById(param.getCarLicenseNum(), param.getInsuranceCardNum());
         Validator.isFalseThrow(1 == deleteCount,
                 new AppException(SystemExceptionEnum.DELETE_ERROR));
+    }
+
+    @Transactional
+    public int monthlyInsertFee(String yearMonth, LocalDate now, List<InsuranceFeeSetting> usingInsuranceFeeSetting) {
+        long utcEpochSecond = DateTimeUtil.toUtcEpochSecond(now);
+
+        List<InsuranceFee> insuranceFees = usingInsuranceFeeSetting.stream().map(dto -> {
+            InsuranceFee insuranceFee = new InsuranceFee();
+            insuranceFee.setAmount(BigDecimal.valueOf(dto.getAmount()));
+            insuranceFee.setCarLicenseNum(dto.getCarLicenseNum());
+            insuranceFee.setExpenseYearMonth(yearMonth);
+            insuranceFee.setCreateTime(utcEpochSecond);
+
+            return insuranceFee;
+        }).collect(Collectors.toList());
+
+        return insuranceFeeDao.saveAll(insuranceFees).size();
     }
 }

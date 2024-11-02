@@ -19,5 +19,5 @@ public class LastMonthOwe {
     @Id
     private String expenseYearMonth;
     private BigDecimal amount;
-    private String createTime;
+    private Long createTime;
 }
