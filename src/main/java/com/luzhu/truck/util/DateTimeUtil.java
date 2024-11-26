@@ -11,8 +11,8 @@ import java.util.List;
 
 @Slf4j
 public class DateTimeUtil {
-    @Value("${env.time.offset}")
-    private static String timeOffset;
+//    @Value("${env.time.offset}")
+    private static String timeOffset = "8";
     public static LocalDate getMonthFirst(String billDate) {
         return YearMonth.parse(billDate, DateTimeFormatter.ofPattern("yyyy-MM")).atDay(1);
     }

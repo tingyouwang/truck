@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.car;
 
 import com.luzhu.truck.cache.CarCache;
+import com.luzhu.truck.dto.car.AddCarFeeParam;
 import com.luzhu.truck.dto.car.AddCarParam;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.response.ResponseModel;
@@ -28,6 +29,12 @@ public class CarController {
     @PostMapping("/addCar")
     public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) throws ExecutionException {
         carService.addCar(param);
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/addCarFee")
+    public ResponseModel<Object> addCarFee(@RequestBody @Valid AddCarFeeParam param) throws ExecutionException {
+        carService.addCarFee(param);
         return new ResponseModel<>();
     }
 }
