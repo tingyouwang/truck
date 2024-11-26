@@ -23,7 +23,7 @@ public class InvoiceController {
         return new ResponseModel<>();
     }
 
-    @GetMapping("/getInvoice")
+    @PostMapping("/getInvoice")
     public ResponseModel<PageResult<Invoice>> getInvoice(@RequestBody @Valid GetInvoiceParam param) {
         PageResult<Invoice> invoice = invoiceService.getInvoiceByType(param);
         return new ResponseModel<>(invoice);

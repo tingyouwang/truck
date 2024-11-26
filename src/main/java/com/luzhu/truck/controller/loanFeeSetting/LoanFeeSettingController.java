@@ -20,7 +20,7 @@ import java.time.ZoneOffset;
 public class LoanFeeSettingController {
     @Autowired
     private LoanFeeSettingService loanFeeSettingService;
-    @GetMapping("/queryByCarLicenseNum")
+    @PostMapping("/queryByCarLicenseNum")
     public ResponseModel<PageResult> getLoanFeeSetting(@RequestBody QueryAllByCarLicenseNumParam param) {
         PageResult<LoanFeeSetting> insuranceCompany = loanFeeSettingService.getLoanFeeSetting(param);
         return new ResponseModel<>(insuranceCompany);

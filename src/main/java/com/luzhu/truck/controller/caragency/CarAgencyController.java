@@ -17,7 +17,7 @@ public class CarAgencyController {
     @Autowired
     private CarAgencyService carAgencyService;
 
-    @GetMapping("/getCarAgency")
+    @PostMapping("/getCarAgency")
     public ResponseModel<PageResult<CarAgency>> getCarAgency(@RequestBody BaseParam param) {
         PageResult<CarAgency> carAgency = carAgencyService.getCarAgency(param);
 

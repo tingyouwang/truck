@@ -17,7 +17,7 @@ public class InsuranceFeeSettingController {
     @Autowired
     private InsuranceFeeSettingService insuranceFeeSettingService;
 
-    @GetMapping("/getInsuranceFeeSetting")
+    @PostMapping("/getInsuranceFeeSetting")
     public ResponseModel<PageResult<InsuranceFeeSetting>> getInsuranceCompany(@RequestBody BaseParam param) {
         PageResult<InsuranceFeeSetting> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
         return new ResponseModel<>(insuranceFeeSetting);

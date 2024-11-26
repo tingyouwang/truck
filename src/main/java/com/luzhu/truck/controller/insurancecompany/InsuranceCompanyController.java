@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class InsuranceCompanyController {
     @Autowired
     private InsuranceCompanyService insuranceCompanyService;
-    @GetMapping("/getInsuranceCompany")
+    @PostMapping("/getInsuranceCompany")
     public ResponseModel<PageResult<InsuranceCompany>> getInsuranceCompany(@RequestBody BaseParam param) {
         PageResult<InsuranceCompany> insuranceCompany = insuranceCompanyService.getInsuranceCompany(param);
         return new ResponseModel<>(insuranceCompany);

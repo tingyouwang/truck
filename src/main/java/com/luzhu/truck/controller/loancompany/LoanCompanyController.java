@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoanCompanyController {
     @Autowired
     private LoanCompanyService loanCompanyService;
-    @GetMapping("/getLoanCompany")
+    @PostMapping("/getLoanCompany")
     public ResponseModel<PageResult<LoanCompany>> getLoanCompany(@RequestBody BaseParam param) {
         PageResult<LoanCompany> carAgency = loanCompanyService.getLoanCompany(param);
 
