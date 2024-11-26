@@ -61,17 +61,4 @@ public class AddCarParam {
     private String oldLicenseNumber;
     private String note1;
     private String note2;
-
-    // Fields from the 'owner' table
-    @NotBlank(message = "車主姓名必填")
-    private String name;
-    private String idNum;
-    private String sex;
-    private String birthday;
-    private String phone1;
-    private String phone2;
-    private String mobile;
-    private String fax;
-    private String address;
-    private String mailAddress;
 }

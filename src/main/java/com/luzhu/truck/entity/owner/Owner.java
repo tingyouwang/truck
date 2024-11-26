@@ -1,9 +1,11 @@
 package com.luzhu.truck.entity.owner;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "owner")
+@Data
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,15 +3,18 @@ package com.luzhu.truck.service.car;
 import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
-import com.luzhu.truck.dto.car.AddCarFeeParam;
-import com.luzhu.truck.dto.car.AddCarParam;
-import com.luzhu.truck.dto.car.CarInfo;
+import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.car.*;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
+import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,21 +39,6 @@ public class CarService {
 
     @Transactional
     public void addCar(AddCarParam addCarParam) {
-        int i = ownerDao.addOwner(
-                addCarParam.getName(),
-                addCarParam.getIdNum(),
-                addCarParam.getSex(),
-                addCarParam.getBirthday(),
-                addCarParam.getPhone1(),
-                addCarParam.getPhone2(),
-                addCarParam.getMobile(),
-                addCarParam.getFax(),
-                addCarParam.getAddress(),
-                addCarParam.getMailAddress()
-        );
-        Validator.isFalseThrow(1 == i,
-                new AppException(SystemExceptionEnum.UPDATE_ERROR));
-
         int insertCount = carDao.addCar(
                 addCarParam.getLicenseNumber(),
                 1, // Assuming `isUsing` is always 1 for this example
@@ -85,6 +73,48 @@ public class CarService {
         );
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void addCarOwner(AddCarOwnerParam addCarOwnerParam) {
+        int i = ownerDao.addOwner(
+                addCarOwnerParam.getName(),
+                addCarOwnerParam.getIdNum(),
+                addCarOwnerParam.getSex(),
+                addCarOwnerParam.getBirthday(),
+                addCarOwnerParam.getPhone1(),
+                addCarOwnerParam.getPhone2(),
+                addCarOwnerParam.getMobile(),
+                addCarOwnerParam.getFax(),
+                addCarOwnerParam.getAddress(),
+                addCarOwnerParam.getMailAddress()
+        );
+        Validator.isFalseThrow(1 == i,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateCarOwner(UpdateCarOwnerParam updateCarOwnerParam) {
+        int i = ownerDao.updateOwner(
+                updateCarOwnerParam.getName(),
+                updateCarOwnerParam.getPhone1(),
+                updateCarOwnerParam.getIdNum(),
+                updateCarOwnerParam.getSex(),
+                updateCarOwnerParam.getBirthday(),
+                updateCarOwnerParam.getPhone2(),
+                updateCarOwnerParam.getMobile(),
+                updateCarOwnerParam.getFax(),
+                updateCarOwnerParam.getAddress(),
+                updateCarOwnerParam.getMailAddress(),
+                updateCarOwnerParam.getId()
+        );
+        Validator.isFalseThrow(1 == i,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    public PageResult<Owner> getCarOwner(BaseParam param) {
+        Page<Owner> allOwner = ownerDao.getAllOwner(param.getPageable());
+        return new PageResult<>(allOwner);
     }
 
     @Transactional
