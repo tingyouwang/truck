@@ -73,4 +73,9 @@ public class BillController {
         }
     }
 
+    @GetMapping("/ha")
+    public ResponseModel<String > ds(HttpServletResponse response) throws Exception {
+        return new ResponseModel<>("haha");
+    }
+
 }
