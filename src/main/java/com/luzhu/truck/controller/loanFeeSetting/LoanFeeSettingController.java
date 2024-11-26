@@ -17,6 +17,7 @@ import java.time.ZoneOffset;
 
 @RestController
 @RequestMapping("/loanFeeSetting")
+@CrossOrigin("*")
 public class LoanFeeSettingController {
     @Autowired
     private LoanFeeSettingService loanFeeSettingService;

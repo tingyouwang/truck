@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/bill")
+@CrossOrigin("*")
 @Slf4j
 public class BillController {
     @Autowired

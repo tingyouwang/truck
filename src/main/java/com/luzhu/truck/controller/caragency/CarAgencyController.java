@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/carAgency")
+@CrossOrigin("*")
 public class CarAgencyController {
     @Autowired
     private CarAgencyService carAgencyService;
