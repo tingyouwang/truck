@@ -30,6 +30,12 @@ public class CarController {
         return new ResponseModel<>(all);
     }
 
+    @PostMapping("/carOwnerDropDownList")
+    public ResponseModel<List<CarOwnerDropDownDto>> getCarOwnerDropDown() throws ExecutionException {
+        List<CarOwnerDropDownDto> carOwnerDropDown = carService.getCarOwnerDropDown();
+        return new ResponseModel<>(carOwnerDropDown);
+    }
+
     @PostMapping("/searchCarByLicenseNum")
     public ResponseModel<PageResult<CarInfo>> getCarList(@RequestBody SearchCarLicenseNumParam param) throws ExecutionException {
         PageResult<CarInfo> carInfoPageResult = carService.searchCarByLicenseNum(param);

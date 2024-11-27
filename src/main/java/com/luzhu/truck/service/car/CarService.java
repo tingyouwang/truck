@@ -168,6 +168,10 @@ public class CarService {
         }
     }
 
+    public List<CarOwnerDropDownDto> getCarOwnerDropDown() {
+        return ownerDao.getAllOwnerDropDown();
+    }
+
     public Owner getCarOwnerById(long id) {
         Owner owner = ownerDao.getOwnerById(id);
         return owner;

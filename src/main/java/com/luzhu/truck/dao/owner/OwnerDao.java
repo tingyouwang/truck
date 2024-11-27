@@ -1,12 +1,15 @@
 package com.luzhu.truck.dao.owner;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.car.CarOwnerDropDownDto;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.entity.owner.Owner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface OwnerDao extends BaseDao<Owner, Integer> {
     @Modifying
@@ -18,6 +21,11 @@ public interface OwnerDao extends BaseDao<Owner, Integer> {
             countQuery = " SELECT COUNT(1) FROM owner"
             , nativeQuery = true)
     Page<Owner> getAllOwner(Pageable pageable);
+
+    @Query(value = "SELECT id, name FROM owner"
+            , nativeQuery = true)
+    List<CarOwnerDropDownDto> getAllOwnerDropDown();
+
     @Query(value = "SELECT * FROM owner WHERE name LIKE %?1%",
             countQuery = " SELECT COUNT(1) FROM owner WHERE name LIKE %?1%"
             , nativeQuery = true)
