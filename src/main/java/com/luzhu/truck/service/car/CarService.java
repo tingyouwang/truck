@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -112,9 +113,18 @@ public class CarService {
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
-    public PageResult<Owner> getCarOwner(BaseParam param) {
-        Page<Owner> allOwner = ownerDao.getAllOwner(param.getPageable());
-        return new PageResult<>(allOwner);
+    public PageResult<Owner> getCarOwner(SearchCarOwnerParam param) {
+
+        if (StringUtils.hasText(param.getSearchName())) {
+            return new PageResult<>(ownerDao.searchByName(param.getSearchName(), param.getPageable()));
+        } else {
+            return new PageResult<>(ownerDao.getAllOwner(param.getPageable()));
+        }
+    }
+
+    public Owner getCarOwnerById(long id) {
+        Owner owner = ownerDao.getOwnerById(id);
+        return owner;
     }
 
     @Transactional

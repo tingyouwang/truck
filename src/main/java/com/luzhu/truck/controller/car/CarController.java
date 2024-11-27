@@ -2,6 +2,7 @@ package com.luzhu.truck.controller.car;
 
 import com.luzhu.truck.cache.CarCache;
 import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.IdParam;
 import com.luzhu.truck.dto.car.*;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.entity.owner.Owner;
@@ -46,8 +47,14 @@ public class CarController {
         return new ResponseModel<>();
     }
     @PostMapping("/getCarOwner")
-    public ResponseModel<PageResult<Owner>> getCarOwner(@RequestBody BaseParam param) {
+    public ResponseModel<PageResult<Owner>> getCarOwner(@RequestBody SearchCarOwnerParam param) {
         PageResult<Owner> carOwner = carService.getCarOwner(param);
+        return new ResponseModel<>(carOwner);
+    }
+
+    @PostMapping("/getCarOwnerById")
+    public ResponseModel<Owner> getCarOwnerByName(@RequestBody IdParam param) {
+        Owner carOwner = carService.getCarOwnerById(param.getId());
         return new ResponseModel<>(carOwner);
     }
 

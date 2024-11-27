@@ -18,6 +18,14 @@ public interface OwnerDao extends BaseDao<Owner, Integer> {
             countQuery = " SELECT COUNT(1) FROM owner"
             , nativeQuery = true)
     Page<Owner> getAllOwner(Pageable pageable);
+    @Query(value = "SELECT * FROM owner WHERE name LIKE %?1%",
+            countQuery = " SELECT COUNT(1) FROM owner WHERE name LIKE %?1%"
+            , nativeQuery = true)
+    Page<Owner> searchByName(String name, Pageable pageable);
+
+    @Query(value = "SELECT * FROM owner WHERE id = ?1"
+            , nativeQuery = true)
+    Owner getOwnerById(long id);
 
     @Modifying
     @Query(value = "UPDATE owner " +
