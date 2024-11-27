@@ -1,5 +1,6 @@
 package com.luzhu.truck.service.car;
 
+import com.luzhu.truck.cache.CarCache;
 import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
@@ -31,6 +32,8 @@ public class CarService {
     private OwnerDao ownerDao;
     @Autowired
     private CarFeeDao carFeeDao;
+    @Autowired
+    private CarCache carCache;
     @Value("${env.time.offset}")
     private String timeOffset;
 
@@ -74,6 +77,7 @@ public class CarService {
         );
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+        carCache.invalidate();
     }
 
     @Transactional

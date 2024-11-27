@@ -42,5 +42,9 @@ public class CarCache {
         }
         return result;
     }
+    public void invalidate() {
+        carCache.invalidateAll();
+    }
+
 
 }
