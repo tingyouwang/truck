@@ -5,6 +5,7 @@ import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
 import com.luzhu.truck.dto.car.*;
+import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -190,5 +191,9 @@ public class CarService {
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    public CarFee getCarFeeByLicenseNum(String licenseNum) {
+        return carFeeDao.getCarFeeByLicenseNum(licenseNum);
     }
 }

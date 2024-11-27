@@ -3,14 +3,18 @@ package com.luzhu.truck.controller.car;
 import com.luzhu.truck.cache.CarCache;
 import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.IdParam;
+import com.luzhu.truck.dto.LicenseNumParam;
 import com.luzhu.truck.dto.car.*;
 import com.luzhu.truck.entity.caragency.CarAgency;
+import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.car.CarService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,5 +86,10 @@ public class CarController {
     public ResponseModel<Object> addCarFee(@RequestBody @Valid AddCarFeeParam param) throws ExecutionException {
         carService.addCarFee(param);
         return new ResponseModel<>();
+    }
+
+    @PostMapping("/getCarFee")
+    public ResponseModel<CarFee> getCarFee(@RequestBody @Valid LicenseNumParam licenseNum) {
+        return new ResponseModel<>(carService.getCarFeeByLicenseNum(licenseNum.getCarLicenseNum()));
     }
 }
