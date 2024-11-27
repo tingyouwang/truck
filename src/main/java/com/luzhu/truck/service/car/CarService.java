@@ -84,6 +84,45 @@ public class CarService {
     }
 
     @Transactional
+    public void updateCar(UpdateCarParam param) {
+        int updateCount = carDao.updateCar(
+                param.getLicenseNumber(),
+                param.getIsUsing(),
+                param.getOwnerName(),
+                param.getCarAgency(),
+                param.getJoinDate(), // 遷入日期
+                param.getQuitDate(), // 遷出日期
+                param.getJoinAmount(),
+                param.getQuitAmount(),
+                param.getCarFrom(),
+                param.getQuitPlace(),
+                param.getLicenseIssueDate(), // 發照日期
+                param.getManufactureDate(), // 出廠日期
+                param.getBrand(),
+                param.getTon(),
+                Double.parseDouble(param.getCc()), // cc 數字轉換
+                param.getEngineNum(),
+                param.getInspectionDate(), // 驗車日期
+                param.getRenewLicenseDate(), // 換照日期
+                param.getCarTypeOutlooking(),
+                param.getPassLicense(),
+                param.getCarWeight(),
+                param.getLoadingWeight(),
+                param.getCarType(),
+                param.getInspectionType(),
+                param.getViolationDate(), // 超載到期
+                param.getReportStopDate(), // 報停日期
+                param.getReportScrapDate(), // 報銷日期
+                param.getOldLicenseNumber(),
+                param.getNote1(),
+                param.getNote2(),
+                param.getId() // ID
+        );
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
     public void addCarOwner(AddCarOwnerParam addCarOwnerParam) {
         int i = ownerDao.addOwner(
                 addCarOwnerParam.getName(),

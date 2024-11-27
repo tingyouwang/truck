@@ -36,8 +36,15 @@ public class CarController {
         return new ResponseModel<>(carInfoPageResult);
     }
     @PostMapping("/addCar")
-    public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) throws ExecutionException {
+    public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) {
         carService.addCar(param);
+        carCache.invalidate();
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/updateCar")
+    public ResponseModel<Object> updateCarInfo(@RequestBody @Valid UpdateCarParam param) {
+        carService.updateCar(param);
         carCache.invalidate();
         return new ResponseModel<>();
     }
