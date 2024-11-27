@@ -28,7 +28,7 @@ public class CarCache {
                 .build(new CacheLoader<String, List<CarInfo>>() {
                     @Override
                     public List<CarInfo> load(String key) throws Exception {
-                        return carService.getAllCar();
+                        return carService.getAllCarForDropDown();
                     }
                 });
     }

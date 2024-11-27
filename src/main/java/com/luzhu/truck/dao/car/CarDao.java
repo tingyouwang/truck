@@ -3,6 +3,8 @@ package com.luzhu.truck.dao.car;
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.entity.Car;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +16,7 @@ public interface CarDao extends BaseDao<Car, Integer> {
     List<String> getAllLicenseNumber();
     @Query(value = "SELECT id, license_number as licenseNumber, owner_name as ownerName FROM car WHERE is_using = 1",
             nativeQuery = true)
-    List<CarInfo> getAllCar();
+    List<CarInfo> getAllCarForDropDown();
     @Query(value = "SELECT * FROM car WHERE id = ?1",
     nativeQuery = true)
     Car getCarById(long id);
@@ -24,6 +26,16 @@ public interface CarDao extends BaseDao<Car, Integer> {
             "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30)",
             nativeQuery = true)
     int addCar(String licenseNumber, int isUsing, String ownerName, String carAgency, String joinDate, String quitDate, Double joinAmount, Double quitAmount, String carFrom, String quitPlace, String licenseIssueDate, String manufactureDate, String brand, String ton, Double cc, String engineNum, String inspectionDate, String renewLicenseDate, String carTypeOutlooking, String passLicense, String carWeight, String loadingWeight, String carType, Double inspectionType, String violationDate, String reportStopDate, String reportScrapDate, String oldLicenseNumber, String note1, String note2);
+
+    @Query(value = "SELECT * FROM car WHERE is_using = 1",
+            countQuery = "SELECT * FROM car WHERE is_using = 1",
+            nativeQuery = true)
+    Page<CarInfo> getAllCar(Pageable pageable);
+
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND license_number LIKE %?1%",
+            countQuery = "SELECT * FROM car WHERE is_using = 1 AND license_number LIKE %?1%",
+            nativeQuery = true)
+    Page<CarInfo> searchCarByLicenseNum(String num, Pageable pageable);
 
 
 }

@@ -25,7 +25,7 @@ public class AddCarParam {
     @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String licenseIssueDate;
     @NotBlank(message = "出廠日期必填")
-    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
+    @Pattern(regexp = "^\\d{3}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM")
     private String manufactureDate;
     @NotNull(message = "出廠年分(西元)必填")
     private Integer westYear;

@@ -1,21 +1,17 @@
 package com.luzhu.truck.service.car;
 
-import com.luzhu.truck.cache.CarCache;
+
 import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
-import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.car.*;
-import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
-import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -32,14 +28,22 @@ public class CarService {
     private OwnerDao ownerDao;
     @Autowired
     private CarFeeDao carFeeDao;
-    @Autowired
-    private CarCache carCache;
     @Value("${env.time.offset}")
     private String timeOffset;
 
-    public List<CarInfo> getAllCar() {
-        return carDao.getAllCar();
+    public List<CarInfo> getAllCarForDropDown() {
+        return carDao.getAllCarForDropDown();
     }
+
+    public PageResult<CarInfo> searchCarByLicenseNum(SearchCarLicenseNumParam param) {
+        if (StringUtils.hasText(param.getLicenseNumber())) {
+            return new PageResult<>(carDao.searchCarByLicenseNum(param.getLicenseNumber(), param.getPageable()));
+        } else {
+            return new PageResult<>(carDao.getAllCar(param.getPageable()));
+        }
+    }
+
+
 
     @Transactional
     public void addCar(AddCarParam addCarParam) {
@@ -77,7 +81,6 @@ public class CarService {
         );
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
-        carCache.invalidate();
     }
 
     @Transactional

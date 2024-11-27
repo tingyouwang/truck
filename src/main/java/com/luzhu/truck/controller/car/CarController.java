@@ -24,14 +24,21 @@ public class CarController {
     private CarCache carCache;
     @Autowired
     private CarService carService;
-    @PostMapping("/carInfo")
+    @PostMapping("/carInfoDropDownList")
     public ResponseModel<List<CarInfo>> getCarInfo() throws ExecutionException {
         List<CarInfo> all = carCache.getAllCars("all");
         return new ResponseModel<>(all);
     }
+
+    @PostMapping("/searchCarByLicenseNum")
+    public ResponseModel<PageResult<CarInfo>> getCarList(@RequestBody SearchCarLicenseNumParam param) throws ExecutionException {
+        PageResult<CarInfo> carInfoPageResult = carService.searchCarByLicenseNum(param);
+        return new ResponseModel<>(carInfoPageResult);
+    }
     @PostMapping("/addCar")
     public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) throws ExecutionException {
         carService.addCar(param);
+        carCache.invalidate();
         return new ResponseModel<>();
     }
 
