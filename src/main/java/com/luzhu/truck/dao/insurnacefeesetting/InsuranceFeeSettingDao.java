@@ -27,10 +27,10 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
     int insertInsuranceFeeSetting(String carLicenseNum, String insuranceCom, String startDate, String endDate,
                                   double amount, String insuranceType, String insuranceNum, String insuranceCardNum, long createTime,
                                   long updateTime);
-    @Query(value = "SELECT * FROM insurance_fee_setting",
-            countQuery = " SELECT COUNT(1) FROM insurance_fee_setting"
+    @Query(value = "SELECT * FROM insurance_fee_setting WHERE car_license_num = ?1 ORDER BY start_date DESC",
+            countQuery = " SELECT COUNT(1) FROM insurance_fee_setting WHERE car_license_num = ?1 ORDER BY start_date DESC"
             , nativeQuery = true)
-    Page<InsuranceFeeSetting> getAllInsuranceFeeSetting(Pageable pageable);
+    Page<InsuranceFeeSetting> getInsuranceFeeSettingByLicenseNum(String carLicenseNum, Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE insurance_fee_setting SET status = 'DISABLE' WHERE car_license_num = ?1 AND insurance_card_num = ?2",

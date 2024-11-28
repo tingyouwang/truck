@@ -3,6 +3,7 @@ package com.luzhu.truck.service.insurancefeesetting;
 import com.luzhu.truck.dao.insurancefee.InsuranceFeeDao;
 import com.luzhu.truck.dao.insurnacefeesetting.InsuranceFeeSettingDao;
 import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.car.LicenseNumPageParam;
 import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
@@ -86,8 +87,8 @@ public class InsuranceFeeSettingService {
 
     }
 
-    public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(BaseParam param) {
-        Page<InsuranceFeeSetting> allInsuranceFeeSetting = insuranceFeeSettingDao.getAllInsuranceFeeSetting(param.getPageable());
+    public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(LicenseNumPageParam param) {
+        Page<InsuranceFeeSetting> allInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByLicenseNum(param.getCarLicenseNum(), param.getPageable());
         return new PageResult<>(allInsuranceFeeSetting);
 
     }
