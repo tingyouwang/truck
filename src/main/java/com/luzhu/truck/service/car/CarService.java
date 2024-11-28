@@ -10,6 +10,7 @@ import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
+import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -179,18 +181,42 @@ public class CarService {
     }
 
     @Transactional
-    public void addCarFee(AddCarFeeParam addCarParam) {
+    public void addCarFee(AddCarFeeParam param) {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
 
-        int insertCount = carFeeDao.addCarFee(addCarParam.getCarLicenseNum(), addCarParam.getManageFee(), addCarParam.getSaleTax(), addCarParam.getBuyTax(),
-                addCarParam.getGasTax(), addCarParam.getOweTax(), addCarParam.getReceipTax(),
-                addCarParam.getFuelTaxSpring(), addCarParam.getFuelTaxSummer(), addCarParam.getFuelTaxAutumn(), addCarParam.getFuelTaxWinter(),
-                addCarParam.getLicenseTaxFirstHalf(), addCarParam.getLicenseTaxSecondHalf(), addCarParam.getUnionFee(), addCarParam.getLaborFee(),
-                addCarParam.getHealthyFee(), addCarParam.getReadyFee(), addCarParam.getPeopleHelpFee(), now,
-                now, "aaadmin");
+        CarFee carFee = new CarFee();
+        carFee.setCarLicenseNum(param.getCarLicenseNum());
+        carFee.setManageFee(param.getManageFee());
+        carFee.setSaleTax(param.getSaleTax());
+        carFee.setBuyTax(param.getBuyTax());
+        carFee.setGasTax(param.getGasTax());
+        carFee.setOweTax(param.getOweTax());
+        carFee.setReceipTax(param.getReceipTax());
+        carFee.setFuelTaxSpring(param.getFuelTaxSpring());
+        carFee.setFuelTaxSummer(param.getFuelTaxSummer());
+        carFee.setFuelTaxAutumn(param.getFuelTaxAutumn());
+        carFee.setFuelTaxWinter(param.getFuelTaxWinter());
+        carFee.setLicenseTaxFirstHalf(param.getLicenseTaxFirstHalf());
+        carFee.setLicenseTaxSecondHalf(param.getLicenseTaxSecondHalf());
+        carFee.setUnionFee(param.getUnionFee());
+        carFee.setLaborFee(param.getLaborFee());
+        carFee.setHealthyFee(param.getHealthyFee());
+        carFee.setReadyFee(param.getReadyFee());
+        carFee.setPeopleHelpFee(param.getPeopleHelpFee());
+        carFee.setCreateTime(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))); // 設定創建時間
+        carFee.setUpdateTime(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))); // 設定更新時間
+        carFee.setUpdateBy("system"); // 設定更新者，實際可改為登入用戶
+        CarFee save = carFeeDao.save(carFee);
 
-        Validator.isFalseThrow(1 == insertCount,
-                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+//        int insertCount = carFeeDao.addCarFee(addCarParam.getCarLicenseNum(), addCarParam.getManageFee(), addCarParam.getSaleTax(), addCarParam.getBuyTax(),
+//                addCarParam.getGasTax(), addCarParam.getOweTax(), addCarParam.getReceipTax(),
+//                addCarParam.getFuelTaxSpring(), addCarParam.getFuelTaxSummer(), addCarParam.getFuelTaxAutumn(), addCarParam.getFuelTaxWinter(),
+//                addCarParam.getLicenseTaxFirstHalf(), addCarParam.getLicenseTaxSecondHalf(), addCarParam.getUnionFee(), addCarParam.getLaborFee(),
+//                addCarParam.getHealthyFee(), addCarParam.getReadyFee(), addCarParam.getPeopleHelpFee(), now,
+//                now, "aaadmin");
+//
+//        Validator.isFalseThrow(1 == insertCount,
+//                new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
     public CarFee getCarFeeByLicenseNum(String licenseNum) {
