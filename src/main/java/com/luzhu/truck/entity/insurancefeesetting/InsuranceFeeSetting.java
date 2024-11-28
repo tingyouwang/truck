@@ -1,9 +1,8 @@
 package com.luzhu.truck.entity.insurancefeesetting;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.luzhu.truck.entity.BaseCompositePk;
+import com.luzhu.truck.entity.InsuranceFeeSettingPk;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,10 +10,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "insurance_fee_setting")
 @Data
+@IdClass(InsuranceFeeSettingPk.class)
 public class InsuranceFeeSetting {
     @Id
     @Column(name = "car_license_num")
     private String carLicenseNum;
+    @Id
+    @Column(name = "insurance_card_num")
+    private String insuranceCardNum;
 
     @Column(name = "insurance_com")
     private String insuranceCom;
@@ -37,9 +40,6 @@ public class InsuranceFeeSetting {
 
     @Column(name = "insurance_num")
     private String insuranceNum;
-
-    @Column(name = "insurance_card_num")
-    private String insuranceCardNum;
 
     @Column(name = "quit_date")
     private LocalDate quitDate;
