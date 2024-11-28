@@ -2,6 +2,7 @@ package com.luzhu.truck.dto.loanfeesetting;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,9 +16,11 @@ public class AddLoanFeeSettingParam {
     @NotBlank(message = "需填入貸款公司")
     private String loanCompany;
     @NotNull
-    private LocalDateTime startDatetime;
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
+    private String startDate;
     @NotNull
-    private LocalDateTime endDatetime;
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
+    private String endDate;
     @NotNull
     private BigDecimal totalAmount;
     @NotNull

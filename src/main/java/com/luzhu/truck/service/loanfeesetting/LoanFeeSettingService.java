@@ -29,14 +29,23 @@ public class LoanFeeSettingService {
 
     @Transactional
     public void addLoanFeeSetting(AddLoanFeeSettingParam addLoanFeeSettingParam) {
-        //存入時間時區為UTC
-        OffsetDateTime startDatetime = addLoanFeeSettingParam.getStartDatetime().atOffset(ZoneOffset.UTC);
-        OffsetDateTime endDatetime = addLoanFeeSettingParam.getEndDatetime().atOffset(ZoneOffset.UTC);
+//        //存入時間時區為UTC
+//        OffsetDateTime startDatetime = addLoanFeeSettingParam.getStartDate().atOffset(ZoneOffset.UTC);
+//        OffsetDateTime endDatetime = addLoanFeeSettingParam.getEndDate().atOffset(ZoneOffset.UTC);
+        LocalDate start = LocalDate.parse(addLoanFeeSettingParam.getStartDate());
+        LocalDate end = LocalDate.parse(addLoanFeeSettingParam.getEndDate());
 
-        int insertCount = loanFeeSettingDao.insertLoanFeeSetting(addLoanFeeSettingParam.getCarLicenseNum(), addLoanFeeSettingParam.getLoanCompany(), startDatetime.toLocalDate(),
-                startDatetime.toLocalDateTime(),endDatetime.toLocalDate(), endDatetime.toLocalDateTime(), addLoanFeeSettingParam.getTotalAmount(), addLoanFeeSettingParam.getMonthPayAmount());
-        Validator.isFalseThrow(1 == insertCount,
-                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+        LoanFeeSetting loanFeeSetting = new LoanFeeSetting();
+        loanFeeSetting.setCarLicenseNum(addLoanFeeSettingParam.getCarLicenseNum());
+        loanFeeSetting.setLoanCompany(addLoanFeeSettingParam.getLoanCompany());
+        loanFeeSetting.setStartDate(start);
+//        loanFeeSetting.setStartDatetime(startDatetime.toLocalDateTime());
+        loanFeeSetting.setEndDate(end);
+//        loanFeeSetting.setEndDatetime(endDatetime.toLocalDateTime());
+        loanFeeSetting.setTotalAmount(addLoanFeeSettingParam.getTotalAmount().doubleValue());
+        loanFeeSetting.setMonthPayAmount(addLoanFeeSettingParam.getMonthPayAmount().doubleValue());
+
+        loanFeeSettingDao.save(loanFeeSetting);
     }
 
     public static void main(String[] args) {
