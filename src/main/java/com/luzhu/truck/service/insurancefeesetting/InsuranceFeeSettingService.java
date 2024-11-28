@@ -5,6 +5,7 @@ import com.luzhu.truck.dao.insurnacefeesetting.InsuranceFeeSettingDao;
 import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
+import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.exception.AppException;
@@ -53,9 +54,35 @@ public class InsuranceFeeSettingService {
         insuranceFee.setAmount(new BigDecimal(param.getAmount()));
         insuranceFee.setExpenseYearMonth(yearMonth);
         insuranceFee.setCreateTime(l);
+        insuranceFee.setInsuranceCardNum(param.getInsuranceCardNum());
+        insuranceFee.setStatus("ENABLE");
 
         //todo 如何檢查插入成功
         insuranceFeeDao.save(insuranceFee);
+
+    }
+
+    @Transactional
+    public void updateInsuranceFeeSetting(UpdateInsuranceFeeSettingParam param) {
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        long l = now.toEpochSecond(ZoneOffset.UTC);
+
+        LocalDate localDate = now.toLocalDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        String yearMonth = localDate.format(formatter);
+
+        int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSetting(param.getCarLicenseNum(), param.getInsuranceCom(), param.getStartDate(), param.getEndDate(),
+                param.getPayUsDate(), param.getAmount(), param.getInsuranceType(), param.getInsuranceNum(), param.getQuitDate(), l,
+                "ADMIN", "ENABLE", param.getOriginalInsuranceCardNum(), param.getInsuranceCardNum());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+
+        //連同帳單一起修改
+        int i = insuranceFeeDao.updateInsuranceFee(param.getCarLicenseNum(), param.getOriginalInsuranceCardNum(),
+                param.getAmount(), param.getInsuranceCardNum(), yearMonth);
+
+        Validator.isFalseThrow(1 == i,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
     }
 
@@ -67,8 +94,11 @@ public class InsuranceFeeSettingService {
 
     @Transactional
     public void deleteInsuranceFeeSetting(DeleteInsuranceSettingParam param) {
-        int deleteCount = insuranceFeeSettingDao.deleteInsuranceFeeSettingById(param.getCarLicenseNum(), param.getInsuranceCardNum());
-        Validator.isFalseThrow(1 == deleteCount,
+        int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSettingById(param.getCarLicenseNum(), param.getInsuranceCardNum());
+        int updateFeeCount = insuranceFeeDao.disableInsuranceFee(param.getCarLicenseNum(), param.getInsuranceCardNum());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.DELETE_ERROR));
+        Validator.isFalseThrow(1 == updateFeeCount,
                 new AppException(SystemExceptionEnum.DELETE_ERROR));
     }
 

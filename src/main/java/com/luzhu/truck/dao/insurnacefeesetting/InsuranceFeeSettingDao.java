@@ -24,7 +24,7 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
             "(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
     nativeQuery = true)
     @Modifying
-    int insertInsuranceFeeSetting(String carLicenseNum, String insuranceCom, LocalDate startDate, LocalDate endDate,
+    int insertInsuranceFeeSetting(String carLicenseNum, String insuranceCom, String startDate, String endDate,
                                   double amount, String insuranceType, String insuranceNum, String insuranceCardNum, long createTime,
                                   long updateTime);
     @Query(value = "SELECT * FROM insurance_fee_setting",
@@ -33,13 +33,25 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
     Page<InsuranceFeeSetting> getAllInsuranceFeeSetting(Pageable pageable);
 
     @Modifying
-    @Query(value = "DELETE FROM insurance_fee_setting WHERE car_license_num = ?1 AND insurance_card_num = ?2",
+    @Query(value = "UPDATE insurance_fee_setting SET status = 'DISABLE' WHERE car_license_num = ?1 AND insurance_card_num = ?2",
             nativeQuery = true)
-    int deleteInsuranceFeeSettingById(String carLicenseNum, String insuranceCardNum);
+    int updateInsuranceFeeSettingById(String carLicenseNum, String insuranceCardNum);
 
     @Query(value = "SELECT * FROM insurance_fee_setting WHERE ?1 BETWEEN start_date AND end_date",
             nativeQuery = true)
     List<InsuranceFeeSetting> getUsingInsuranceFeeSetting(LocalDate now);
+
+    @Modifying
+    @Query(value = "UPDATE insurance_fee_setting " +
+            "SET insurance_com = ?2, start_date = ?3, end_date = ?4, pay_us_date = ?5, " +
+            "amount = ?6, insurance_type = ?7, insurance_num = ?8, quit_date = ?9, " +
+            "update_time = ?10, update_by = ?11, status = ?12, insurance_card_num = ?14 " +
+            "WHERE car_license_num = ?1 AND insurance_card_num = ?13",
+            nativeQuery = true)
+    int updateInsuranceFeeSetting(String carLicenseNum, String insuranceCom, String startDate, String endDate,
+                                  String payUsDate, double amount, String insuranceType, String insuranceNum,
+                                  String quitDate, long updateTime, String updateBy, String status,
+                                  String OriginalInsuranceCardNum, String newInsuranceCardNum);
 
 
 }

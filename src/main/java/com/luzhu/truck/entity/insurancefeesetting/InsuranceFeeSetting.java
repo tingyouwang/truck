@@ -52,5 +52,7 @@ public class InsuranceFeeSetting {
 
     @Column(name = "update_by")
     private String updateBy;
+    @Column(name = "status")
+    private String status;
 
 }

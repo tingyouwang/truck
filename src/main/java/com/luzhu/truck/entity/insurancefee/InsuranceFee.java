@@ -25,5 +25,9 @@ public class InsuranceFee {
 
     @Column(name = "create_time")
     private long createTime;
+    @Column(name = "insurance_card_num")
+    private String insuranceCardNum;
+    @Column(name = "status")
+    private String status;
 
 }
