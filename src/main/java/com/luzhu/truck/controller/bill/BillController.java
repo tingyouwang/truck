@@ -36,7 +36,8 @@ public class BillController {
     public ResponseModel<MonthBillResponse> getMonthBill(@RequestBody @Valid MonthBillReq req) throws ExecutionException {
         List<CarInfo> allCars = carCache.getAllCars("all");
 
-        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getId() == req.getId()).findFirst();
+//        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getId() == req.getId()).findFirst();
+        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getLicenseNumber().equalsIgnoreCase(req.getCarLicenseNum())).findFirst();
 
         if (searchCarOpt.isPresent()) {
             MonthBillResponse monthBill = billService.getMonthBill(req);

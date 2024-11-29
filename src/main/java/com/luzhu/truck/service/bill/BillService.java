@@ -98,7 +98,7 @@ public class BillService {
     @Autowired
     private ReturnMoneyDao returnMoneyDao;
     public MonthBillResponse getMonthBill(MonthBillReq req) {
-        Car searchCar = carDao.getCarById(req.getId());
+//        Car searchCar = carDao.getCarById(req.getId());
 
         MonthBillResponse res = new MonthBillResponse();
 

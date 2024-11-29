@@ -9,8 +9,8 @@ import java.time.LocalDate;
 
 @Data
 public class MonthBillReq {
-    @NotNull(message = "車主id不可為空")
-    private Long id;
+//    @NotNull(message = "車主id不可為空")
+//    private Long id;
     @NotBlank(message = "車牌不可為空")
     private String carLicenseNum;
     @NotBlank(message = "車主姓名不可為空")

@@ -39,7 +39,7 @@ public class LastMonthOweService {
                 MonthBillReq monthBillReq = new MonthBillReq();
                 monthBillReq.setBillDate(yearMonth);
                 monthBillReq.setCarLicenseNum(car.getLicenseNumber());
-                monthBillReq.setId(car.getId());
+//                monthBillReq.setId(car.getId());
                 monthBillReq.setOwnerName(car.getOwnerName());
 
                 MonthBillResponse monthBill = billService.getMonthBill(monthBillReq);
