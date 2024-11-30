@@ -6,6 +6,7 @@ import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSettingDto;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
@@ -21,8 +22,8 @@ public class InsuranceFeeSettingController {
     private InsuranceFeeSettingService insuranceFeeSettingService;
 
     @PostMapping("/getInsuranceFeeSetting")
-    public ResponseModel<PageResult<InsuranceFeeSetting>> getInsuranceCompany(@RequestBody LicenseNumPageParam param) {
-        PageResult<InsuranceFeeSetting> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
+    public ResponseModel<PageResult<InsuranceFeeSettingDto>> getInsuranceCompany(@RequestBody LicenseNumPageParam param) {
+        PageResult<InsuranceFeeSettingDto> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
         return new ResponseModel<>(insuranceFeeSetting);
     }
 

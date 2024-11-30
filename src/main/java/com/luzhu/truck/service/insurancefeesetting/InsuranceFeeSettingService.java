@@ -9,6 +9,7 @@ import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSettingDto;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
@@ -17,6 +18,7 @@ import com.luzhu.truck.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,9 +89,35 @@ public class InsuranceFeeSettingService {
 
     }
 
-    public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(LicenseNumPageParam param) {
+    public PageResult<InsuranceFeeSettingDto> getInsuranceFeeSetting(LicenseNumPageParam param) {
         Page<InsuranceFeeSetting> allInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByLicenseNum(param.getCarLicenseNum(), param.getPageable());
-        return new PageResult<>(allInsuranceFeeSetting);
+
+        List<InsuranceFeeSettingDto> collect = allInsuranceFeeSetting.stream().map(dto -> {
+            InsuranceFeeSettingDto d = new InsuranceFeeSettingDto();
+            d.setCarLicenseNum(dto.getCarLicenseNum());
+            d.setInsuranceCardNum(dto.getInsuranceCardNum());
+            d.setStartDate(DateTimeUtil.parseToMinguoDate(dto.getStartDate()));
+            d.setEndDate(DateTimeUtil.parseToMinguoDate(dto.getEndDate()));
+            if (null != dto.getPayUsDate()) {
+                d.setPayUsDate(DateTimeUtil.parseToMinguoDate(dto.getPayUsDate()));
+            }
+
+            if (null != dto.getQuitDate()) {
+                d.setQuitDate(DateTimeUtil.parseToMinguoDate(dto.getQuitDate()));
+            }
+
+            d.setCreateTime(dto.getCreateTime());
+            d.setUpdateTime(dto.getUpdateTime());
+            d.setUpdateBy(dto.getUpdateBy());
+            d.setStatus(dto.getStatus());
+            return d;
+        }).collect(Collectors.toList());
+
+        Page<InsuranceFeeSettingDto> insuranceFeeSettingDtos = new PageImpl<>(collect, allInsuranceFeeSetting.getPageable(), allInsuranceFeeSetting.getTotalElements());
+
+//        return new PageImpl<>(dtos, insuranceFeeSettingPage.getPageable(), insuranceFeeSettingPage.getTotalElements());
+
+        return new PageResult<>(insuranceFeeSettingDtos);
 
     }
 
