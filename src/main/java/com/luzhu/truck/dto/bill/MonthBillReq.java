@@ -13,8 +13,8 @@ public class MonthBillReq {
 //    private Long id;
     @NotBlank(message = "車牌不可為空")
     private String carLicenseNum;
-    @NotBlank(message = "車主姓名不可為空")
-    private String ownerName;
+//    @NotBlank(message = "車主姓名不可為空")
+//    private String ownerName;
     @NotBlank(message = "帳單日期不可為空")
     private String billDate;
 }

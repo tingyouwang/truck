@@ -40,7 +40,7 @@ public class LastMonthOweService {
                 monthBillReq.setBillDate(yearMonth);
                 monthBillReq.setCarLicenseNum(car.getLicenseNumber());
 //                monthBillReq.setId(car.getId());
-                monthBillReq.setOwnerName(car.getOwnerName());
+//                monthBillReq.setOwnerName(car.getOwnerName());
 
                 MonthBillResponse monthBill = billService.getMonthBill(monthBillReq);
                 LastMonthOwe lastMonthOwe = new LastMonthOwe();

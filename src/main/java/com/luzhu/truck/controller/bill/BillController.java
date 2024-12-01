@@ -55,7 +55,8 @@ public class BillController {
     public ResponseModel<MonthsBillDetailResponse> getMonthBillDetail(@RequestBody @Valid MonthBillDetailReq req, HttpServletResponse response) throws Exception {
         List<CarInfo> allCars = carCache.getAllCars("all");
 
-        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getId() == req.getId()).findFirst();
+//        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getId() == req.getId()).findFirst();
+        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getLicenseNumber().equalsIgnoreCase(req.getCarLicenseNum())).findFirst();
 
         if (searchCarOpt.isPresent()) {
             MonthsBillDetailResponse billDetail = billService.getBillDetail(req);
@@ -64,7 +65,7 @@ public class BillController {
                 response.setContentType("application/pdf");
                 response.setHeader("Content-Disposition", "attachment; filename=report.pdf");
                 OutputStream out = response.getOutputStream();
-                reportService.billDetailPDF(out, billDetail, req);
+                reportService.billDetailPDF(out, billDetail, req, searchCarOpt.get());
                 out.flush();
             }
 
