@@ -35,5 +35,6 @@ public class LoanFeeSetting {
 
     @Column(name = "month_pay_amount")
     private double monthPayAmount;
+    private String note;
 
 }

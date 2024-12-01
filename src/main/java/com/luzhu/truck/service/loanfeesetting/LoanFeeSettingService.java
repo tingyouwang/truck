@@ -44,6 +44,7 @@ public class LoanFeeSettingService {
 //        loanFeeSetting.setEndDatetime(endDatetime.toLocalDateTime());
         loanFeeSetting.setTotalAmount(addLoanFeeSettingParam.getTotalAmount().doubleValue());
         loanFeeSetting.setMonthPayAmount(addLoanFeeSettingParam.getMonthPayAmount().doubleValue());
+        loanFeeSetting.setNote(addLoanFeeSettingParam.getNote());
 
         loanFeeSettingDao.save(loanFeeSetting);
     }

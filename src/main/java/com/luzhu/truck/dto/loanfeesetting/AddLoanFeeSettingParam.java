@@ -25,5 +25,6 @@ public class AddLoanFeeSettingParam {
     private BigDecimal totalAmount;
     @NotNull
     private BigDecimal monthPayAmount;
+    private String note;
 
 }
