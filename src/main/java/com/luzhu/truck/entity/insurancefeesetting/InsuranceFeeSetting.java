@@ -23,14 +23,14 @@ public class InsuranceFeeSetting {
     private String insuranceCom;
 
     @Column(name = "start_date")
-    private LocalDate startDate;
+    private String startDate;
 
     @Column(name = "end_date")
-    private LocalDate endDate;
+    private String endDate;
 
     //入帳日
     @Column(name = "pay_us_date")
-    private LocalDate payUsDate;
+    private String payUsDate;
 
     @Column(name = "amount")
     private double amount;
@@ -42,7 +42,7 @@ public class InsuranceFeeSetting {
     private String insuranceNum;
 
     @Column(name = "quit_date")
-    private LocalDate quitDate;
+    private String quitDate;
 
     @Column(name = "create_time", updatable = false, insertable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Long createTime;

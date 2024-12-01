@@ -22,8 +22,8 @@ public class InsuranceFeeSettingController {
     private InsuranceFeeSettingService insuranceFeeSettingService;
 
     @PostMapping("/getInsuranceFeeSetting")
-    public ResponseModel<PageResult<InsuranceFeeSettingDto>> getInsuranceCompany(@RequestBody LicenseNumPageParam param) {
-        PageResult<InsuranceFeeSettingDto> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
+    public ResponseModel<PageResult<InsuranceFeeSetting>> getInsuranceCompany(@RequestBody LicenseNumPageParam param) {
+        PageResult<InsuranceFeeSetting> insuranceFeeSetting = insuranceFeeSettingService.getInsuranceFeeSetting(param);
         return new ResponseModel<>(insuranceFeeSetting);
     }
 

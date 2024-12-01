@@ -19,14 +19,14 @@ public class LoanFeeSetting {
 
     @Column(name = "start_date")
 //    @Temporal(TemporalType.DATE)
-    private LocalDate startDate;
+    private String startDate;
     @Column(name = "start_datetime")
 //    @Temporal(TemporalType.DATE)
     private LocalDateTime startDatetime;
 
     @Column(name = "end_date")
 //    @Temporal(TemporalType.DATE)
-    private LocalDate endDate;
+    private String endDate;
     @Column(name = "end_datetime")
     private LocalDateTime endDatetime;
 

@@ -32,15 +32,15 @@ public class LoanFeeSettingService {
 //        //存入時間時區為UTC
 //        OffsetDateTime startDatetime = addLoanFeeSettingParam.getStartDate().atOffset(ZoneOffset.UTC);
 //        OffsetDateTime endDatetime = addLoanFeeSettingParam.getEndDate().atOffset(ZoneOffset.UTC);
-        LocalDate start = LocalDate.parse(addLoanFeeSettingParam.getStartDate());
-        LocalDate end = LocalDate.parse(addLoanFeeSettingParam.getEndDate());
+//        LocalDate start = LocalDate.parse(addLoanFeeSettingParam.getStartDate());
+//        LocalDate end = LocalDate.parse(addLoanFeeSettingParam.getEndDate());
 
         LoanFeeSetting loanFeeSetting = new LoanFeeSetting();
         loanFeeSetting.setCarLicenseNum(addLoanFeeSettingParam.getCarLicenseNum());
         loanFeeSetting.setLoanCompany(addLoanFeeSettingParam.getLoanCompany());
-        loanFeeSetting.setStartDate(start);
+        loanFeeSetting.setStartDate(addLoanFeeSettingParam.getStartDate());
 //        loanFeeSetting.setStartDatetime(startDatetime.toLocalDateTime());
-        loanFeeSetting.setEndDate(end);
+        loanFeeSetting.setEndDate(addLoanFeeSettingParam.getEndDate());
 //        loanFeeSetting.setEndDatetime(endDatetime.toLocalDateTime());
         loanFeeSetting.setTotalAmount(addLoanFeeSettingParam.getTotalAmount().doubleValue());
         loanFeeSetting.setMonthPayAmount(addLoanFeeSettingParam.getMonthPayAmount().doubleValue());

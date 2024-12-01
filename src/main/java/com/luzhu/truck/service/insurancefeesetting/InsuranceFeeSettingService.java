@@ -89,37 +89,37 @@ public class InsuranceFeeSettingService {
 
     }
 
-    public PageResult<InsuranceFeeSettingDto> getInsuranceFeeSetting(LicenseNumPageParam param) {
+    public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(LicenseNumPageParam param) {
         Page<InsuranceFeeSetting> allInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByLicenseNum(param.getCarLicenseNum(), param.getPageable());
 
-        List<InsuranceFeeSettingDto> collect = allInsuranceFeeSetting.stream().map(dto -> {
-            InsuranceFeeSettingDto d = new InsuranceFeeSettingDto();
-            d.setCarLicenseNum(dto.getCarLicenseNum());
-            d.setInsuranceCardNum(dto.getInsuranceCardNum());
-            d.setStartDate(DateTimeUtil.parseToMinguoDate(dto.getStartDate()));
-            d.setEndDate(DateTimeUtil.parseToMinguoDate(dto.getEndDate()));
-            if (null != dto.getPayUsDate()) {
-                d.setPayUsDate(DateTimeUtil.parseToMinguoDate(dto.getPayUsDate()));
-            }
-
-            if (null != dto.getQuitDate()) {
-                d.setQuitDate(DateTimeUtil.parseToMinguoDate(dto.getQuitDate()));
-            }
-
-            d.setCreateTime(dto.getCreateTime());
-            d.setUpdateTime(dto.getUpdateTime());
-            d.setUpdateBy(dto.getUpdateBy());
-            d.setStatus(dto.getStatus());
-            d.setInsuranceType(dto.getInsuranceType());
-            d.setInsuranceNum(dto.getInsuranceNum());
-            return d;
-        }).collect(Collectors.toList());
-
-        Page<InsuranceFeeSettingDto> insuranceFeeSettingDtos = new PageImpl<>(collect, allInsuranceFeeSetting.getPageable(), allInsuranceFeeSetting.getTotalElements());
+//        List<InsuranceFeeSettingDto> collect = allInsuranceFeeSetting.stream().map(dto -> {
+//            InsuranceFeeSettingDto d = new InsuranceFeeSettingDto();
+//            d.setCarLicenseNum(dto.getCarLicenseNum());
+//            d.setInsuranceCardNum(dto.getInsuranceCardNum());
+//            d.setStartDate(DateTimeUtil.parseToMinguoDate(dto.getStartDate()));
+//            d.setEndDate(DateTimeUtil.parseToMinguoDate(dto.getEndDate()));
+//            if (null != dto.getPayUsDate()) {
+//                d.setPayUsDate(DateTimeUtil.parseToMinguoDate(dto.getPayUsDate()));
+//            }
+//
+//            if (null != dto.getQuitDate()) {
+//                d.setQuitDate(DateTimeUtil.parseToMinguoDate(dto.getQuitDate()));
+//            }
+//
+//            d.setCreateTime(dto.getCreateTime());
+//            d.setUpdateTime(dto.getUpdateTime());
+//            d.setUpdateBy(dto.getUpdateBy());
+//            d.setStatus(dto.getStatus());
+//            d.setInsuranceType(dto.getInsuranceType());
+//            d.setInsuranceNum(dto.getInsuranceNum());
+//            return d;
+//        }).collect(Collectors.toList());
+//
+//        Page<InsuranceFeeSettingDto> insuranceFeeSettingDtos = new PageImpl<>(collect, allInsuranceFeeSetting.getPageable(), allInsuranceFeeSetting.getTotalElements());
 
 //        return new PageImpl<>(dtos, insuranceFeeSettingPage.getPageable(), insuranceFeeSettingPage.getTotalElements());
 
-        return new PageResult<>(insuranceFeeSettingDtos);
+        return new PageResult<>(allInsuranceFeeSetting);
 
     }
 
