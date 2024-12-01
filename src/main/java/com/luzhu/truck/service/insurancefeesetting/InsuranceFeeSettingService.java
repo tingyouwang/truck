@@ -110,6 +110,8 @@ public class InsuranceFeeSettingService {
             d.setUpdateTime(dto.getUpdateTime());
             d.setUpdateBy(dto.getUpdateBy());
             d.setStatus(dto.getStatus());
+            d.setInsuranceType(dto.getInsuranceType());
+            d.setInsuranceNum(dto.getInsuranceNum());
             return d;
         }).collect(Collectors.toList());
 
