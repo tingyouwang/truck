@@ -24,11 +24,11 @@ public class Invoice {
 
     @Column(name = "invoice_date", nullable = false)
 //    @Temporal(TemporalType.DATE)
-    private LocalDate invoiceDate;
+    private String invoiceDate;
 
     @Column(name = "handle_date", nullable = false)
 //    @Temporal(TemporalType.DATE)
-    private LocalDate handleDate;
+    private String handleDate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;

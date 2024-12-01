@@ -248,9 +248,10 @@ public class BillService {
                 } else if (fee.getType().equals("OFFSET")) {
                     builder.name("抵發發票").offsetAmount(fee.getAmountTax().intValue());
                 }
+                LocalDate parse = LocalDate.parse(fee.getInvoiceDate(), DateTimeFormatter.ISO_DATE);
                 return builder.expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                         .note(fee.getNote())
-                        .date(DateTimeUtil.parseToMinguoDate(fee.getInvoiceDate()))
+                        .date(DateTimeUtil.parseToMinguoDate(parse))
                         .build();
             }).toList();
             res.addAll(invoiceRes);
