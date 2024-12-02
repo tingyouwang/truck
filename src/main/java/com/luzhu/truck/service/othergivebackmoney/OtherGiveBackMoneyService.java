@@ -2,6 +2,7 @@ package com.luzhu.truck.service.othergivebackmoney;
 
 import com.luzhu.truck.dao.othergivebackmoney.OtherGiveBackMoneyDao;
 import com.luzhu.truck.dto.othergivebackmoney.AddOtherGiveBackMoneyParam;
+import com.luzhu.truck.dto.othergivebackmoney.UpdateOtherGiveBackMoneyParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -22,6 +23,15 @@ public class OtherGiveBackMoneyService {
         int insertCount = otherGiveBackMoneyDao.insertOtherGiveBackMoney(param.getCarLicenseNum(), param.getGiveBackDate(), param.getAmount(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateOtherGiveBackMoney(UpdateOtherGiveBackMoneyParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = otherGiveBackMoneyDao.updateOtherGiveBackMoney(param.getCarLicenseNum(), param.getGiveBackDate(), param.getAmount(), param.getNote(), l, param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 }
