@@ -1,7 +1,10 @@
 package com.luzhu.truck.controller.payinterest;
 
+import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.payinterest.AddPayInterestParam;
 import com.luzhu.truck.dto.payinterest.UpdatePayInterestParam;
+import com.luzhu.truck.entity.payinterest.PayInterest;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.payinterest.PayInterestService;
 import jakarta.validation.Valid;
@@ -26,5 +29,10 @@ public class PayInterestController {
         payInterestService.updatePayInterest(param);
 
         return new ResponseModel<>();
+    }
+
+    @PostMapping("/getPayInterest")
+    public ResponseModel<PageResult<PayInterest>> getPayInterestList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
+        return new ResponseModel<>(payInterestService.getLendMoneyList(param));
     }
 }
