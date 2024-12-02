@@ -2,6 +2,8 @@ package com.luzhu.truck.dao.receiveoffset;
 
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.entity.receiveoffset.ReceiveOffset;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,11 @@ public interface ReceiveOffsetDao extends BaseDao<ReceiveOffset, Integer> {
     @Query(value = "SELECT * FROM receive_offset WHERE car_license_num = ?1 AND pay_date between ?2 AND ?3"
             , nativeQuery = true)
     List<ReceiveOffset> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
+    @Query(value = "SELECT * FROM receive_offset WHERE car_license_num = ?1 AND pay_date between ?2 AND ?3"
+            , nativeQuery = true
+            , countQuery = "SELECT COUNT(1) FROM receive_offset WHERE car_license_num = ?1 AND pay_date between ?2 AND ?3")
+    Page<ReceiveOffset> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 
     @Modifying
     @Query(value = "INSERT INTO `receive_offset` (`car_license_num`, `pay_date`, `amount`, `receipt_amount`, `note`, `create_time`, `last_modify_time`) " +
