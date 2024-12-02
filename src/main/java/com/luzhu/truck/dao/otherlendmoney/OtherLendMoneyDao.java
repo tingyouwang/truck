@@ -25,4 +25,12 @@ public interface OtherLendMoneyDao extends BaseDao<OtherLendMoney, Integer> {
     @Query(value = "SELECT * FROM other_lend_money WHERE car_license_num = ?1 AND lend_date between ?2 AND ?3"
             , nativeQuery = true)
     List<OtherLendMoney> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
+    @Modifying
+    @Query(value = "UPDATE `other_lend_money` " +
+            "SET `car_license_num` = ?1, `lend_date` = ?2, `amount` = ?3, `note` = ?4, " +
+            "`last_modify_time` = ?5 " +
+            "WHERE `id` = ?6", nativeQuery = true)
+    int updateOtherLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String note, long lastModifyTime, long id);
+
 }

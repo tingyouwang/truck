@@ -2,6 +2,7 @@ package com.luzhu.truck.service.otherlendmoney;
 
 import com.luzhu.truck.dao.otherlendmoney.OtherLendMoneyDao;
 import com.luzhu.truck.dto.otherlendmoney.AddOtherLendMoneyParam;
+import com.luzhu.truck.dto.otherlendmoney.UpdateOtherLendMoneyParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -22,6 +23,15 @@ public class OtherLendMoneyService {
         int insertCount = otherLendMoneyDao.insertOtherLendMoney(param.getCarLicenseNum(), param.getLendDate(), param.getAmount(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateOtherLendMoney(UpdateOtherLendMoneyParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = otherLendMoneyDao.updateOtherLendMoney(param.getCarLicenseNum(), param.getLendDate(), param.getAmount(), param.getNote(), l, param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 }
