@@ -27,4 +27,13 @@ public interface LendMoneyDao extends BaseDao<LendMoney, Integer> {
     @Query(value = "SELECT * FROM lend_money WHERE car_license_num = ?1 AND lend_date between ?2 AND ?3"
             , nativeQuery = true)
     List<LendMoney> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
+    @Modifying
+    @Query(value = "UPDATE `lend_money` " +
+            "SET `car_license_num` = ?1, `lend_date` = ?2, `amount` = ?3, `type` = ?4, " +
+            "`expire_date` = ?5, `interest_amount` = ?6, `note` = ?7, `last_modify_time` = ?8 " +
+            "WHERE `id` = ?9", nativeQuery = true)
+    int updateLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String type,
+                        String expireDate, BigDecimal interestAmount, String note, long lastModifyTime, long id);
+
 }
