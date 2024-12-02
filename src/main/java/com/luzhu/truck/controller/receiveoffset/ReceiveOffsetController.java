@@ -1,0 +1,22 @@
+package com.luzhu.truck.controller.receiveoffset;
+
+import com.luzhu.truck.dto.receiveoffset.AddReceiveOffsetParam;
+import com.luzhu.truck.response.ResponseModel;
+import com.luzhu.truck.service.receiveoffset.ReceiveOffsetService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/receiveOffset")
+@CrossOrigin("*")
+public class ReceiveOffsetController {
+    @Autowired
+    private ReceiveOffsetService receiveOffsetService;
+    @PostMapping("/addReceiveOffset")
+    public ResponseModel<Object> addReceiveOffset(@RequestBody @Valid AddReceiveOffsetParam param) {
+        receiveOffsetService.addReceiveOffset(param);
+
+        return new ResponseModel<>();
+    }
+}
