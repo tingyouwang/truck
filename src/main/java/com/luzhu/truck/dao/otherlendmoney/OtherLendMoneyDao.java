@@ -4,6 +4,8 @@ import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.entity.invoice.Invoice;
 import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -33,4 +35,8 @@ public interface OtherLendMoneyDao extends BaseDao<OtherLendMoney, Integer> {
             "WHERE `id` = ?6", nativeQuery = true)
     int updateOtherLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String note, long lastModifyTime, long id);
 
+    @Query(value = "SELECT * FROM other_lend_money WHERE car_license_num = ?1 AND lend_date between ?2 AND ?3"
+            , nativeQuery = true
+            , countQuery = "SELECT COUNT(1) FROM other_lend_money WHERE car_license_num = ?1 AND lend_date between ?2 AND ?3")
+    Page<OtherLendMoney> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 }

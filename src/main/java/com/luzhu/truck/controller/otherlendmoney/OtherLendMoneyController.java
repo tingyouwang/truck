@@ -1,7 +1,11 @@
 package com.luzhu.truck.controller.otherlendmoney;
 
+import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.otherlendmoney.AddOtherLendMoneyParam;
 import com.luzhu.truck.dto.otherlendmoney.UpdateOtherLendMoneyParam;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
+import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.otherlendmoney.OtherLendMoneyService;
 import jakarta.validation.Valid;
@@ -26,5 +30,10 @@ public class OtherLendMoneyController {
         otherLendMoneyService.updateOtherLendMoney(param);
 
         return new ResponseModel<>();
+    }
+
+    @PostMapping("/getOtherLendMoney")
+    public ResponseModel<PageResult<OtherLendMoney>> getOtherLendMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
+        return new ResponseModel<>(otherLendMoneyService.getLendMoneyList(param));
     }
 }
