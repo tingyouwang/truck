@@ -2,6 +2,7 @@ package com.luzhu.truck.service.trafficticket;
 
 import com.luzhu.truck.dao.trafficticket.TrafficTicketDao;
 import com.luzhu.truck.dto.trafficticket.AddTrafficTicketParam;
+import com.luzhu.truck.dto.trafficticket.UpdateTrafficTicketParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -23,6 +24,16 @@ public class TrafficTicketService {
                 param.getAmount(), param.getNote(), l , l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateTicket(UpdateTrafficTicketParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = trafficTicketDao.updateTicket(param.getCarLicenseNum(), param.getHandleDate(), param.getTicketDate(), param.getGoPoliceDate(), param.getPayDate(), param.getTicketNum(),
+                param.getAmount(), param.getNote(), l , param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 }
