@@ -4,6 +4,8 @@ import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.trafficticket.TrafficTicket;
 import com.luzhu.truck.entity.unionfee.UnionFee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -36,5 +38,10 @@ public interface TrafficTicketDao extends BaseDao<TrafficTicket, Integer> {
     @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3"
             , nativeQuery = true)
     List<TrafficTicket> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
+    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3"
+            , nativeQuery = true
+            , countQuery = "SELECT COUNT(1) FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3")
+    Page<TrafficTicket> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 
 }
