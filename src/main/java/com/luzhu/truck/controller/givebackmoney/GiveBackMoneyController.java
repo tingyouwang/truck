@@ -1,7 +1,11 @@
 package com.luzhu.truck.controller.givebackmoney;
 
+import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.givebackmoney.AddGiveBackMoneyParam;
 import com.luzhu.truck.dto.givebackmoney.UpdateGiveBackMoneyParam;
+import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.givebackmoney.GiveBackMoneyService;
 import jakarta.validation.Valid;
@@ -26,6 +30,11 @@ public class GiveBackMoneyController {
         giveBackMoneyService.updateGiveBackMoney(param);
 
         return new ResponseModel<>();
+    }
+
+    @PostMapping("/getLendMoney")
+    public ResponseModel<PageResult<GiveBackMoney>> getLendMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
+        return new ResponseModel<>(giveBackMoneyService.getGiveBackMoneyList(param));
     }
 
 }

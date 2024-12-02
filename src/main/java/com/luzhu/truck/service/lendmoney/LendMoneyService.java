@@ -43,7 +43,6 @@ public class LendMoneyService {
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
-    @Transactional
     public PageResult<LendMoney> getLendMoneyList(LicenseAndExpenseYearMonthParam param) {
         String expenseYearMonth = param.getExpenseYearMonth();
         DateTimeValidate.checkYearMonth(expenseYearMonth);

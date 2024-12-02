@@ -5,6 +5,8 @@ import com.luzhu.truck.dto.givebackmoney.SumGiveBackMoneyAmountAndInterestDto;
 import com.luzhu.truck.dto.lendmoney.SumAmountAndTaxDto;
 import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
 import com.luzhu.truck.entity.lendmoney.LendMoney;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -37,4 +39,9 @@ public interface GiveBackMoneyDao extends BaseDao<GiveBackMoney, Integer> {
     @Query(value = "SELECT * FROM give_back_money WHERE car_license_num = ?1 AND give_back_date between ?2 AND ?3"
             , nativeQuery = true)
     List<GiveBackMoney> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
+
+    @Query(value = "SELECT * FROM give_back_money WHERE car_license_num = ?1 AND give_back_date between ?2 AND ?3"
+            , nativeQuery = true
+            , countQuery = "SELECT COUNT(1) FROM give_back_money WHERE car_license_num = ?1 AND give_back_date between ?2 AND ?3")
+    Page<GiveBackMoney> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 }
