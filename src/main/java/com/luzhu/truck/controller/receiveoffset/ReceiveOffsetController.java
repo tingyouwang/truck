@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.receiveoffset;
 
 import com.luzhu.truck.dto.receiveoffset.AddReceiveOffsetParam;
+import com.luzhu.truck.dto.receiveoffset.UpdateReceiveOffsetParam;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.receiveoffset.ReceiveOffsetService;
 import jakarta.validation.Valid;
@@ -16,6 +17,13 @@ public class ReceiveOffsetController {
     @PostMapping("/addReceiveOffset")
     public ResponseModel<Object> addReceiveOffset(@RequestBody @Valid AddReceiveOffsetParam param) {
         receiveOffsetService.addReceiveOffset(param);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/updateReceiveOffset")
+    public ResponseModel<Object> updateReceiveOffset(@RequestBody @Valid UpdateReceiveOffsetParam param) {
+        receiveOffsetService.updateReceiveOffset(param);
 
         return new ResponseModel<>();
     }

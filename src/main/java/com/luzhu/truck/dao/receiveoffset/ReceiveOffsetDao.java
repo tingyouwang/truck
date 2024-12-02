@@ -26,4 +26,14 @@ public interface ReceiveOffsetDao extends BaseDao<ReceiveOffset, Integer> {
     int insertReceiveOffset(String carLicenseNum, String payDate, BigDecimal amount,
                             BigDecimal receiptAmount, String note, long createTime, long lastModifyTime);
 
+    @Modifying
+    @Query(value = "UPDATE `receive_offset` " +
+            "SET `car_license_num` = ?1, `pay_date` = ?2, " +
+            "`amount` = ?3, `receipt_amount` = ?4, `note` = ?5, `last_modify_time` = ?6 " +
+            "WHERE `id` = ?7", nativeQuery = true)
+    int updateReceiveOffset(String carLicenseNum, String payDate,
+                            BigDecimal amount, BigDecimal receiptAmount, String note,
+                            long lastModifyTime, long id);
+
+
 }

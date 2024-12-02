@@ -2,6 +2,7 @@ package com.luzhu.truck.service.receiveoffset;
 
 import com.luzhu.truck.dao.receiveoffset.ReceiveOffsetDao;
 import com.luzhu.truck.dto.receiveoffset.AddReceiveOffsetParam;
+import com.luzhu.truck.dto.receiveoffset.UpdateReceiveOffsetParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -23,6 +24,16 @@ public class ReceiveOffsetService {
                 param.getReceiptAmount(), param.getNote(), l , l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateReceiveOffset(UpdateReceiveOffsetParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = receiveOffsetDao.updateReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(),
+                param.getReceiptAmount(), param.getNote(), l , param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
