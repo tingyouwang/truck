@@ -27,4 +27,13 @@ public interface PayInterestDao extends BaseDao<PayInterest, Integer> {
     int insertPayInterest(String carLicenseNum, String payDate, BigDecimal amount,
                           String note, long createTime, long lastModifyTime);
 
+    @Modifying
+    @Query(value = "UPDATE `pay_interest` " +
+            "SET `car_license_num` = ?1, `pay_date` = ?2, `amount` = ?3, `note` = ?4, " +
+            "`last_modify_time` = ?5 " +
+            "WHERE `id` = ?6", nativeQuery = true)
+    int updatePayInterest(String carLicenseNum, String payDate, BigDecimal amount,
+                          String note, long lastModifyTime, long id);
+
+
 }

@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.payinterest;
 
 import com.luzhu.truck.dto.payinterest.AddPayInterestParam;
+import com.luzhu.truck.dto.payinterest.UpdatePayInterestParam;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.payinterest.PayInterestService;
 import jakarta.validation.Valid;
@@ -16,6 +17,13 @@ public class PayInterestController {
     @PostMapping("/addPayInterest")
     public ResponseModel<Object> addPayInterest(@RequestBody @Valid AddPayInterestParam param) {
         payInterestService.addPayInterest(param);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/updatePayInterest")
+    public ResponseModel<Object> updatePayInterest(@RequestBody @Valid UpdatePayInterestParam param) {
+        payInterestService.updatePayInterest(param);
 
         return new ResponseModel<>();
     }

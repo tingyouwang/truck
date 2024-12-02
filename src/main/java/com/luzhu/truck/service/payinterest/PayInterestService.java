@@ -3,6 +3,7 @@ package com.luzhu.truck.service.payinterest;
 import com.luzhu.truck.dao.payinterest.PayInterestDao;
 import com.luzhu.truck.dto.lendmoney.AddLendMoneyParam;
 import com.luzhu.truck.dto.payinterest.AddPayInterestParam;
+import com.luzhu.truck.dto.payinterest.UpdatePayInterestParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -25,6 +26,16 @@ public class PayInterestService {
                 param.getAmount(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updatePayInterest(UpdatePayInterestParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = payInterestDao.updatePayInterest(param.getCarLicenseNum(), param.getPayDate(),
+                param.getAmount(), param.getNote(), l, param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 }
