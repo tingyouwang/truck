@@ -28,7 +28,7 @@ public class InvoiceService {
     public void addInvoice(AddInvoiceParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         int insertCount = invoiceDao.insertInvoice(param.getInvoiceNum(), param.getInvoiceDate(), param.getHandleDate(),
-                param.getInvoiceAmount(), param.getInvoiceTax(), param.getCarAgency(), param.getCarAgencyNum(),
+                param.getAmount(), param.getAmountTax(), param.getCarAgency(), param.getCarAgencyNum(),
                 param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum()
         , param.getType(), l);
         Validator.isFalseThrow(1 == insertCount,

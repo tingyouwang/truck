@@ -3,7 +3,6 @@ package com.luzhu.truck.dao.invoice;
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.entity.invoice.Invoice;
-import com.luzhu.truck.entity.unionfee.UnionFee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
