@@ -1,19 +1,23 @@
 package com.luzhu.truck.service.lendmoney;
 
 import com.luzhu.truck.dao.lendmoney.LendMoneyDao;
+import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.lendmoney.AddLendMoneyParam;
 import com.luzhu.truck.dto.lendmoney.UpdateLendMoneyParam;
+import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
+import com.luzhu.truck.response.PageResult;
+import com.luzhu.truck.util.DateTimeValidate;
 import com.luzhu.truck.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class LendMoneyService {
@@ -37,5 +41,18 @@ public class LendMoneyService {
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public PageResult<LendMoney> getLendMoneyList(LicenseAndExpenseYearMonthParam param) {
+        String expenseYearMonth = param.getExpenseYearMonth();
+        DateTimeValidate.checkYearMonth(expenseYearMonth);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        YearMonth yearMonth = YearMonth.parse(expenseYearMonth, dateTimeFormatter);
+        LocalDate monthFirst = yearMonth.atDay(1);
+        LocalDate monthEnd = yearMonth.atEndOfMonth();
+        Page<LendMoney> list = lendMoneyDao.getList(param.getCarLicenseNum(), monthFirst, monthEnd, param.getPageable());
+
+        return new PageResult<>(list);
     }
 }
