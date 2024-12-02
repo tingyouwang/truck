@@ -25,4 +25,13 @@ public interface ReturnMoneyDao extends BaseDao<ReturnMoney, Integer> {
     int insertReturnMoney(String carLicenseNum, String payDate, BigDecimal amount,
                           String note, long createTime, long lastModifyTime);
 
+    @Modifying
+    @Query(value = "UPDATE `return_money` " +
+            "SET `car_license_num` = ?1, `pay_date` = ?2," +
+            "`amount` = ?3, `note` = ?4, `last_modify_time` = ?5 " +
+            "WHERE `id` = ?6", nativeQuery = true)
+    int updateReturnMoney(String carLicenseNum, String payDate,
+                          BigDecimal amount, String note, long lastModifyTime, long id);
+
+
 }

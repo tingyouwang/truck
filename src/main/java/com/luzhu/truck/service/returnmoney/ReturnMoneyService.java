@@ -2,6 +2,7 @@ package com.luzhu.truck.service.returnmoney;
 
 import com.luzhu.truck.dao.returnmoney.ReturnMoneyDao;
 import com.luzhu.truck.dto.returnmoney.AddReturnMoneyParam;
+import com.luzhu.truck.dto.returnmoney.UpdateReturnMoneyParam;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.validator.Validator;
@@ -22,6 +23,15 @@ public class ReturnMoneyService {
         int insertCount = returnMoneyDao.insertReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateReturnMoney(UpdateReturnMoneyParam param) {
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        int updateCount = returnMoneyDao.updateReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getNote(), l, param.getId());
+
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
