@@ -21,6 +21,15 @@ public interface GiveBackMoneyDao extends BaseDao<GiveBackMoney, Integer> {
     int insertLendMoney(String carLicenseNum, String lendDate, BigDecimal amount, String type,
                         String expireDate, BigDecimal interestAmount, String note, long createTime, long lastModifyTime);
 
+    @Modifying
+    @Query(value = "UPDATE `give_back_money` " +
+            "SET `car_license_num` = ?1, `give_back_date` = ?2, `amount` = ?3, `type` = ?4, " +
+            "`expire_date` = ?5, `interest_amount` = ?6, `note` = ?7, `last_modify_time` = ?8 " +
+            "WHERE `id` = ?9", nativeQuery = true)
+    int updateGiveBackMoney(String carLicenseNum, String giveBackDate, BigDecimal amount, String type,
+                            String expireDate, BigDecimal interestAmount, String note, long lastModifyTime, long id);
+
+
     @Query(value = "SELECT SUM(amount) AS sum, SUM(interest_amount) AS interestSum FROM give_back_money WHERE car_license_num = ?1 AND " +
             "give_back_date between ?2 AND ?3" , nativeQuery = true)
     SumGiveBackMoneyAmountAndInterestDto getGiveBackMoney(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
