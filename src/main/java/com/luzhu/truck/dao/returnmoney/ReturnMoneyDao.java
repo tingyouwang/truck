@@ -2,6 +2,8 @@ package com.luzhu.truck.dao.returnmoney;
 
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.entity.returnmoney.ReturnMoney;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,11 @@ public interface ReturnMoneyDao extends BaseDao<ReturnMoney, Integer> {
             "WHERE `id` = ?6", nativeQuery = true)
     int updateReturnMoney(String carLicenseNum, String payDate,
                           BigDecimal amount, String note, long lastModifyTime, long id);
+
+    @Query(value = "SELECT * FROM return_money WHERE car_license_num = ?1 AND pay_date between ?2 AND ?3"
+            , nativeQuery = true
+            , countQuery = "SELECT COUNT(1) FROM return_money WHERE car_license_num = ?1 AND pay_date between ?2 AND ?3")
+    Page<ReturnMoney> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 
 
 }

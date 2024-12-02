@@ -1,7 +1,10 @@
 package com.luzhu.truck.controller.returnmoney;
 
+import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.returnmoney.AddReturnMoneyParam;
 import com.luzhu.truck.dto.returnmoney.UpdateReturnMoneyParam;
+import com.luzhu.truck.entity.returnmoney.ReturnMoney;
+import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.returnmoney.ReturnMoneyService;
 import jakarta.validation.Valid;
@@ -26,5 +29,10 @@ public class ReturnMoneyController {
         returnMoneyService.updateReturnMoney(param);
 
         return new ResponseModel<>();
+    }
+
+    @PostMapping("/getReturnMoney")
+    public ResponseModel<PageResult<ReturnMoney>> getReturnMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
+        return new ResponseModel<>(returnMoneyService.getReturnMoneyList(param));
     }
 }
