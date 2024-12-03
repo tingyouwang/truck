@@ -1,6 +1,7 @@
 package com.luzhu.truck.dao.insurancecompany;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.insurancecompany.InsuranceComDropDownList;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,12 +9,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface InsuranceCompanyDao extends BaseDao<InsuranceCompany, Integer> {
     @Query(value = "SELECT * FROM insurance_company",
             countQuery = " SELECT COUNT(1) FROM insurance_company"
             , nativeQuery = true)
     Page<InsuranceCompany> getAllInsuranceCompany(Pageable pageable);
+
+    @Query(value = "SELECT id, company_name FROM insurance_company"
+            , nativeQuery = true)
+    List<InsuranceComDropDownList> getInsuranceComDropDown();
 
     @Modifying
     @Query(value = "INSERT INTO insurance_company (company_name, short_name, " +

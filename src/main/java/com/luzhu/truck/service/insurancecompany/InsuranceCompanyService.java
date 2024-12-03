@@ -5,6 +5,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
+import com.luzhu.truck.dto.insurancecompany.InsuranceComDropDownList;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class InsuranceCompanyService {
     @Autowired
@@ -24,6 +27,10 @@ public class InsuranceCompanyService {
     public PageResult<InsuranceCompany> getInsuranceCompany(BaseParam param) {
         Page<InsuranceCompany> allInsuranceCompany = insuranceCompanyDao.getAllInsuranceCompany(param.getPageable());
         return new PageResult<>(allInsuranceCompany);
+    }
+
+    public List<InsuranceComDropDownList> getInsuranceComDropDown() {
+        return insuranceCompanyDao.getInsuranceComDropDown();
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
+import com.luzhu.truck.dto.insurancecompany.InsuranceComDropDownList;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
 import com.luzhu.truck.response.PageResult;
@@ -12,6 +13,8 @@ import com.luzhu.truck.service.insurancecompany.InsuranceCompanyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/insuranceCompany")
@@ -23,6 +26,11 @@ public class InsuranceCompanyController {
     public ResponseModel<PageResult<InsuranceCompany>> getInsuranceCompany(@RequestBody BaseParam param) {
         PageResult<InsuranceCompany> insuranceCompany = insuranceCompanyService.getInsuranceCompany(param);
         return new ResponseModel<>(insuranceCompany);
+    }
+
+    @PostMapping("/getInsuranceCompanyDropDown")
+    public ResponseModel<List<InsuranceComDropDownList>> getInsuranceCompanyDropDown() {
+        return new ResponseModel<>(insuranceCompanyService.getInsuranceComDropDown());
     }
 
     @PostMapping("/addInsuranceCompany")
@@ -39,10 +47,10 @@ public class InsuranceCompanyController {
         return new ResponseModel<>();
     }
 
-    @PostMapping("/deleteInsuranceCompany/{id}")
-    public ResponseModel<Object> deleteInsuranceCompany(@PathVariable int id) {
-        insuranceCompanyService.deleteInsuranceCompany(id);
-
-        return new ResponseModel<>();
-    }
+//    @PostMapping("/deleteInsuranceCompany/{id}")
+//    public ResponseModel<Object> deleteInsuranceCompany(@PathVariable int id) {
+//        insuranceCompanyService.deleteInsuranceCompany(id);
+//
+//        return new ResponseModel<>();
+//    }
 }
