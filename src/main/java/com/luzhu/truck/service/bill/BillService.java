@@ -261,13 +261,13 @@ public class BillService {
             res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("借款金額")
                     .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getLendDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
                     .note(fee.getNote())
                     .build()).toList());
             res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("借款利息")
                     .receiveAmount(fee.getInterestAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getLendDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
                     .note(fee.getNote())
                     .build()).toList());
 
@@ -303,7 +303,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("其他抵收")
                     .offsetAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getGiveBackDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getGiveBackDate())))
                     .note(fee.getNote())
                     .build()).toList());
 
@@ -313,7 +313,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("罰單")
                     .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getHandleDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getHandleDate())))
                     .note(fee.getNote())
                     .build()).toList());
             //代支利息
@@ -322,7 +322,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("代支利息")
                     .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getPayDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getPayDate())))
                     .note(fee.getNote())
                     .build()).toList());
             //收據抵收
@@ -331,7 +331,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("收據抵收")
                     .offsetAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getPayDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getPayDate())))
                     .note(fee.getNote())
                     .build()).toList());
             //入款退回
@@ -340,7 +340,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("入款退回")
                     .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getPayDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getPayDate())))
                     .note(fee.getNote())
                     .build()).toList());
         }

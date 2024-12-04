@@ -18,7 +18,7 @@ public class ReturnMoney {
     private String carLicenseNum;
 
     @Column(name = "pay_date", nullable = false)
-    private LocalDate payDate; // Using String as per preference
+    private String payDate; // Using String as per preference
 
     @Column(name = "expense_year_month", length = 7, nullable = false)
     private String expenseYearMonth;

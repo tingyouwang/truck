@@ -19,7 +19,7 @@ public class TrafficTicket {
     private String carLicenseNum;
 
     @Column(name = "handle_date", nullable = false)
-    private LocalDate handleDate;
+    private String handleDate;
 
     @Column(name = "ticket_date", nullable = false)
     private String ticketDate;
