@@ -293,7 +293,7 @@ public class BillService {
                     .expenseYearMonth(DateTimeUtil.parseToMinguoDateYearMonth(fee.getExpenseYearMonth()))
                     .name("其他應收")
                     .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(fee.getLendDate()))
+                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
                     .note(fee.getNote())
                     .build()).toList());
 

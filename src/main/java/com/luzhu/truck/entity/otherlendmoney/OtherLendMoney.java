@@ -19,7 +19,7 @@ public class OtherLendMoney {
     private String carLicenseNum;
 
     @Column(name = "lend_date", nullable = false)
-    private LocalDate lendDate;
+    private String lendDate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
