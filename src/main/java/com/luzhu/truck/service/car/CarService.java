@@ -71,7 +71,7 @@ public class CarService {
                 addCarParam.getCarFrom(),
                 addCarParam.getQuitPlace(),
                 addCarParam.getLicenseIssueDate(),
-                addCarParam.getManufactureDate(),
+                addCarParam.getManufactureYearMonth(),
                 addCarParam.getBrand(),
                 addCarParam.getTon(),
                 Double.parseDouble(addCarParam.getCc()),  // Assuming cc is numeric
