@@ -110,4 +110,5 @@ public class Car {
 
     @Column(name = "note2", nullable = false, length = 500)
     private String note2;
+    private Double ton;
 }

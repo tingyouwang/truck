@@ -109,7 +109,7 @@ public class CarService {
                 param.getCarFrom(),
                 param.getQuitPlace(),
                 param.getLicenseIssueDate(), // 發照日期
-                param.getManufactureDate(), // 出廠日期
+                param.getManufactureYearMonth(), // 出廠日期
                 param.getBrand(),
                 param.getTon(),
                 Double.parseDouble(param.getCc()), // cc 數字轉換
