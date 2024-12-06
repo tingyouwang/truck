@@ -52,6 +52,8 @@ public class GlobalController implements ResponseBodyAdvice<Object> {
                 for (Object item : pageList) {
                     processFields(item);
                 }
+            } else {
+                processFields(data);
             }
 //          todo 還有其他的instance
         }
