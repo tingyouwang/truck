@@ -6,6 +6,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.car.LicenseNumPageParam;
 import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
+import com.luzhu.truck.dto.insurancefeesetting.GetSingleInsuranceSettingParam;
 import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
@@ -87,6 +88,10 @@ public class InsuranceFeeSettingService {
         Validator.isFalseThrow(1 == i,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
+    }
+
+    public InsuranceFeeSetting getSingleInsuranceSetting(GetSingleInsuranceSettingParam param) {
+        return insuranceFeeSettingDao.getInsuranceFeeSettingByPk(param.getCarLicenseNum(), param.getInsuranceCardNum());
     }
 
     public PageResult<InsuranceFeeSetting> getInsuranceFeeSetting(LicenseNumPageParam param) {

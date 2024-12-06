@@ -32,6 +32,10 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
             , nativeQuery = true)
     Page<InsuranceFeeSetting> getInsuranceFeeSettingByLicenseNum(String carLicenseNum, Pageable pageable);
 
+    @Query(value = "SELECT * FROM insurance_fee_setting WHERE car_license_num = ?1 AND insurance_card_num = ?2",
+            nativeQuery = true)
+    InsuranceFeeSetting getInsuranceFeeSettingByPk(String carLicenseNum, String insuranceCardNum);
+
     @Modifying
     @Query(value = "UPDATE insurance_fee_setting SET status = 'DISABLE' WHERE car_license_num = ?1 AND insurance_card_num = ?2",
             nativeQuery = true)
