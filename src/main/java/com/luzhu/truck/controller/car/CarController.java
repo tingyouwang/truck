@@ -47,6 +47,12 @@ public class CarController {
         return new ResponseModel<>(carInfoPageResult);
     }
 
+    @PostMapping("/getCarByLicenseNum")
+    public ResponseModel<Car> getCarDetail(@RequestBody SearchCarLicenseNumParam param) {
+        Car car = carService.getCarByLicense(param);
+        return new ResponseModel<>(car);
+    }
+
     @PostMapping("/searchCarByCarOwner")
     public ResponseModel<PageResult<CarInfo>> getCarByOwner(@RequestBody SearchCarOwnerParam param) {
         PageResult<CarInfo> carInfoPageResult = carService.searchCarByOwner(param);

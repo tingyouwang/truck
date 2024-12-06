@@ -51,6 +51,10 @@ public class CarService {
         return new PageResult<>(carDao.searchCarByOwner(param.getSearchName(), param.getPageable()));
     }
 
+    public Car getCarByLicense(SearchCarLicenseNumParam param) {
+        return carDao.getCarByLicenseNum(param.getLicenseNumber());
+    }
+
 
 
     @Transactional

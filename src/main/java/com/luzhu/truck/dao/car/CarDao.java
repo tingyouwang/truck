@@ -46,5 +46,9 @@ public interface CarDao extends BaseDao<Car, Integer> {
             nativeQuery = true)
     Page<CarInfo> searchCarByOwner(String owner, Pageable pageable);
 
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND license_number = ?1",
+            nativeQuery = true)
+    Car getCarByLicenseNum(String licenseNum);
+
 
 }
