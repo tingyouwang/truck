@@ -5,6 +5,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.IdParam;
 import com.luzhu.truck.dto.LicenseNumParam;
 import com.luzhu.truck.dto.car.*;
+import com.luzhu.truck.entity.Car;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.owner.Owner;
@@ -43,6 +44,12 @@ public class CarController {
     @PostMapping("/searchCarByLicenseNum")
     public ResponseModel<PageResult<CarInfo>> getCarList(@RequestBody SearchCarLicenseNumParam param) throws ExecutionException {
         PageResult<CarInfo> carInfoPageResult = carService.searchCarByLicenseNum(param);
+        return new ResponseModel<>(carInfoPageResult);
+    }
+
+    @PostMapping("/searchCarByCarOwner")
+    public ResponseModel<PageResult<CarInfo>> getCarByOwner(@RequestBody SearchCarOwnerParam param) {
+        PageResult<CarInfo> carInfoPageResult = carService.searchCarByOwner(param);
         return new ResponseModel<>(carInfoPageResult);
     }
     @PostMapping("/addCar")

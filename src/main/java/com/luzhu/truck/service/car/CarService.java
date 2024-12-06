@@ -5,6 +5,7 @@ import com.luzhu.truck.dao.car.CarDao;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.owner.OwnerDao;
 import com.luzhu.truck.dto.car.*;
+import com.luzhu.truck.entity.Car;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.owner.Owner;
 import com.luzhu.truck.exception.AppException;
@@ -44,6 +45,10 @@ public class CarService {
         } else {
             return new PageResult<>(carDao.getAllCar(param.getPageable()));
         }
+    }
+
+    public PageResult<CarInfo> searchCarByOwner(SearchCarOwnerParam param) {
+        return new PageResult<>(carDao.searchCarByOwner(param.getSearchName(), param.getPageable()));
     }
 
 
