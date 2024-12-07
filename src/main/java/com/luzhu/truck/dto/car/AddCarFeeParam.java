@@ -1,7 +1,6 @@
 package com.luzhu.truck.dto.car;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -11,14 +10,24 @@ public class AddCarFeeParam {
     @NotNull
     private double manageFee;           // 管理費
     @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private double saleTax;             // 銷項稅率
     @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private double buyTax;              // 進項稅率 for 車輛總帳的抵發票額
     @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private double gasTax;              // 油單稅率
     @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private double oweTax;              // 欠款利率
     @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private double receipTax;           // 收據稅率
     @NotNull
     private double fuelTaxSpring;       // 春燃料稅
