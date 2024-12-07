@@ -58,7 +58,7 @@ public class MinguoDateTimeAspect extends BaseAop{
     private void setField(Object paramObject, Field field) throws Exception {
         field.setAccessible(true);
         Object value = field.get(paramObject);
-        if (null == value) {
+        if (null == value || "".equals(value)) {
             return;
         }
         if (value instanceof String) {

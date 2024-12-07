@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -97,6 +98,9 @@ public class CarService {
 
     @Transactional
     public void updateCar(UpdateCarParam param) {
+        String violateDate = StringUtils.hasText(param.getViolationDate()) ? param.getViolationDate() : null;
+        String reportStopDate = StringUtils.hasText(param.getReportStopDate()) ? param.getReportStopDate() : null;
+        String reportScrapDate = StringUtils.hasText(param.getReportScrapDate()) ? param.getReportScrapDate() : null;
         int updateCount = carDao.updateCar(
                 param.getLicenseNumber(),
                 param.getIsUsing(),
@@ -122,9 +126,9 @@ public class CarService {
                 param.getLoadingWeight(),
                 param.getCarType(),
                 param.getInspectionType(),
-                param.getViolationDate(), // 超載到期
-                param.getReportStopDate(), // 報停日期
-                param.getReportScrapDate(), // 報銷日期
+                violateDate, // 超載到期
+                reportStopDate, // 報停日期
+                reportScrapDate, // 報銷日期
                 param.getOldLicenseNumber(),
                 param.getNote1(),
                 param.getNote2(),
