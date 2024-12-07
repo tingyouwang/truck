@@ -40,7 +40,7 @@ public class CarAgencyService {
 
     @Transactional
     public void updateCarAgency(UpdateCarAgencyParam updateCarAgencyParam) {
-        int i = carAgencyDao.countByAgencyName(updateCarAgencyParam.getAgencyName());
+        int i = carAgencyDao.countByAgencyName(updateCarAgencyParam.getAgencyName(), updateCarAgencyParam.getId());
         Validator.isFalseThrow(0 == i,
                 new AppException(SystemExceptionEnum.CAR_AGENCY_NAME_DUPLICATE));
         CarAgency carAgency = new CarAgency();

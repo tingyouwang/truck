@@ -29,5 +29,8 @@ public interface CarAgencyDao extends BaseDao<CarAgency, Integer> {
             , nativeQuery = true)
     int countByAgencyName(String agencyName);
 
+    @Query(value = "SELECT COUNT(1) FROM car_agency WHERE agency_name = ?1 AND id != ?2"
+            , nativeQuery = true)
+    int countByAgencyName(String agencyName, int id);
 
 }
