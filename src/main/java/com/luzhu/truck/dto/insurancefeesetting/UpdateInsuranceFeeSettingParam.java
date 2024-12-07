@@ -7,10 +7,12 @@ import lombok.Data;
 
 @Data
 public class UpdateInsuranceFeeSettingParam {
-    @NotBlank(message = "原保卡號碼不可為空")
-    private String originalInsuranceCardNum;
+//    @NotBlank(message = "原保卡號碼不可為空")
+//    private String originalInsuranceCardNum;
     @NotBlank(message = "車牌不可為空")
     private String carLicenseNum;
+    @NotBlank(message = "新保卡號碼不可為空")
+    private String insuranceCardNum;
 
     @NotBlank(message = "保險公司不可為空")
     private String insuranceCom;
@@ -28,8 +30,6 @@ public class UpdateInsuranceFeeSettingParam {
     private String insuranceType;
     @NotBlank(message = "保單號碼不可為空")
     private String insuranceNum;
-    @NotBlank(message = "新保卡號碼不可為空")
-    private String insuranceCardNum;
     @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String quitDate;
 }

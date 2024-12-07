@@ -49,13 +49,20 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
     @Query(value = "UPDATE insurance_fee_setting " +
             "SET insurance_com = ?2, start_date = ?3, end_date = ?4, pay_us_date = ?5, " +
             "amount = ?6, insurance_type = ?7, insurance_num = ?8, quit_date = ?9, " +
-            "update_time = ?10, update_by = ?11, status = ?12, insurance_card_num = ?14 " +
+            "update_time = ?10, update_by = ?11, status = ?12 " +
             "WHERE car_license_num = ?1 AND insurance_card_num = ?13",
             nativeQuery = true)
     int updateInsuranceFeeSetting(String carLicenseNum, String insuranceCom, String startDate, String endDate,
                                   String payUsDate, double amount, String insuranceType, String insuranceNum,
                                   String quitDate, long updateTime, String updateBy, String status,
-                                  String OriginalInsuranceCardNum, String newInsuranceCardNum);
+                                  String OriginalInsuranceCardNum);
+
+    @Modifying
+    @Query(value = "UPDATE insurance_fee_setting " +
+            "SET status = ?2 " +
+            "WHERE car_license_num = ?1 AND insurance_card_num = ?3",
+            nativeQuery = true)
+    int updateInsuranceFeeSettingStatus(String carLicenseNum, String status, String insuranceCardNum);
 
 
 }

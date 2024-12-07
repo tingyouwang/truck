@@ -3,10 +3,7 @@ package com.luzhu.truck.service.insurancefeesetting;
 import com.luzhu.truck.dao.insurancefee.InsuranceFeeDao;
 import com.luzhu.truck.dao.insurnacefeesetting.InsuranceFeeSettingDao;
 import com.luzhu.truck.dto.car.LicenseNumPageParam;
-import com.luzhu.truck.dto.insurancefeesetting.AddInsuranceFeeSettingParam;
-import com.luzhu.truck.dto.insurancefeesetting.DeleteInsuranceSettingParam;
-import com.luzhu.truck.dto.insurancefeesetting.GetSingleInsuranceSettingParam;
-import com.luzhu.truck.dto.insurancefeesetting.UpdateInsuranceFeeSettingParam;
+import com.luzhu.truck.dto.insurancefeesetting.*;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.exception.AppException;
@@ -17,7 +14,7 @@ import com.luzhu.truck.validator.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,21 +71,29 @@ public class InsuranceFeeSettingService {
 
         LocalDate localDate = now.toLocalDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-        String yearMonth = localDate.format(formatter);
 
         int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSetting(param.getCarLicenseNum(), param.getInsuranceCom(), param.getStartDate(), param.getEndDate(),
                 param.getPayUsDate(), param.getAmount(), param.getInsuranceType(), param.getInsuranceNum(), param.getQuitDate(), l,
-                "ADMIN", "ENABLE", param.getOriginalInsuranceCardNum(), param.getInsuranceCardNum());
+                "ADMIN", "ENABLE", param.getInsuranceCardNum());
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
         //連同帳單一起修改
-        int i = insuranceFeeDao.updateInsuranceFee(param.getCarLicenseNum(), param.getOriginalInsuranceCardNum(),
-                param.getAmount(), param.getInsuranceCardNum(), yearMonth);
+//        int i = insuranceFeeDao.updateInsuranceFee(param.getCarLicenseNum(), param.getInsuranceNum(),
+//                param.getAmount(), param.getInsuranceCardNum(), yearMonth);
 
-        Validator.isFalseThrow(1 == i,
+//        Validator.isFalseThrow(1 == i,
+//                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+
+    }
+
+    @Transactional
+    public void updateInsuranceFeeSettingStatus(UpdateInsuranceFeeSettingStatusParam param) {
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+
+        int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSettingStatus(param.getCarLicenseNum(), "DISABLE", param.getInsuranceCardNum());
+        Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
-
     }
 
     public InsuranceFeeSetting getSingleInsuranceSetting(GetSingleInsuranceSettingParam param) {
