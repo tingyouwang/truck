@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseEnum;
 import com.luzhu.truck.response.ResponseModel;
@@ -8,9 +9,11 @@ import com.luzhu.truck.util.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,7 +30,6 @@ import java.util.List;
 public class GlobalController implements ResponseBodyAdvice<Object> {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-
     public ResponseModel handleValidationExceptions(MethodArgumentNotValidException ex) {
         JSONObject json = new JSONObject();
         ex.getBindingResult().getFieldErrors().forEach(error ->
@@ -35,6 +37,18 @@ public class GlobalController implements ResponseBodyAdvice<Object> {
         );
         return new ResponseModel<>().validFail(json.toString(), ResponseEnum.VALID_ERROR);
     }
+
+    @ExceptionHandler(AppException.class)
+    public ResponseModel handleAppException(AppException ex) {
+        return new ResponseModel<>().validFail(ex.getMessage(), ResponseEnum.DATABASE_DATA_ERROR);
+    }
+//    @ExceptionHandler(AppException.class)
+//    public ResponseEntity<Object> handleAppException(AppException ex) {
+//        return ResponseEntity
+////                .status(ex.getExceptionEnum().getCode())
+//                .status(500)
+//                .body(new ErrorResponse(ex.getMessage()));
+//    }
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {

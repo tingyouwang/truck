@@ -13,6 +13,7 @@ public enum SystemExceptionEnum implements IRuntimeExceptionEnum{
     DATA_ERROR("SYS_0005", "DATA_ERROR", "資料錯誤"),
     NO_DATA("SYS_0006", "NO_DATA", "查無資料"),
     DUPLICATE_DATA("SYS_0007", "DUPLICATE_DATA", "資料重覆"),
+    PRIMARY_KEY_CONFLICT("SYS_0008", "保險卡號重覆", "PRIMARY_KEY_CONFLICT"),
 
     NOT_IMPLEMENTED_METHOD("SYS_8888", "NOT_IMPLEMENTED_METHOD", "未實作方法"),
 
