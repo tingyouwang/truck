@@ -28,14 +28,21 @@ public class CarAgencyService {
 
     @Transactional
     public void addCarAgency(AddCarAgencyParam addCarAgencyParam) {
+        int i = carAgencyDao.countByAgencyName(addCarAgencyParam.getAgencyName());
+        Validator.isFalseThrow(0 == i,
+                new AppException(SystemExceptionEnum.CAR_AGENCY_NAME_DUPLICATE));
+
         int insertCount = carAgencyDao.insertCarAgency(addCarAgencyParam.getAgencyName(), addCarAgencyParam.getAddress(), addCarAgencyParam.getOwner(), addCarAgencyParam.getTaxId(),
-                addCarAgencyParam.getPhone1(), addCarAgencyParam.getPhone2(), addCarAgencyParam.getMobile(), addCarAgencyParam.getFax(), addCarAgencyParam.getAgencyShortName());
+                addCarAgencyParam.getPhone1(), addCarAgencyParam.getPhone2(), addCarAgencyParam.getMobile(), addCarAgencyParam.getFax());
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
     @Transactional
     public void updateCarAgency(UpdateCarAgencyParam updateCarAgencyParam) {
+        int i = carAgencyDao.countByAgencyName(updateCarAgencyParam.getAgencyName());
+        Validator.isFalseThrow(0 == i,
+                new AppException(SystemExceptionEnum.CAR_AGENCY_NAME_DUPLICATE));
         CarAgency carAgency = new CarAgency();
         carAgency.setId(updateCarAgencyParam.getId());
         carAgency.setAgencyName(updateCarAgencyParam.getAgencyName());
