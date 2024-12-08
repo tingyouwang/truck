@@ -48,6 +48,7 @@ public class InsuranceFeeTask {
         } catch (Exception e) {
             log.error("[InsuranceFeeTask] generateMonthBill 錯誤:" + e.getMessage());
         }
+        insuranceFeeSettingService.updateGenerateBillStatus(usingInsuranceFeeSetting);
 
     }
 }

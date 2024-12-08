@@ -89,11 +89,22 @@ public class InsuranceFeeSettingService {
 
     @Transactional
     public void updateInsuranceFeeSettingStatus(UpdateInsuranceFeeSettingStatusParam param) {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        long l = LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC);
 
-        int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSettingStatus(param.getCarLicenseNum(), "DISABLE", param.getInsuranceCardNum());
+        int updateCount = insuranceFeeSettingDao.updateInsuranceFeeSettingStatus(param.getCarLicenseNum(), "DISABLE", param.getInsuranceCardNum(), l);
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+
+    @Transactional
+    public void updateGenerateBillStatus(List<InsuranceFeeSetting> usingInsuranceFeeSetting) {
+        long l = LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC);
+
+        usingInsuranceFeeSetting = usingInsuranceFeeSetting.stream().peek(setting -> {
+            setting.setGenerateBill("Y");
+            setting.setUpdateTime(l);
+        }).toList();
+        insuranceFeeSettingDao.saveAll(usingInsuranceFeeSetting);
     }
 
     public InsuranceFeeSetting getSingleInsuranceSetting(GetSingleInsuranceSettingParam param) {
