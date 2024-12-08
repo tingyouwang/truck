@@ -19,7 +19,7 @@ public class GiveBackMoney {
     private String carLicenseNum;
 
     @Column(name = "give_back_date", nullable = false)
-    private LocalDate giveBackDate;
+    private String giveBackDate;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
