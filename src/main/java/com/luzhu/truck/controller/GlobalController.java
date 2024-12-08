@@ -70,6 +70,8 @@ public class GlobalController implements ResponseBodyAdvice<Object> {
                 processFields(data);
             }
 //          todo 還有其他的instance
+        } else {
+            String x = "a";
         }
         return body;
     }
@@ -87,7 +89,7 @@ public class GlobalController implements ResponseBodyAdvice<Object> {
 
     private boolean isDateField(Field field) {
         return field.getType().equals(String.class) &&
-                (field.getName().contains("date") || field.getName().contains("Date")) &&
+                (field.getName().contains("date") || field.getName().contains("Date") || field.getName().contains("yearMonth")) &&
                 !field.getName().contains("update");
     }
 
@@ -96,8 +98,9 @@ public class GlobalController implements ResponseBodyAdvice<Object> {
         try {
             String value = (String) field.get(obj);
             if (value != null) {
-                LocalDate westDate = LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
-                String formattedDate = DateTimeUtil.parseToMinguoDate(westDate);
+//                LocalDate westDate = LocalDate.parse(value, DateTimeFormatter.ISO_DATE);
+//                String formattedDate = DateTimeUtil.parseToMinguoDate(westDate);
+                String formattedDate = DateTimeUtil.tryToMinguoDateStr(value);
                 field.set(obj, formattedDate);
             }
         } catch (IllegalAccessException | IllegalArgumentException e) {

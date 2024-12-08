@@ -1,5 +1,7 @@
 package com.luzhu.truck.util;
 
+import com.luzhu.truck.exception.AppException;
+import com.luzhu.truck.exception.ValidateExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -36,6 +38,11 @@ public class DateTimeUtil {
         return result;
     }
 
+    /**
+     * 民國轉西元
+     * @param date 民國
+     * @return
+     */
     public static String transferWestDateStr(String date) {
         DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
                 .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
@@ -64,6 +71,44 @@ public class DateTimeUtil {
             return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } catch (DateTimeParseException e) {
             return "";
+        }
+    }
+
+    /**
+     * 西元轉民國
+     * @param date 2024-12-01 或 2024-12
+     * @return
+     */
+    public static String tryToMinguoDateStr(String date) {
+        DateTimeFormatter westFormatter = DateTimeFormatter.ISO_DATE;
+        if (date.split("-").length == 2) {
+            return tryParseMinguoYearMonth(date, westFormatter);
+        } else {
+             return tryParseFullMinguoDate(date, westFormatter);
+        }
+    }
+
+    private static String tryParseFullMinguoDate(String date, DateTimeFormatter inputFormatter) {
+        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
+                .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
+        try {
+            LocalDate localDate = LocalDate.parse(date, inputFormatter);
+            return localDate.format(minguoFormatter);
+        } catch (DateTimeParseException e) {
+            return "";
+        }
+    }
+
+    private static String tryParseMinguoYearMonth(String date, DateTimeFormatter inputFormatter ) {
+        DateTimeFormatter minguoFormatter = DateTimeFormatter.ofPattern("yyy-MM")
+                .withChronology(java.time.chrono.MinguoChronology.INSTANCE);
+        String forFormatDate = date + "-01";
+        try {
+            LocalDate localDate = LocalDate.parse(forFormatDate, inputFormatter);
+            return localDate.format(minguoFormatter);
+        } catch (DateTimeParseException e) {
+            log.error(String.format("input 日期格式錯誤:%s, 自行拼接日期01:%s", date, forFormatDate));
+            throw e;
         }
     }
 
@@ -101,6 +146,16 @@ public class DateTimeUtil {
 
         // 转换为 epoch second
         return utcTime.toEpochSecond();
+    }
+
+    /**
+     * 轉成年月
+     * @param fullDate 2024-12-01
+     * @return
+     */
+    public static String fullDateToYearMonth(String fullDate) {
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM");
+        return LocalDate.parse(fullDate, DateTimeFormatter.ISO_DATE).format(pattern);
     }
 
 }
