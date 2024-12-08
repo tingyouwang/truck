@@ -8,49 +8,49 @@ public class AddCarFeeParam {
     @NotBlank(message = "車牌不可為空")
     private String carLicenseNum;       // 車牌號碼
     @NotNull
-    private double manageFee;           // 管理費
+    private Double manageFee;           // 管理費
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
-    private double saleTax;             // 銷項稅率
+    private Double saleTax;             // 銷項稅率
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
-    private double buyTax;              // 進項稅率 for 車輛總帳的抵發票額
+    private Double buyTax;              // 進項稅率 for 車輛總帳的抵發票額
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
-    private double gasTax;              // 油單稅率
+    private Double gasTax;              // 油單稅率
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
-    private double oweTax;              // 欠款利率
+    private Double oweTax;              // 欠款利率
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
-    private double receipTax;           // 收據稅率
+    private Double receipTax;           // 收據稅率
     @NotNull
-    private double fuelTaxSpring;       // 春燃料稅
+    private Double fuelTaxSpring;       // 春燃料稅
     @NotNull
-    private double fuelTaxSummer;       // 夏燃料稅
+    private Double fuelTaxSummer;       // 夏燃料稅
     @NotNull
-    private double fuelTaxAutumn;       // 秋燃料稅
+    private Double fuelTaxAutumn;       // 秋燃料稅
     @NotNull
-    private double fuelTaxWinter;       // 冬燃料稅
+    private Double fuelTaxWinter;       // 冬燃料稅
     @NotNull
-    private double licenseTaxFirstHalf; // 牌照稅上半年
+    private Double licenseTaxFirstHalf; // 牌照稅上半年
     @NotNull
-    private double licenseTaxSecondHalf;// 牌照稅下半年
+    private Double licenseTaxSecondHalf;// 牌照稅下半年
     @NotNull
-    private double unionFee;            // 公會費
+    private Double unionFee;            // 公會費
     @NotNull
-    private double laborFee;            // 勞保
+    private Double laborFee;            // 勞保
     @NotNull
-    private double healthyFee;          // 健保
+    private Double healthyFee;          // 健保
     @NotNull
-    private double readyFee;            // 準備金
+    private Double readyFee;            // 準備金
     @NotNull
-    private double peopleHelpFee;       // 互助金
+    private Double peopleHelpFee;       // 互助金
 //    private String createTime;   // 創建時間
 //    private String updateTime;   // 更新時間
 //    private String updateBy;            // 更新者
