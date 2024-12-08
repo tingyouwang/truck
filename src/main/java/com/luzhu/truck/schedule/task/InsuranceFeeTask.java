@@ -45,10 +45,11 @@ public class InsuranceFeeTask {
 
             LocalDateTime end = LocalDateTime.now();
             log.info("[InsuranceFeeTask] 花費時間:" + Duration.between(start, end).getSeconds() + "成功插入筆數:" + insertCount);
+            insuranceFeeSettingService.updateGenerateBillStatus(usingInsuranceFeeSetting);
         } catch (Exception e) {
             log.error("[InsuranceFeeTask] generateMonthBill 錯誤:" + e.getMessage());
         }
-        insuranceFeeSettingService.updateGenerateBillStatus(usingInsuranceFeeSetting);
+
 
     }
 }

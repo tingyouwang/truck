@@ -52,16 +52,16 @@ public class InsuranceFeeSettingService {
             throw new AppException(SystemExceptionEnum.PRIMARY_KEY_CONFLICT);
         }
 
-        InsuranceFee insuranceFee = new InsuranceFee();
-        insuranceFee.setCarLicenseNum(param.getCarLicenseNum());
-        insuranceFee.setAmount(new BigDecimal(param.getAmount()));
-        insuranceFee.setExpenseYearMonth(yearMonth);
-        insuranceFee.setCreateTime(l);
-        insuranceFee.setInsuranceCardNum(param.getInsuranceCardNum());
-        insuranceFee.setStatus("ENABLE");
-
-        //todo 如何檢查插入成功
-        insuranceFeeDao.save(insuranceFee);
+//        InsuranceFee insuranceFee = new InsuranceFee();
+//        insuranceFee.setCarLicenseNum(param.getCarLicenseNum());
+//        insuranceFee.setAmount(new BigDecimal(param.getAmount()));
+//        insuranceFee.setExpenseYearMonth(yearMonth);
+//        insuranceFee.setCreateTime(l);
+//        insuranceFee.setInsuranceCardNum(param.getInsuranceCardNum());
+//        insuranceFee.setStatus("ENABLE");
+//
+//        //todo 如何檢查插入成功
+//        insuranceFeeDao.save(insuranceFee);
     }
 
     @Transactional
@@ -165,6 +165,8 @@ public class InsuranceFeeSettingService {
             insuranceFee.setCarLicenseNum(dto.getCarLicenseNum());
             insuranceFee.setExpenseYearMonth(yearMonth);
             insuranceFee.setCreateTime(utcEpochSecond);
+            insuranceFee.setInsuranceCardNum(dto.getInsuranceCardNum());
+            insuranceFee.setStatus("ENABLE");
 
             return insuranceFee;
         }).collect(Collectors.toList());
