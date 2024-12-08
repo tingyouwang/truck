@@ -26,7 +26,7 @@ public class ManageFeeService {
 
         List<ManageFee> manageFees = usingCarFee.stream().map(dto -> {
             ManageFee manageFee = new ManageFee();
-            manageFee.setAmount(BigDecimal.valueOf(dto.getHealthyFee()));
+            manageFee.setAmount(BigDecimal.valueOf(dto.getManageFee()));
             manageFee.setCarLicenseNum(dto.getCarLicenseNum());
             manageFee.setExpenseYearMonth(yearMonth);
             manageFee.setCreateTime(utcEpochSecond);

@@ -27,7 +27,7 @@ public class UnionFeeService {
 
         List<UnionFee> unionFees = usingCarFee.stream().map(dto -> {
             UnionFee unionFee = new UnionFee();
-            unionFee.setAmount(BigDecimal.valueOf(dto.getHealthyFee()));
+            unionFee.setAmount(BigDecimal.valueOf(dto.getUnionFee()));
             unionFee.setCarLicenseNum(dto.getCarLicenseNum());
             unionFee.setExpenseYearMonth(yearMonth);
             unionFee.setCreateTime(utcEpochSecond);
