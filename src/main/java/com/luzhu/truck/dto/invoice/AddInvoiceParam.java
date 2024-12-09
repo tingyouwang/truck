@@ -26,8 +26,6 @@ public class AddInvoiceParam {
     private String invoiceNum;
     @NotNull(message = "銷貨金額")
     private BigDecimal amount;
-    @NotNull(message = "銷貨稅")
-    private BigDecimal amountTax;
     @NotBlank(message = "車行")
     private String carAgency;
     private int carAgencyNum;

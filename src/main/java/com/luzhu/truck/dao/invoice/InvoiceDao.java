@@ -1,7 +1,9 @@
 package com.luzhu.truck.dao.invoice;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.car.CarFeeJoinInvoiceDto;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
+import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.invoice.Invoice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +59,9 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
     @Query(value = "SELECT * FROM invoice WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 AND disable = ?4"
             , nativeQuery = true)
     List<Invoice> getDetailByInvoiceDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, int disable);
+
+    @Query(value = "SELECT c.*, i.type FROM invoice i JOIN car_fee c ON c.car_license_num = i.car_license_num WHERE i.id = ?1"
+    , nativeQuery = true)
+    CarFeeJoinInvoiceDto getCarFeeByInvoiceId(long id);
 
 }
