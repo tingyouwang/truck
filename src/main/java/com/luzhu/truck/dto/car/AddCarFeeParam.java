@@ -28,6 +28,10 @@ public class AddCarFeeParam {
     @NotNull
     @DecimalMax("1")
     @DecimalMin("0.001")
+    private Double giveBackTax;         // 入款利率
+    @NotNull
+    @DecimalMax("1")
+    @DecimalMin("0.001")
     private Double receipTax;           // 收據稅率
     @NotNull
     private Double fuelTaxSpring;       // 春燃料稅

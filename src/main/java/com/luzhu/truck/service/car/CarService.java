@@ -204,6 +204,7 @@ public class CarService {
         carFee.setBuyTax(param.getBuyTax());
         carFee.setGasTax(param.getGasTax());
         carFee.setOweTax(param.getOweTax());
+        carFee.setGiveBackTax(param.getGiveBackTax());
         carFee.setReceipTax(param.getReceipTax());
         carFee.setFuelTaxSpring(param.getFuelTaxSpring());
         carFee.setFuelTaxSummer(param.getFuelTaxSummer());

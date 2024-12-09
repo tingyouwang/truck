@@ -28,6 +28,8 @@ public class CarFee {
 
     @Column(name = "owe_tax")
     private Double oweTax;
+    @Column(name = "give_back_tax")
+    private Double giveBackTax;
 
     @Column(name = "receip_tax")
     private Double receipTax;
