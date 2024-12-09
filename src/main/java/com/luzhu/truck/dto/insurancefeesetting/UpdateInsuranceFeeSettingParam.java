@@ -7,8 +7,6 @@ import lombok.Data;
 
 @Data
 public class UpdateInsuranceFeeSettingParam {
-//    @NotBlank(message = "原保卡號碼不可為空")
-//    private String originalInsuranceCardNum;
     @NotBlank(message = "車牌不可為空")
     private String carLicenseNum;
     @NotBlank(message = "新保卡號碼不可為空")
