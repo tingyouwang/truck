@@ -60,7 +60,7 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
             , nativeQuery = true)
     List<Invoice> getDetailByInvoiceDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, int disable);
 
-    @Query(value = "SELECT c.*, i.type FROM invoice i JOIN car_fee c ON c.car_license_num = i.car_license_num WHERE i.id = ?1"
+    @Query(value = "SELECT c.*, i.type, i.disable FROM invoice i JOIN car_fee c ON c.car_license_num = i.car_license_num WHERE i.id = ?1"
     , nativeQuery = true)
     CarFeeJoinInvoiceDto getCarFeeByInvoiceId(long id);
 

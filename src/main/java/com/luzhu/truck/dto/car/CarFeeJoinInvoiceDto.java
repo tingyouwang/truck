@@ -13,4 +13,5 @@ public class CarFeeJoinInvoiceDto {
     private Double oweTax;
     private Double receipTax;
     private String type;
+    private Integer disable;
 }

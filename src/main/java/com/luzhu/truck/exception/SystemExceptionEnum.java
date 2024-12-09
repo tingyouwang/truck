@@ -15,6 +15,7 @@ public enum SystemExceptionEnum implements IRuntimeExceptionEnum{
     DUPLICATE_DATA("SYS_0007", "DUPLICATE_DATA", "資料重覆"),
     PRIMARY_KEY_CONFLICT("SYS_0008", "保險卡號重覆", "PRIMARY_KEY_CONFLICT"),
     CAR_AGENCY_NAME_DUPLICATE("SYS_0009", "車行名稱重覆", "PRIMARY_KEY_CONFLICT"),
+    INVOICE_DISABLE("SYS_0010", "發票已作廢, 無法更新", "INVOICE_DISABLE"),
 
     NOT_IMPLEMENTED_METHOD("SYS_8888", "NOT_IMPLEMENTED_METHOD", "未實作方法"),
 

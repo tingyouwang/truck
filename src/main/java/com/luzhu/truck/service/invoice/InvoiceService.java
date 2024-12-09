@@ -64,6 +64,9 @@ public class InvoiceService {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 
         CarFeeJoinInvoiceDto carFeeByInvoiceId = invoiceDao.getCarFeeByInvoiceId(param.getId());
+        Validator.isFalseThrow(0 == carFeeByInvoiceId.getDisable(),
+                new AppException(SystemExceptionEnum.INVOICE_DISABLE));
+
         Double taxPercent = 0.0;
         switch (carFeeByInvoiceId.getType().toUpperCase()) {
             case "SALE":
