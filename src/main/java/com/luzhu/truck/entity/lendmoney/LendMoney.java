@@ -28,7 +28,7 @@ public class LendMoney {
     private String type;
 
     @Column(name = "expire_date", nullable = false)
-    private LocalDate expireDate;
+    private String expireDate;
 
     @Column(name = "interest_amount", nullable = false)
     private BigDecimal interestAmount;
