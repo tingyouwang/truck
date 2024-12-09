@@ -1,9 +1,11 @@
 package com.luzhu.truck.service.receiveoffset;
 
+import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.receiveoffset.ReceiveOffsetDao;
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
 import com.luzhu.truck.dto.receiveoffset.AddReceiveOffsetParam;
 import com.luzhu.truck.dto.receiveoffset.UpdateReceiveOffsetParam;
+import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.receiveoffset.ReceiveOffset;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -25,10 +28,17 @@ import java.time.format.DateTimeFormatter;
 public class ReceiveOffsetService {
     @Autowired
     private ReceiveOffsetDao receiveOffsetDao;
+    @Autowired
+    private CarFeeDao carFeeDao;
     @Transactional
     public void addReceiveOffset(AddReceiveOffsetParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-        int insertCount = receiveOffsetDao.insertReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(),
+
+        CarFee carFee = carFeeDao.getCarFeeByLicenseNum(param.getCarLicenseNum());
+        Double taxPercent = carFee.getReceipTax();
+        BigDecimal taxAmount = param.getReceiptAmount().multiply(BigDecimal.valueOf(taxPercent));
+
+        int insertCount = receiveOffsetDao.insertReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), taxAmount,
                 param.getReceiptAmount(), param.getNote(), l , l);
 
         Validator.isFalseThrow(1 == insertCount,
@@ -38,7 +48,12 @@ public class ReceiveOffsetService {
     @Transactional
     public void updateReceiveOffset(UpdateReceiveOffsetParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-        int updateCount = receiveOffsetDao.updateReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(),
+
+        CarFee carFee = carFeeDao.getCarFeeByLicenseNum(param.getCarLicenseNum());
+        Double taxPercent = carFee.getReceipTax();
+        BigDecimal taxAmount = param.getReceiptAmount().multiply(BigDecimal.valueOf(taxPercent));
+
+        int updateCount = receiveOffsetDao.updateReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), taxAmount,
                 param.getReceiptAmount(), param.getNote(), l , param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
