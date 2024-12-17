@@ -23,10 +23,10 @@ public class LastMonthOweTask {
     public void generateLastMonthOwe() throws ExecutionException {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-        String yearMonth = now.format(formatter);
+        String yearMonth = now.minusMonths(1).format(formatter);
         log.info(String.format("start task generateLastMonthOwe : startTime: %s", now));
         lastMonthOweService.addLastMonthOwe(yearMonth, now);
-        log.info(String.format("end task generateLastMonthOwe : endTime: %s", LocalDateTime.now(ZoneOffset.ofHours(0))));
+        log.info(String.format("end task generateLastMonthOwe : endTime: %s", LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)))));
 
     }
 }
