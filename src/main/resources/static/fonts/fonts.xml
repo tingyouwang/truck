@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fontFamilies>
     <fontFamily name="SansSerif">
-<!--        <normal>static/fonts/STSONG.TTF</normal>-->
-        <normal>C:\Users\Eric\IdeaProjects\truck\target\classes\static\fonts/STSONG.TTF</normal>
+<!--        根據字體的相對路徑-->
+<!--        <normal>.\static\fonts\STSONG.TTF</normal>-->
+        <normal>.\classes\static\fonts\STSONG.TTF</normal>
+<!--        <normal>C:\Users\Eric\IdeaProjects\truck\target\classes\static\fonts/STSONG.TTF</normal>-->
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
         <exportFonts>
