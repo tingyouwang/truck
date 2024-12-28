@@ -3,7 +3,9 @@
     <fontFamily name="SansSerif">
 <!--        根據字體的相對路徑-->
 <!--        <normal>.\static\fonts\STSONG.TTF</normal>-->
+<!--        prod-->
         <normal>.\classes\static\fonts\STSONG.TTF</normal>
+<!--        local-->
 <!--        <normal>C:\Users\Eric\IdeaProjects\truck\target\classes\static\fonts/STSONG.TTF</normal>-->
         <pdfEncoding>Identity-H</pdfEncoding>
         <pdfEmbedded>true</pdfEmbedded>
