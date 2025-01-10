@@ -8,4 +8,10 @@ public class Validator {
             throw abstractException;
         }
     }
+
+    public static void isNullThrow(Object object, AbstractException abstractException) {
+        if (null == object) {
+            throw abstractException;
+        }
+    }
 }
