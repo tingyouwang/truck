@@ -41,12 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
 //    }
 
     // 定義公開路徑
-    private static final List<String> PUBLIC_PATHS = List.of("/user/register", "/user/login", "/authentication/login");
+    private static final List<String> PUBLIC_PATHS = List.of("/user/register", "/user/login", "/authentication/login", "/key/getKey");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         String requestPath = request.getRequestURI();
 
         // 跳過公開路徑

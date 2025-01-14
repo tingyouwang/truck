@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(HttpMethod.POST, "/user/register", "/user/login", "/authentication/login").permitAll()
+                        auth -> auth.requestMatchers(HttpMethod.POST, "/user/register", "/user/login", "/authentication/login", "/key/getKey").permitAll()
                                 //todo 未來加入腳色管理
 //                                .requestMatchers(HttpMethod.POST, "/abc/edf").hasRole("admin")
                         .anyRequest().authenticated());
