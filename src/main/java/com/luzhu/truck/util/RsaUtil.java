@@ -147,7 +147,7 @@ public class RsaUtil {
 //        RsaKeyPair rsaKeyPair2 = generateKeyPair();
 //        RsaKeyPair rsaKeyPair3 = generateKeyPair();
 
-        String plainText = "password123";
+        String plainText = "!QAz123";
         String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDshjz42bQcMV8BfhvNK3CrWKRarvHXyauk6sQtDG6BlNhB07qvQc0Q2qrT8jYwbeYix+QTmCZK/lLDfOAK+/TSd5YIiHgjY34sQzVBGyAI36vAJZIuxAjbWCi5cvhzT1SHqLyhR9URrWsBlMnaOZLlJ53t0Gt77/pe/n1oXsPjUwIDAQAB";
         String encrypt = encrypt(plainText, publicKey);
         System.out.println(encrypt);

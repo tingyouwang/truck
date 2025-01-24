@@ -7,15 +7,21 @@ import com.luzhu.truck.util.RsaUtil;
 import com.luzhu.truck.validator.Validator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 
+@Aspect
+@Order(10)
+@Component
 public class ApiDecryptDataAop extends BaseAop {
 
     private static final Logger log = LoggerFactory.getLogger(ApiDecryptDataAop.class);
@@ -28,19 +34,21 @@ public class ApiDecryptDataAop extends BaseAop {
     public ApiDecryptDataAop() {
     }
 
-    @Pointcut("@annotation(com.wanda.web.annotation.ApiDecryptData)")
+//    @Pointcut("@annotation(com.wanda.web.annotation.ApiDecryptData)")
+    @Pointcut("@annotation(com.luzhu.truck.annotation.ApiDecryptData)")
     public void apiDecryptDataAnnotation() {
     }
 
     @Before("apiDecryptDataAnnotation()")
     public void decryptData(JoinPoint joinPoint) {
-        if (this.needEncrypt) {
+//        if (this.needEncrypt) {
+        if (true) {
             HttpServletRequest request = this.getHttpServletRequest();
 
             Validator.isNullThrow(request, WebRuntimeException.systemError());
             String apiSecretKey = request.getHeader("api-secret-key");
 
-            Validator.isNullThrow(apiSecretKey, new WebRuntimeException(WebExceptionEnum.API_SECRET_KEY_NOT_EXIST));
+//            Validator.isNullThrow(apiSecretKey, new WebRuntimeException(WebExceptionEnum.API_SECRET_KEY_NOT_EXIST));
 
 //            RsaKeyPair rsaKeyPair = (RsaKeyPair) this.redisService.hashGetAll(WebRedisUtil.apiSecretKey(apiSecretKey), RsaKeyPair.class);
             RsaKeyPair rsaKeyPair = new RsaKeyPair();

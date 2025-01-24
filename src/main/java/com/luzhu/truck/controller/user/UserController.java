@@ -1,5 +1,7 @@
 package com.luzhu.truck.controller.user;
 
+import com.luzhu.truck.annotation.ApiDecryptData;
+import com.luzhu.truck.annotation.DecryptParam;
 import com.luzhu.truck.dto.GeoInfo;
 import com.luzhu.truck.dto.user.LoginReqDto;
 import com.luzhu.truck.dto.user.LoginResDto;
@@ -21,7 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     // 註冊
-//    @ApiDecryptData
+    @ApiDecryptData
     @PostMapping("/register")
     public ResponseModel<LoginResDto> register(@RequestBody @Valid RegisterDto reqDto,
                                                HttpServletRequest request) {
