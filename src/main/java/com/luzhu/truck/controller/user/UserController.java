@@ -30,6 +30,7 @@ public class UserController {
         return new ResponseModel<>(registerService.register(reqDto, GeoInfo.create(request)));
     }
 
+    @ApiDecryptData
     @PostMapping("/login")
     public ResponseModel<LoginResDto> login(@RequestBody @Valid LoginReqDto reqDto,
                                             HttpServletRequest request) {

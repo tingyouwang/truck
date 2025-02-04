@@ -25,7 +25,7 @@ public class JwtUtil {
     public static String sign(String secret, String role, String userId) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.create().withClaim("role", role).withClaim("userId", userId)
-                .withExpiresAt(Instant.ofEpochSecond(LocalDateTime.now(ZoneOffset.UTC).plusMinutes(2).toEpochSecond(ZoneOffset.UTC)))
+                .withExpiresAt(Instant.ofEpochSecond(LocalDateTime.now(ZoneOffset.UTC).plusMinutes(60).toEpochSecond(ZoneOffset.UTC)))
                 .sign(algorithm);
     }
     public static String sign(String secret, Map<String, String> map) {
