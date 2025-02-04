@@ -18,6 +18,9 @@ public interface LoanFeeSettingDao extends BaseDao<LoanFeeSetting, String> {
     @Query(value = "SELECT * FROM loan_fee_setting WHERE ?1 BETWEEN start_date AND end_date",
     nativeQuery = true)
     List<LoanFeeSetting> getUsingLoanFeeSetting(LocalDate now);
+    @Query(value = "SELECT * FROM loan_fee_setting WHERE ?1 BETWEEN start_date AND end_date AND car_license_num = ?2",
+            nativeQuery = true)
+    LoanFeeSetting getUsingLoanFeeSettingByCarLicenseNum(LocalDate now, String carLicenseNum);
     @Query(value = "SELECT * FROM loan_fee_setting WHERE car_license_num = ?1",
             nativeQuery = true,
     countQuery = "SELECT COUNT(1) FROM loan_fee_setting WHERE car_license_num = ?1")

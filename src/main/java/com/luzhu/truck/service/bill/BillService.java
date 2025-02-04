@@ -2,15 +2,18 @@ package com.luzhu.truck.service.bill;
 
 import com.luzhu.truck.dao.Healthfee.HealthFeeDao;
 import com.luzhu.truck.dao.car.CarDao;
+import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.fueltax.FuelTaxDao;
 import com.luzhu.truck.dao.givebackmoney.GiveBackMoneyDao;
 import com.luzhu.truck.dao.insurancefee.InsuranceFeeDao;
+import com.luzhu.truck.dao.insurnacefeesetting.InsuranceFeeSettingDao;
 import com.luzhu.truck.dao.invoice.InvoiceDao;
 import com.luzhu.truck.dao.laborinsurance.LaborInsuranceDao;
 import com.luzhu.truck.dao.lastmonthowe.LastMonthOweDao;
 import com.luzhu.truck.dao.lendmoney.LendMoneyDao;
 import com.luzhu.truck.dao.licensetax.LicenseTaxDao;
 import com.luzhu.truck.dao.loanfee.LoanFeeDao;
+import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
 import com.luzhu.truck.dao.managefee.ManageFeeDao;
 import com.luzhu.truck.dao.othergivebackmoney.OtherGiveBackMoneyDao;
 import com.luzhu.truck.dao.otherlendmoney.OtherLendMoneyDao;
@@ -24,15 +27,18 @@ import com.luzhu.truck.dto.givebackmoney.SumGiveBackMoneyAmountAndInterestDto;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.dto.lendmoney.SumAmountAndTaxDto;
 import com.luzhu.truck.entity.Car;
+import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.fuel.FuelTax;
 import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
 import com.luzhu.truck.entity.healthfee.HealthFee;
 import com.luzhu.truck.entity.insurancefee.InsuranceFee;
+import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.entity.invoice.Invoice;
 import com.luzhu.truck.entity.laborInsurance.LaborInsurance;
 import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.entity.licensetax.LicenseTax;
 import com.luzhu.truck.entity.loanfee.LoanFee;
+import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
 import com.luzhu.truck.entity.managefee.ManageFee;
 import com.luzhu.truck.entity.othergivebackmoney.OtherGiveBackMoney;
 import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
@@ -42,15 +48,19 @@ import com.luzhu.truck.entity.returnmoney.ReturnMoney;
 import com.luzhu.truck.entity.trafficticket.TrafficTicket;
 import com.luzhu.truck.entity.unionfee.UnionFee;
 import com.luzhu.truck.enums.InvoiceType;
+import com.luzhu.truck.schedule.service.*;
+import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
+import com.luzhu.truck.service.laborinsurance.LaborInsuranceService;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +69,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class BillService {
+    @Value("${env.time.offset}")
+    private String timeOffset;
     @Autowired
     private CarDao carDao;
     @Autowired
@@ -97,6 +109,28 @@ public class BillService {
     private ReceiveOffsetDao receiveOffsetDao;
     @Autowired
     private ReturnMoneyDao returnMoneyDao;
+    @Autowired
+    private HealthFeeService healthFeeService;
+    @Autowired
+    private LaborInsuranceService laborInsuranceService;
+    @Autowired
+    private CarFeeDao carFeeDao;
+    @Autowired
+    private FuelTaxService fuelTaxService;
+    @Autowired
+    private InsuranceFeeSettingDao insuranceFeeSettingDao;
+    @Autowired
+    private InsuranceFeeSettingService insuranceFeeSettingService;
+    @Autowired
+    private LicenseTaxService licenseTaxService;
+    @Autowired
+    private LoanFeeSettingDao loanFeeSettingDao;
+    @Autowired
+    private LoanFeeService loanFeeService;
+    @Autowired
+    private ManageFeeService manageFeeService;
+    @Autowired
+    private UnionFeeService unionFeeService;
     public MonthBillResponse getMonthBill(MonthBillReq req) {
 //        Car searchCar = carDao.getCarById(req.getId());
 
@@ -356,6 +390,44 @@ public class BillService {
         response.setReceiveSum(receiveSum);
         response.setOffsetSum(offsetSum);
         return response;
+    }
+
+    @Transactional
+    public void generateCurrentMonthBill(GenerateCurrentMonthBillReq req) {
+        InsuranceFeeSetting insuranceFeeSetting = null;
+        insuranceFeeSetting.getAmount();
+
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        String yearMonth = now.format(formatter);
+
+        LocalDate nowDate = LocalDate.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
+        //保險設定
+        InsuranceFeeSetting usingInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByCarNum(nowDate, req.getCarLicenseNum());
+        List<InsuranceFeeSetting> insuranceFeeSettingList = List.of(usingInsuranceFeeSetting);
+
+        //貸款設定
+        LoanFeeSetting usingLoanFeeSetting = loanFeeSettingDao.getUsingLoanFeeSettingByCarLicenseNum(nowDate, req.getCarLicenseNum());
+        List<LoanFeeSetting> loanFeeSettingList = List.of(usingLoanFeeSetting);
+
+        CarFee carFee = carFeeDao.getCarFeeByLicenseNum(req.getCarLicenseNum());
+        List<CarFee> carFeeList = List.of(carFee);
+
+        int i = healthFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
+        int i1 = laborInsuranceService.monthlyInsertFee(yearMonth, now, carFeeList);
+        int i2 = fuelTaxService.seasonlyInsertFee(yearMonth, now, carFeeList);
+
+        int i3 = insuranceFeeSettingService.monthlyInsertFee(yearMonth, nowDate, insuranceFeeSettingList);
+        insuranceFeeSettingService.updateGenerateBillStatus(insuranceFeeSettingList);
+
+        int i4 = licenseTaxService.halfYearInsertFee(yearMonth, now, carFeeList);
+
+        int i5 = loanFeeService.monthlyInsertFee(yearMonth, nowDate, loanFeeSettingList);
+        int i6 = manageFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
+        int i7 = unionFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
+        log.info(String.format("[手動新增當月帳單:%s:車牌號碼:%s] 健保筆數:%s, 勞保筆數:%s, 燃料稅筆數:%s, 保險費筆數:%s, 牌照稅筆數:%s, 貸款筆數:%s, 管理費筆數:%s, 公會費筆數:%s",
+                yearMonth, req.getCarLicenseNum(), i, i1, i2, i3, i4, i5, i6, i7));
+
     }
 
 

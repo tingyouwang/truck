@@ -2,10 +2,7 @@ package com.luzhu.truck.controller.bill;
 
 import com.luzhu.truck.cache.CarCache;
 import com.luzhu.truck.controller.report.ReportService;
-import com.luzhu.truck.dto.bill.MonthBillDetailReq;
-import com.luzhu.truck.dto.bill.MonthBillReq;
-import com.luzhu.truck.dto.bill.MonthBillResponse;
-import com.luzhu.truck.dto.bill.MonthsBillDetailResponse;
+import com.luzhu.truck.dto.bill.*;
 import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.response.ResponseEnum;
 import com.luzhu.truck.response.ResponseModel;
@@ -47,8 +44,22 @@ public class BillController {
             log.info("查無此車主");
             return new ResponseModel<>(ResponseEnum.DATA_IS_EMPTY);
         }
+    }
 
+    @PostMapping("/generateCurrentMonthBill")
+    public ResponseModel<Object> generateCurrentMonthBill(@RequestBody @Valid GenerateCurrentMonthBillReq req) throws ExecutionException {
+        List<CarInfo> allCars = carCache.getAllCars("all");
 
+        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getLicenseNumber().equalsIgnoreCase(req.getCarLicenseNum())).findFirst();
+
+        if (searchCarOpt.isPresent()) {
+            billService.generateCurrentMonthBill(req);
+            return new ResponseModel<>();
+        } else {
+            //todo 待確認拋錯為甚麼沒有response to 前端
+            log.info("查無此車主");
+            return new ResponseModel<>(ResponseEnum.DATA_IS_EMPTY);
+        }
     }
 
     @PostMapping("/monthBillDetail")
