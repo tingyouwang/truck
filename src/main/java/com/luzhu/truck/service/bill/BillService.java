@@ -394,9 +394,6 @@ public class BillService {
 
     @Transactional
     public void generateCurrentMonthBill(GenerateCurrentMonthBillReq req) {
-        InsuranceFeeSetting insuranceFeeSetting = null;
-        insuranceFeeSetting.getAmount();
-
         LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
