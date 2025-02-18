@@ -48,6 +48,7 @@ import com.luzhu.truck.entity.returnmoney.ReturnMoney;
 import com.luzhu.truck.entity.trafficticket.TrafficTicket;
 import com.luzhu.truck.entity.unionfee.UnionFee;
 import com.luzhu.truck.enums.InvoiceType;
+import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.schedule.service.*;
 import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
 import com.luzhu.truck.service.laborinsurance.LaborInsuranceService;
@@ -64,6 +65,9 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.luzhu.truck.exception.SystemExceptionEnum.GENERATE_CURRENT_BILL;
 
 
 @Service
@@ -401,6 +405,8 @@ public class BillService {
         LocalDate nowDate = LocalDate.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         //保險設定
         InsuranceFeeSetting usingInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByCarNum(nowDate, req.getCarLicenseNum());
+        if (Optional.ofNullable(usingInsuranceFeeSetting).isEmpty()) throw new AppException(GENERATE_CURRENT_BILL);
+
         List<InsuranceFeeSetting> insuranceFeeSettingList = List.of(usingInsuranceFeeSetting);
 
         //貸款設定
