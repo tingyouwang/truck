@@ -31,7 +31,7 @@ public class AddCarParam {
 //    private Integer westYear;
     @NotBlank(message = "廠牌必填")
     private String brand;
-    @NotBlank(message = "噸位必填")
+//    @NotBlank(message = "噸位必填")
     private String ton;
     @NotBlank(message = "cc數必填")
     private String cc;
@@ -47,7 +47,7 @@ public class AddCarParam {
     private String carTypeOutlooking;
     //通行證
     private String passLicense;
-    @NotBlank(message = "車重必填")
+//    @NotBlank(message = "車重必填")
     private String carWeight;
     @NotBlank(message = "載重必填")
     private String loadingWeight;
