@@ -64,7 +64,7 @@ public class CarService {
                 addCarParam.getLicenseNumber(),
                 1, // Assuming `isUsing` is always 1 for this example
                 addCarParam.getOwnerName(),
-                addCarParam.getCarAgency(),
+                addCarParam.getCarAgencyId(),
                 addCarParam.getJoinDate(),
                 addCarParam.getQuitDate(),
                 addCarParam.getJoinAmount(),
