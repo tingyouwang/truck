@@ -1,6 +1,7 @@
 package com.luzhu.truck.dao.caragency;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,12 +9,18 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CarAgencyDao extends BaseDao<CarAgency, Integer> {
     @Query(value = "SELECT * FROM car_agency",
             countQuery = " SELECT COUNT(1) FROM car_agency"
             , nativeQuery = true)
     Page<CarAgency> getAllCarAgency(Pageable pageable);
+
+    @Query(value = "SELECT id as carAgencyId, agency_name FROM car_agency",
+            nativeQuery = true)
+    List<CarAgencyDropDownDTO> dropDownGetCarAgency();
 
     @Modifying
     @Query(value = "INSERT INTO car_agency (agency_name, address, " +

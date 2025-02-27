@@ -3,6 +3,7 @@ package com.luzhu.truck.service.caragency;
 import com.luzhu.truck.dao.caragency.CarAgencyDao;
 import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.exception.AppException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class CarAgencyService {
@@ -24,6 +26,10 @@ public class CarAgencyService {
 //        return carAgencyDao.getAllCarAgency(param.getPageable());
         Page<CarAgency> allCarAgency = carAgencyDao.getAllCarAgency(param.getPageable());
         return new PageResult<>(allCarAgency);
+    }
+
+    public List<CarAgencyDropDownDTO> dropDownGetCarAgency() {
+        return carAgencyDao.dropDownGetCarAgency();
     }
 
     @Transactional

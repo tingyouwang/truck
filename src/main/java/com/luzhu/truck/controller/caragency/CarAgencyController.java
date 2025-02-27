@@ -2,6 +2,7 @@ package com.luzhu.truck.controller.caragency;
 
 import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.response.PageResult;
@@ -10,6 +11,8 @@ import com.luzhu.truck.service.caragency.CarAgencyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/carAgency")
@@ -23,6 +26,13 @@ public class CarAgencyController {
         PageResult<CarAgency> carAgency = carAgencyService.getCarAgency(param);
 
         return new ResponseModel<>(carAgency);
+    }
+
+    @PostMapping("/dropDownGetCarAgency")
+    public ResponseModel<List<CarAgencyDropDownDTO>> dropDownGetCarAgency() {
+        List<CarAgencyDropDownDTO> carAgencyDropDownDTOS = carAgencyService.dropDownGetCarAgency();
+
+        return new ResponseModel<>(carAgencyDropDownDTOS);
     }
 
     @PostMapping("/addCarAgency")
