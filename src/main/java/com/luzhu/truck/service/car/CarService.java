@@ -105,7 +105,7 @@ public class CarService {
                 param.getLicenseNumber(),
                 param.getIsUsing(),
                 param.getOwnerName(),
-                param.getCarAgency(),
+                param.getCarAgencyId(),
                 param.getJoinDate(), // 遷入日期
                 param.getQuitDate(), // 遷出日期
                 param.getJoinAmount(),

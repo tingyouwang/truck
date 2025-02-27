@@ -18,7 +18,7 @@ public class UpdateCarParam {
     @NotBlank(message = "車主姓名必填")
     private String ownerName;
     @NotNull(message = "車行Id必填")
-    private String carAgency;
+    private int carAgencyId;
     @NotBlank(message = "遷入日期必填")
     private String joinDate;
     private String quitDate;
