@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,6 +68,9 @@ public class CarController {
 
     @PostMapping("/updateCar")
     public ResponseModel<Object> updateCarInfo(@RequestBody @Valid UpdateCarParam param) {
+
+        if (!StringUtils.hasText(param.getQuitDate())) param.setQuitDate(null);
+
         carService.updateCar(param);
         carCache.invalidate();
         return new ResponseModel<>();

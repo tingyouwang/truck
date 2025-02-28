@@ -90,7 +90,8 @@ public class CarService {
                 addCarParam.getReportScrapDate(),
                 addCarParam.getOldLicenseNumber(),
                 addCarParam.getNote1(),
-                addCarParam.getNote2()
+                addCarParam.getNote2(),
+                addCarParam.getCarAgency()
         );
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -102,7 +103,6 @@ public class CarService {
         String reportStopDate = StringUtils.hasText(param.getReportStopDate()) ? param.getReportStopDate() : null;
         String reportScrapDate = StringUtils.hasText(param.getReportScrapDate()) ? param.getReportScrapDate() : null;
         int updateCount = carDao.updateCar(
-                param.getLicenseNumber(),
                 param.getIsUsing(),
                 param.getOwnerName(),
                 param.getCarAgencyId(),
@@ -132,7 +132,8 @@ public class CarService {
                 param.getOldLicenseNumber(),
                 param.getNote1(),
                 param.getNote2(),
-                param.getId() // ID
+                param.getId(), // ID
+                param.getCarAgency()
         );
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));

@@ -25,6 +25,8 @@ public class Car {
 
     @Column(name = "car_agency", nullable = false, length = 100)
     private String carAgency;
+    @Column(name = "car_agency_id", nullable = false, length = 100)
+    private int carAgencyId;
 
     @Column(name = "join_date", nullable = false)
 //    @Temporal(TemporalType.DATE)
