@@ -25,13 +25,13 @@ public class AddCarFeeParam {
     @DecimalMax("1")
     @DecimalMin("0.001")
     private Double oweTax;              // 欠款利率
+//    @NotNull
+//    @DecimalMax("1")
+//    @DecimalMin("0.001")
+    private Double giveBackTax = 0.0;         // 入款利率
     @NotNull
     @DecimalMax("1")
-    @DecimalMin("0.001")
-    private Double giveBackTax;         // 入款利率
-    @NotNull
-    @DecimalMax("1")
-    @DecimalMin("0.001")
+    @DecimalMin("0")
     private Double receipTax;           // 收據稅率
     @NotNull
     private Double fuelTaxSpring;       // 春燃料稅
