@@ -51,7 +51,7 @@ public class AddCarParam {
     private String passLicense;
 //    @NotBlank(message = "車重必填")
     private String carWeight;
-    @NotBlank(message = "載重必填")
+//    @NotBlank(message = "載重必填")
     private String loadingWeight;
     @NotBlank(message = "車輛種類必填")
     private String carType;

@@ -9,6 +9,8 @@ import com.luzhu.truck.entity.Car;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.owner.Owner;
+import com.luzhu.truck.exception.AppException;
+import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.car.CarService;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -60,7 +63,11 @@ public class CarController {
         return new ResponseModel<>(carInfoPageResult);
     }
     @PostMapping("/addCar")
-    public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) {
+    public ResponseModel<Object> addCarInfo(@RequestBody @Valid AddCarParam param) throws ExecutionException {
+        List<CarInfo> allCars = carCache.getAllCars("all");
+
+        Optional<CarInfo> searchCarOpt = allCars.stream().filter(car -> car.getLicenseNumber().equalsIgnoreCase(param.getLicenseNumber())).findFirst();
+        if (searchCarOpt.isPresent()) throw new AppException(SystemExceptionEnum.DUPLICATE_CAR_LICENSE_NUM);
         carService.addCar(param);
         carCache.invalidate();
         return new ResponseModel<>();
