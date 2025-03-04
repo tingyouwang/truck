@@ -39,8 +39,8 @@ public class Invoice {
     @Column(name = "car_agency", nullable = false, length = 90)
     private String carAgency;
 
-    @Column(name = "car_agency_num", nullable = false)
-    private int carAgencyNum;
+    @Column(name = "car_agency_id", nullable = false)
+    private int carAgencyId;
 
     @Column(name = "disable", nullable = false)
     private int disable;

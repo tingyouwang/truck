@@ -28,7 +28,7 @@ public class AddInvoiceParam {
     private BigDecimal amount;
     @NotBlank(message = "車行")
     private String carAgency;
-    private int carAgencyNum;
+    private int carAgencyId;
     private String note;
     private int disable;
     private String taxMonth;

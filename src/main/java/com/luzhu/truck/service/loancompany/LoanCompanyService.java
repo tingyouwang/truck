@@ -2,9 +2,11 @@ package com.luzhu.truck.service.loancompany;
 
 import com.luzhu.truck.dao.loancompany.LoanCompanyDao;
 import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.dto.loancompany.AddLoadComParam;
+import com.luzhu.truck.dto.loancompany.LoanCompanyDropDownDTO;
 import com.luzhu.truck.dto.loancompany.UpdateLoanComParam;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
 import com.luzhu.truck.entity.loancompany.LoanCompany;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class LoanCompanyService {
@@ -32,6 +36,9 @@ public class LoanCompanyService {
                 param.getContactor(), param.getPhone(), param.getNote());
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+    public List<LoanCompanyDropDownDTO> dropDownGetLoanCompany() {
+        return loanCompanyDao.dropDownGetCarAgency();
     }
 
     @Transactional

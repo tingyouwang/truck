@@ -31,7 +31,7 @@ public class InvoiceController {
     }
 
     @PostMapping("/updateInvoice")
-    public ResponseModel<Object> addInvoice(@RequestBody @Valid UpdateInvoiceParam param) {
+    public ResponseModel<Object> updateInvoice(@RequestBody @Valid UpdateInvoiceParam param) {
         invoiceService.updateInvoice(param);
 
         return new ResponseModel<>();

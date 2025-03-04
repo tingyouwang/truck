@@ -1,9 +1,11 @@
 package com.luzhu.truck.controller.loancompany;
 
 import com.luzhu.truck.dto.BaseParam;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.dto.loancompany.AddLoadComParam;
+import com.luzhu.truck.dto.loancompany.LoanCompanyDropDownDTO;
 import com.luzhu.truck.dto.loancompany.UpdateLoanComParam;
 import com.luzhu.truck.entity.loancompany.LoanCompany;
 import com.luzhu.truck.response.PageResult;
@@ -12,6 +14,8 @@ import com.luzhu.truck.service.loancompany.LoanCompanyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/loanCompany")
@@ -24,6 +28,12 @@ public class LoanCompanyController {
         PageResult<LoanCompany> carAgency = loanCompanyService.getLoanCompany(param);
 
         return new ResponseModel<>(carAgency);
+    }
+    @PostMapping("/dropDownGetLoanCompany")
+    public ResponseModel<List<LoanCompanyDropDownDTO>> dropDownGetCarAgency() {
+        List<LoanCompanyDropDownDTO> loanCompanyDropDownDTOS = loanCompanyService.dropDownGetLoanCompany();
+
+        return new ResponseModel<>(loanCompanyDropDownDTOS);
     }
 
     @PostMapping("/addLoanCompany")

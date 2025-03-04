@@ -19,7 +19,7 @@ import java.util.List;
 public interface InvoiceDao extends BaseDao<Invoice, Integer> {
     @Modifying
     @Query(value = "INSERT INTO invoice (invoice_num, invoice_date, " +
-            "handle_date, amount, amount_tax, car_agency, car_agency_num, disable, note, tax_month, car_license_num, type, last_modify_time) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)", nativeQuery = true)
+            "handle_date, amount, amount_tax, car_agency, car_agency_id, disable, note, tax_month, car_license_num, type, last_modify_time) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)", nativeQuery = true)
     int insertInvoice(String invoiceNum, String invoiceDate, String handleDate, BigDecimal amount, BigDecimal amountTax,
                       String carAgency, int carAgencyNum, int disable, String note, String taxMonth, String carLicenseNum
     , String type, long now);
@@ -41,7 +41,7 @@ public interface InvoiceDao extends BaseDao<Invoice, Integer> {
 
     @Modifying
     @Query(value = "UPDATE invoice SET handle_date = ?2, invoice_date = ?3, invoice_num = ?4, " +
-            "amount = ?5, amount_tax = ?6, car_agency = ?7, car_agency_num = ?8, note = ?9, disable = ?10, tax_month = ?11, last_modify_time = ?12 " +
+            "amount = ?5, amount_tax = ?6, car_agency = ?7, car_agency_id = ?8, note = ?9, disable = ?10, tax_month = ?11, last_modify_time = ?12 " +
             "WHERE id = ?1",
             nativeQuery = true)
     int updateInvoice(int id,

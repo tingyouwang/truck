@@ -1,12 +1,16 @@
 package com.luzhu.truck.dao.loancompany;
 
 import com.luzhu.truck.dao.BaseDao;
+import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
+import com.luzhu.truck.dto.loancompany.LoanCompanyDropDownDTO;
 import com.luzhu.truck.entity.loancompany.LoanCompany;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface LoanCompanyDao extends BaseDao<LoanCompany, Integer> {
@@ -24,6 +28,10 @@ public interface LoanCompanyDao extends BaseDao<LoanCompany, Integer> {
     @Query(value = "INSERT INTO loan_company (company_name, short_name, " +
             "contactor, phone, note) VALUES (?1, ?2, ?3, ?4, ?5)", nativeQuery = true)
     int insertLoanCompany(String companyName, String shortName, String contactor, String phone, String note);
+
+    @Query(value = "SELECT id, company_name FROM loan_company",
+            nativeQuery = true)
+    List<LoanCompanyDropDownDTO> dropDownGetCarAgency();
 
 
 

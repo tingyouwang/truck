@@ -52,7 +52,7 @@ public class InvoiceService {
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = invoiceDao.insertInvoice(param.getInvoiceNum(), param.getInvoiceDate(), param.getHandleDate(),
-                param.getAmount(), taxAmount, param.getCarAgency(), param.getCarAgencyNum(),
+                param.getAmount(), taxAmount, param.getCarAgency(), param.getCarAgencyId(),
                 param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum()
         , param.getType(), l);
         Validator.isFalseThrow(1 == insertCount,
@@ -84,7 +84,7 @@ public class InvoiceService {
 
         int insertCount = invoiceDao.updateInvoice(param.getId(), param.getHandleDate(),
                 param.getInvoiceDate(), param.getInvoiceNum(), param.getAmount(),
-                taxAmount, param.getCarAgency(), param.getCarAgencyNum(), param.getNote(),
+                taxAmount, param.getCarAgency(), param.getCarAgencyId(), param.getNote(),
                 param.getDisable(), param.getTaxMonth(), l);
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
