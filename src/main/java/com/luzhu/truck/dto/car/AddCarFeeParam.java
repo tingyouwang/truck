@@ -23,7 +23,7 @@ public class AddCarFeeParam {
     private Double gasTax;              // 油單稅率
     @NotNull
     @DecimalMax("1")
-    @DecimalMin("0.001")
+    @DecimalMin("0")
     private Double oweTax;              // 欠款利率
 //    @NotNull
 //    @DecimalMax("1")
