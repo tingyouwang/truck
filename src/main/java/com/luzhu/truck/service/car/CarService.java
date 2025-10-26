@@ -235,4 +235,11 @@ public class CarService {
     public CarFee getCarFeeByLicenseNum(String licenseNum) {
         return carFeeDao.getCarFeeByLicenseNum(licenseNum);
     }
+
+    @Transactional
+    public void updateOwnerStatus(UpdateOwnerStatusParam param) {
+        int updateCount = ownerDao.updateOwnerStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
 }

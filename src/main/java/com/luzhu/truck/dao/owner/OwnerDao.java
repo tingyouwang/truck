@@ -2,7 +2,6 @@ package com.luzhu.truck.dao.owner;
 
 import com.luzhu.truck.dao.BaseDao;
 import com.luzhu.truck.dto.car.CarOwnerDropDownDto;
-import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.entity.owner.Owner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,17 +16,17 @@ public interface OwnerDao extends BaseDao<Owner, Integer> {
             "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
             nativeQuery = true)
     int addOwner(String name, String idNum, String sex, String birthday, String phone1, String phone2, String mobile, String fax, String address, String mailAddress);
-    @Query(value = "SELECT * FROM owner ORDER BY id DESC",
-            countQuery = " SELECT COUNT(1) FROM owner ORDER BY id DESC"
+    @Query(value = "SELECT * FROM owner WHERE status = 'enable' ORDER BY id DESC",
+            countQuery = " SELECT COUNT(1) FROM owner WHERE status = 'enable' ORDER BY id DESC"
             , nativeQuery = true)
     Page<Owner> getAllOwner(Pageable pageable);
 
-    @Query(value = "SELECT id, name FROM owner"
+    @Query(value = "SELECT id, name FROM owner WHERE status = 'enable'"
             , nativeQuery = true)
     List<CarOwnerDropDownDto> getAllOwnerDropDown();
 
-    @Query(value = "SELECT * FROM owner WHERE name LIKE %?1% ORDER BY id DESC",
-            countQuery = " SELECT COUNT(1) FROM owner WHERE name LIKE %?1%"
+    @Query(value = "SELECT * FROM owner WHERE name LIKE %?1% AND status = 'enable' ORDER BY id DESC",
+            countQuery = " SELECT COUNT(1) FROM owner WHERE name LIKE %?1% AND status = 'enable'"
             , nativeQuery = true)
     Page<Owner> searchByName(String name, Pageable pageable);
 
@@ -41,4 +40,9 @@ public interface OwnerDao extends BaseDao<Owner, Integer> {
             "WHERE id = ?11",
             nativeQuery = true)
     int updateOwner(String name, String phone1, String idNum, String sex, String birthday, String phone2, String mobile, String fax, String address, String mailAddress, int id);
+
+    @Modifying
+    @Query(value = "UPDATE owner SET status = ?2 WHERE id = ?1",
+            nativeQuery = true)
+    int updateOwnerStatus(int id, String status);
 }

@@ -40,4 +40,7 @@ public class Owner {
 
     @Column(name = "mail_address", length = 300)
     private String mailAddress;
+    
+    // 狀態 正常:enable 失效:disable
+    private String status = "enable";
 }
