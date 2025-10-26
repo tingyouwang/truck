@@ -13,12 +13,12 @@ import java.util.List;
 
 @Repository
 public interface InsuranceCompanyDao extends BaseDao<InsuranceCompany, Integer> {
-    @Query(value = "SELECT * FROM insurance_company",
-            countQuery = " SELECT COUNT(1) FROM insurance_company"
+    @Query(value = "SELECT * FROM insurance_company WHERE status = 'enable'",
+            countQuery = " SELECT COUNT(1) FROM insurance_company WHERE status = 'enable'"
             , nativeQuery = true)
     Page<InsuranceCompany> getAllInsuranceCompany(Pageable pageable);
 
-    @Query(value = "SELECT id, company_name FROM insurance_company"
+    @Query(value = "SELECT id, company_name FROM insurance_company WHERE status = 'enable'"
             , nativeQuery = true)
     List<InsuranceComDropDownList> getInsuranceComDropDown();
 
@@ -31,4 +31,9 @@ public interface InsuranceCompanyDao extends BaseDao<InsuranceCompany, Integer> 
     @Query(value = "DELETE FROM insurance_company WHERE id = ?1",
             nativeQuery = true)
     int deleteInsuranceCompanyById(int id);
+
+    @Modifying
+    @Query(value = "UPDATE insurance_company SET status = ?2 WHERE id = ?1",
+            nativeQuery = true)
+    int updateInsuranceCompanyStatus(int id, String status);
 }

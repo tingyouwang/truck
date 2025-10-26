@@ -2,12 +2,10 @@ package com.luzhu.truck.service.insurancecompany;
 
 import com.luzhu.truck.dao.insurancecompany.InsuranceCompanyDao;
 import com.luzhu.truck.dto.BaseParam;
-import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
-import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.insurancecompany.InsuranceComDropDownList;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
-import com.luzhu.truck.entity.caragency.CarAgency;
+import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceCompanyStatusParam;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -58,6 +56,13 @@ public class InsuranceCompanyService {
         company.setPhone(param.getPhone());
         company.setNote(param.getNote());
         insuranceCompanyDao.save(company);
+    }
+
+    @Transactional
+    public void updateInsuranceCompanyStatus(UpdateInsuranceCompanyStatusParam param) {
+        int updateCount = insuranceCompanyDao.updateInsuranceCompanyStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
 }

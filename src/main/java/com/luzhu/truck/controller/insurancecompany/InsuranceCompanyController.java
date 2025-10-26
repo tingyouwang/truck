@@ -1,11 +1,10 @@
 package com.luzhu.truck.controller.insurancecompany;
 
 import com.luzhu.truck.dto.BaseParam;
-import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
-import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
 import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.insurancecompany.InsuranceComDropDownList;
 import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
+import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceCompanyStatusParam;
 import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
@@ -53,4 +52,11 @@ public class InsuranceCompanyController {
 //
 //        return new ResponseModel<>();
 //    }
+
+    @PostMapping("/disableInsuranceCompany")
+    public ResponseModel<Object> disableInsuranceCompany(@RequestBody @Valid UpdateInsuranceCompanyStatusParam param) {
+        insuranceCompanyService.updateInsuranceCompanyStatus(param);
+
+        return new ResponseModel<>();
+    }
 }
