@@ -63,11 +63,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.luzhu.truck.exception.SystemExceptionEnum.GENERATE_CURRENT_BILL;
+import static com.luzhu.truck.exception.SystemExceptionEnum.*;
 
 
 @Service
@@ -402,18 +400,25 @@ public class BillService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         String yearMonth = now.format(formatter);
 
+        //檢查是否有重複產出
+        String carLicenseNum = req.getCarLicenseNum();
+        List<HealthFee> detailByExpenseYearMonth = healthFeeDao.getDetailByExpenseYearMonth(carLicenseNum, Collections.singletonList(yearMonth));
+        if (!detailByExpenseYearMonth.isEmpty()) throw new AppException(GENERATE_CURRENT_BILL);
+
         LocalDate nowDate = LocalDate.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
         //保險設定
-        InsuranceFeeSetting usingInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByCarNum(nowDate, req.getCarLicenseNum());
-        if (Optional.ofNullable(usingInsuranceFeeSetting).isEmpty()) throw new AppException(GENERATE_CURRENT_BILL);
+        InsuranceFeeSetting usingInsuranceFeeSetting = insuranceFeeSettingDao.getInsuranceFeeSettingByCarNum(nowDate, carLicenseNum);
+        if (Optional.ofNullable(usingInsuranceFeeSetting).isEmpty()) throw new AppException(NEED_SET_INSURANCE_CAR_FEE);
 
         List<InsuranceFeeSetting> insuranceFeeSettingList = List.of(usingInsuranceFeeSetting);
 
         //貸款設定
-        LoanFeeSetting usingLoanFeeSetting = loanFeeSettingDao.getUsingLoanFeeSettingByCarLicenseNum(nowDate, req.getCarLicenseNum());
-        List<LoanFeeSetting> loanFeeSettingList = List.of(usingLoanFeeSetting);
+        List<LoanFeeSetting> loanFeeSettingList = new ArrayList<>();
+        LoanFeeSetting usingLoanFeeSetting = loanFeeSettingDao.getUsingLoanFeeSettingByCarLicenseNum(nowDate, carLicenseNum);
+        if (Optional.ofNullable(usingLoanFeeSetting).isPresent()) loanFeeSettingList.add(usingLoanFeeSetting);
 
-        CarFee carFee = carFeeDao.getCarFeeByLicenseNum(req.getCarLicenseNum());
+        CarFee carFee = carFeeDao.getCarFeeByLicenseNum(carLicenseNum);
+        if (Optional.ofNullable(carFee).isEmpty()) throw new AppException(NEED_SET_INSURANCE_CAR_FEE);
         List<CarFee> carFeeList = List.of(carFee);
 
         int i = healthFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
@@ -429,7 +434,7 @@ public class BillService {
         int i6 = manageFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
         int i7 = unionFeeService.monthlyInsertFee(yearMonth, now, carFeeList);
         log.info(String.format("[手動新增當月帳單:%s:車牌號碼:%s] 健保筆數:%s, 勞保筆數:%s, 燃料稅筆數:%s, 保險費筆數:%s, 牌照稅筆數:%s, 貸款筆數:%s, 管理費筆數:%s, 公會費筆數:%s",
-                yearMonth, req.getCarLicenseNum(), i, i1, i2, i3, i4, i5, i6, i7));
+                yearMonth, carLicenseNum, i, i1, i2, i3, i4, i5, i6, i7));
 
     }
 

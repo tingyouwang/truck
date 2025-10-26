@@ -5,12 +5,17 @@ import com.luzhu.truck.dto.car.LicenseNumPageParam;
 import com.luzhu.truck.dto.insurancefeesetting.*;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSetting;
 import com.luzhu.truck.entity.insurancefeesetting.InsuranceFeeSettingDto;
+import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
 import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+
+import static com.luzhu.truck.exception.SystemExceptionEnum.END_DATE_EARLY_THAN_START_DATE;
 
 @RestController
 @RequestMapping("/insuranceFeeSetting")
@@ -33,6 +38,9 @@ public class InsuranceFeeSettingController {
 
     @PostMapping("/addInsuranceFeeSetting")
     public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddInsuranceFeeSettingParam addInsuranceFeeSettingParam) {
+        LocalDate start = LocalDate.parse(addInsuranceFeeSettingParam.getStartDate());
+        LocalDate end = LocalDate.parse(addInsuranceFeeSettingParam.getEndDate());
+        if (!end.isAfter(start)) throw new AppException(END_DATE_EARLY_THAN_START_DATE);
         insuranceFeeSettingService.addInsuranceFeeSetting(addInsuranceFeeSettingParam);
 
         return new ResponseModel<>();
