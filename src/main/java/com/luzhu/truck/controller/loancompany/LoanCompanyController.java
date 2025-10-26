@@ -1,12 +1,10 @@
 package com.luzhu.truck.controller.loancompany;
 
 import com.luzhu.truck.dto.BaseParam;
-import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
-import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.dto.loancompany.AddLoadComParam;
 import com.luzhu.truck.dto.loancompany.LoanCompanyDropDownDTO;
 import com.luzhu.truck.dto.loancompany.UpdateLoanComParam;
+import com.luzhu.truck.dto.loancompany.UpdateLoanCompanyStatusParam;
 import com.luzhu.truck.entity.loancompany.LoanCompany;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
@@ -53,6 +51,13 @@ public class LoanCompanyController {
     @PostMapping("/deleteLoanCompany/{id}")
     public ResponseModel<Object> deleteCarAgency(@PathVariable int id) {
         loanCompanyService.deleteLoanCompany(id);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/disableLoanCompany")
+    public ResponseModel<Object> disableLoanCompany(@RequestBody @Valid UpdateLoanCompanyStatusParam param) {
+        loanCompanyService.updateLoanCompanyStatus(param);
 
         return new ResponseModel<>();
     }

@@ -2,13 +2,10 @@ package com.luzhu.truck.service.loancompany;
 
 import com.luzhu.truck.dao.loancompany.LoanCompanyDao;
 import com.luzhu.truck.dto.BaseParam;
-import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
-import com.luzhu.truck.dto.insurancecompany.UpdateInsuranceComParam;
 import com.luzhu.truck.dto.loancompany.AddLoadComParam;
 import com.luzhu.truck.dto.loancompany.LoanCompanyDropDownDTO;
 import com.luzhu.truck.dto.loancompany.UpdateLoanComParam;
-import com.luzhu.truck.entity.insurancecompany.InsuranceCompany;
+import com.luzhu.truck.dto.loancompany.UpdateLoanCompanyStatusParam;
 import com.luzhu.truck.entity.loancompany.LoanCompany;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -59,6 +56,13 @@ public class LoanCompanyService {
         int deleteCount = loanCompanyDao.deleteLoanCompanyById(id);
         Validator.isFalseThrow(1 == deleteCount,
                 new AppException(SystemExceptionEnum.DELETE_ERROR));
+    }
+
+    @Transactional
+    public void updateLoanCompanyStatus(UpdateLoanCompanyStatusParam param) {
+        int updateCount = loanCompanyDao.updateLoanCompanyStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
 }

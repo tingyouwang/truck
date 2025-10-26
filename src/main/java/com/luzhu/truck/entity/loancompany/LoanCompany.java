@@ -16,5 +16,7 @@ public class LoanCompany {
     private String contactor;
     private String phone;
     private String note;
+    // 狀態 正常:enable 失效:disable
+    private String status = "enable";
 
 }
