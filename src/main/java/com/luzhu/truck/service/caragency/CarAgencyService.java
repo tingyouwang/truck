@@ -5,6 +5,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
 import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
+import com.luzhu.truck.dto.caragency.UpdateCarAgencyStatusParam;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -68,6 +68,13 @@ public class CarAgencyService {
         int deleteCount = carAgencyDao.deleteCarAgencyById(id);
         Validator.isFalseThrow(1 == deleteCount,
                 new AppException(SystemExceptionEnum.DELETE_ERROR));
+    }
+
+    @Transactional
+    public void updateCarAgencyStatus(UpdateCarAgencyStatusParam param) {
+        int updateCount = carAgencyDao.updateCarAgencyStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
 //    public static void main(String[] args) {

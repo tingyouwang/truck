@@ -20,4 +20,6 @@ public class CarAgency {
     private String phone2;
     private String mobile;
     private String fax;
+    // 狀態 正常:enable 失效:disable
+    private String status = "enable";
 }

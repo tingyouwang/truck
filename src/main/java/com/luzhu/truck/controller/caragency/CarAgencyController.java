@@ -4,6 +4,7 @@ import com.luzhu.truck.dto.BaseParam;
 import com.luzhu.truck.dto.caragency.AddCarAgencyParam;
 import com.luzhu.truck.dto.caragency.CarAgencyDropDownDTO;
 import com.luzhu.truck.dto.caragency.UpdateCarAgencyParam;
+import com.luzhu.truck.dto.caragency.UpdateCarAgencyStatusParam;
 import com.luzhu.truck.entity.caragency.CarAgency;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
@@ -50,6 +51,13 @@ public class CarAgencyController {
     @PostMapping("/deleteCarAgency/{id}")
     public ResponseModel<Object> deleteCarAgency(@PathVariable int id) {
         carAgencyService.deleteCarAgency(id);
+
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/disableCarAgency")
+    public ResponseModel<Object> disableCarAgency(@RequestBody @Valid UpdateCarAgencyStatusParam param) {
+        carAgencyService.updateCarAgencyStatus(param);
 
         return new ResponseModel<>();
     }

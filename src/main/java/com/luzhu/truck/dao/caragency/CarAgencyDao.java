@@ -13,12 +13,12 @@ import java.util.List;
 
 @Repository
 public interface CarAgencyDao extends BaseDao<CarAgency, Integer> {
-    @Query(value = "SELECT * FROM car_agency",
-            countQuery = " SELECT COUNT(1) FROM car_agency"
+    @Query(value = "SELECT * FROM car_agency WHERE status = 'enable'",
+            countQuery = " SELECT COUNT(1) FROM car_agency WHERE status = 'enable'"
             , nativeQuery = true)
     Page<CarAgency> getAllCarAgency(Pageable pageable);
 
-    @Query(value = "SELECT id as carAgencyId, agency_name FROM car_agency",
+    @Query(value = "SELECT id as carAgencyId, agency_name FROM car_agency WHERE status = 'enable'",
             nativeQuery = true)
     List<CarAgencyDropDownDTO> dropDownGetCarAgency();
 
@@ -32,12 +32,17 @@ public interface CarAgencyDao extends BaseDao<CarAgency, Integer> {
     nativeQuery = true)
     int deleteCarAgencyById(int id);
 
-    @Query(value = "SELECT COUNT(1) FROM car_agency WHERE agency_name = ?1"
+    @Query(value = "SELECT COUNT(1) FROM car_agency WHERE agency_name = ?1 AND status = 'enable'"
             , nativeQuery = true)
     int countByAgencyName(String agencyName);
 
-    @Query(value = "SELECT COUNT(1) FROM car_agency WHERE agency_name = ?1 AND id != ?2"
+    @Query(value = "SELECT COUNT(1) FROM car_agency WHERE agency_name = ?1 AND id != ?2 AND status = 'enable'"
             , nativeQuery = true)
     int countByAgencyName(String agencyName, int id);
+
+    @Modifying
+    @Query(value = "UPDATE car_agency SET status = ?2 WHERE id = ?1",
+            nativeQuery = true)
+    int updateCarAgencyStatus(int id, String status);
 
 }
