@@ -18,10 +18,6 @@ public interface LoanCompanyDao extends BaseDao<LoanCompany, Integer> {
             , nativeQuery = true)
     Page<LoanCompany> getAllLoanCompany(Pageable pageable);
 
-    @Modifying
-    @Query(value = "DELETE FROM loan_company WHERE id = ?1",
-            nativeQuery = true)
-    int deleteLoanCompanyById(int id);
 
     @Modifying
     @Query(value = "INSERT INTO loan_company (company_name, short_name, " +

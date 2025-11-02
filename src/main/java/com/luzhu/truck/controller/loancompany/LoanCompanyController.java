@@ -48,13 +48,6 @@ public class LoanCompanyController {
         return new ResponseModel<>();
     }
 
-    @PostMapping("/deleteLoanCompany/{id}")
-    public ResponseModel<Object> deleteCarAgency(@PathVariable int id) {
-        loanCompanyService.deleteLoanCompany(id);
-
-        return new ResponseModel<>();
-    }
-
     @PostMapping("/disableLoanCompany")
     public ResponseModel<Object> disableLoanCompany(@RequestBody @Valid UpdateLoanCompanyStatusParam param) {
         loanCompanyService.updateLoanCompanyStatus(param);

@@ -119,4 +119,12 @@ public class CarController {
 
         return new ResponseModel<>();
     }
+
+    @PostMapping("/disableCar")
+    public ResponseModel<Object> disableCar(@RequestBody @Valid UpdateCarStatusParam param) {
+        carService.updateCarStatus(param);
+        carCache.invalidate();
+
+        return new ResponseModel<>();
+    }
 }

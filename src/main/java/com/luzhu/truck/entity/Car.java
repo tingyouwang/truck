@@ -113,4 +113,7 @@ public class Car {
     @Column(name = "note2", nullable = false, length = 500)
     private String note2;
     private Double ton;
+    
+    // 狀態 正常:enable 失效:disable
+    private String status = "enable";
 }

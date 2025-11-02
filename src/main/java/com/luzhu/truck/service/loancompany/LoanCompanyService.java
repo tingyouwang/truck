@@ -51,12 +51,6 @@ public class LoanCompanyService {
         loanCompanyDao.save(loanCompany);
     }
 
-    @Transactional
-    public void deleteLoanCompany(int id) {
-        int deleteCount = loanCompanyDao.deleteLoanCompanyById(id);
-        Validator.isFalseThrow(1 == deleteCount,
-                new AppException(SystemExceptionEnum.DELETE_ERROR));
-    }
 
     @Transactional
     public void updateLoanCompanyStatus(UpdateLoanCompanyStatusParam param) {

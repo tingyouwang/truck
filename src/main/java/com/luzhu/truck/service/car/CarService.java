@@ -242,4 +242,11 @@ public class CarService {
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
+
+    @Transactional
+    public void updateCarStatus(UpdateCarStatusParam param) {
+        int updateCount = carDao.updateCarStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
 }

@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CarDao extends BaseDao<Car, Integer> {
-    @Query(value = "SELECT license_number FROM car WHERE is_using = 1",
+    @Query(value = "SELECT license_number FROM car WHERE is_using = 1 AND status = 'enable'",
     nativeQuery = true)
     List<String> getAllLicenseNumber();
-    @Query(value = "SELECT id, license_number as licenseNumber, owner_name as ownerName FROM car WHERE is_using = 1",
+    @Query(value = "SELECT id, license_number as licenseNumber, owner_name as ownerName FROM car WHERE is_using = 1 AND status = 'enable'",
             nativeQuery = true)
     List<CarInfo> getAllCarForDropDown();
     @Query(value = "SELECT * FROM car WHERE id = ?1",
@@ -33,24 +33,28 @@ public interface CarDao extends BaseDao<Car, Integer> {
     int updateCar(int isUsing, String ownerName, int carAgencyId, String joinDate, String quitDate, Double joinAmount, Double quitAmount, String carFrom, String quitPlace, String licenseIssueDate, String manufactureDate, String brand, String ton, Double cc, String engineNum, String inspectionDate, String renewLicenseDate, String carTypeOutlooking, String passLicense, String carWeight, String loadingWeight, String carType, Double inspectionType, String violationDate, String reportStopDate, String reportScrapDate, String oldLicenseNumber, String note1, String note2, long id, String carAgency);
 
 
-    @Query(value = "SELECT * FROM car WHERE is_using = 1",
-            countQuery = "SELECT * FROM car WHERE is_using = 1",
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND status = 'enable'",
+            countQuery = "SELECT COUNT(1) FROM car WHERE is_using = 1 AND status = 'enable'",
             nativeQuery = true)
     Page<CarInfo> getAllCar(Pageable pageable);
 
-    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND license_number LIKE %?1%",
-            countQuery = "SELECT * FROM car WHERE is_using = 1 AND license_number LIKE %?1%",
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND status = 'enable' AND license_number LIKE %?1%",
+            countQuery = "SELECT COUNT(1) FROM car WHERE is_using = 1 AND status = 'enable' AND license_number LIKE %?1%",
             nativeQuery = true)
     Page<CarInfo> searchCarByLicenseNum(String num, Pageable pageable);
 
-    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND owner_name = ?1",
-            countQuery = "SELECT * FROM car WHERE is_using = 1 AND owner_name = ?1",
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND status = 'enable' AND owner_name = ?1",
+            countQuery = "SELECT COUNT(1) FROM car WHERE is_using = 1 AND status = 'enable' AND owner_name = ?1",
             nativeQuery = true)
     Page<CarInfo> searchCarByOwner(String owner, Pageable pageable);
 
-    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND license_number = ?1",
+    @Query(value = "SELECT * FROM car WHERE is_using = 1 AND status = 'enable' AND license_number = ?1",
             nativeQuery = true)
     Car getCarByLicenseNum(String licenseNum);
 
+    @Modifying
+    @Query(value = "UPDATE car SET status = ?2 WHERE id = ?1",
+            nativeQuery = true)
+    int updateCarStatus(int id, String status);
 
 }
