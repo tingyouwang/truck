@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.loanFeeSetting;
 
 import com.luzhu.truck.dto.loanfeesetting.AddLoanFeeSettingParam;
+import com.luzhu.truck.dto.loanfeesetting.GetSingleLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.QueryAllByCarLicenseNumParam;
 import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingStatusParam;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
@@ -26,6 +27,12 @@ public class LoanFeeSettingController {
     public ResponseModel<PageResult<LoanFeeSetting>> getLoanFeeSetting(@RequestBody QueryAllByCarLicenseNumParam param) {
         PageResult<LoanFeeSetting> insuranceCompany = loanFeeSettingService.getLoanFeeSetting(param);
         return new ResponseModel<>(insuranceCompany);
+    }
+    
+    @PostMapping("/getSingleLoanFeeSetting")
+    public ResponseModel<LoanFeeSetting> getSingleLoanFeeSetting(@RequestBody @Valid GetSingleLoanFeeSettingParam param) {
+        LoanFeeSetting loanFeeSetting = loanFeeSettingService.getSingleLoanFeeSetting(param);
+        return new ResponseModel<>(loanFeeSetting);
     }
     @PostMapping("/addLoanFeeSetting")
     public ResponseModel<Object> addInsuranceCompany(@RequestBody @Valid AddLoanFeeSettingParam addLoanFeeSettingParam) {

@@ -2,6 +2,7 @@ package com.luzhu.truck.service.loanfeesetting;
 
 import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
 import com.luzhu.truck.dto.loanfeesetting.AddLoanFeeSettingParam;
+import com.luzhu.truck.dto.loanfeesetting.GetSingleLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.QueryAllByCarLicenseNumParam;
 import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingStatusParam;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
@@ -25,6 +26,11 @@ public class LoanFeeSettingService {
     public PageResult<LoanFeeSetting> getLoanFeeSetting(QueryAllByCarLicenseNumParam param) {
         Page<LoanFeeSetting> allByCarLicenseNum = loanFeeSettingDao.getAllByCarLicenseNum(param.getCarLicenseNum(), param.getPageable());
         return new PageResult<>(allByCarLicenseNum);
+    }
+    
+    public LoanFeeSetting getSingleLoanFeeSetting(GetSingleLoanFeeSettingParam param) {
+        return loanFeeSettingDao.findById(param.getId())
+                .orElseThrow(() -> new AppException(SystemExceptionEnum.NO_DATA));
     }
 
     @Transactional
