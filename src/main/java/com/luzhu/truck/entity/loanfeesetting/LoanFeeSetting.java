@@ -3,7 +3,6 @@ package com.luzhu.truck.entity.loanfeesetting;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,7 +10,10 @@ import java.time.LocalDateTime;
 @Data
 public class LoanFeeSetting {
     @Id
-    @Column(name = "car_license_num")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "car_license_num", nullable = false)
     private String carLicenseNum;
 
     @Column(name = "loan_company")
@@ -36,5 +38,9 @@ public class LoanFeeSetting {
     @Column(name = "month_pay_amount")
     private double monthPayAmount;
     private String note;
+
+    // 狀態 正常:enable 失效:disable
+    @Column(name = "status", nullable = false)
+    private String status = "enable";
 
 }

@@ -1,9 +1,9 @@
 package com.luzhu.truck.service.loanfeesetting;
 
 import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
-import com.luzhu.truck.dto.insurancecompany.AddInsuranceComParam;
 import com.luzhu.truck.dto.loanfeesetting.AddLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.QueryAllByCarLicenseNumParam;
+import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingStatusParam;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
@@ -35,6 +35,12 @@ public class LoanFeeSettingService {
 //        LocalDate start = LocalDate.parse(addLoanFeeSettingParam.getStartDate());
 //        LocalDate end = LocalDate.parse(addLoanFeeSettingParam.getEndDate());
 
+        // 驗證：一台車只能有一筆 enable 的貸款
+        int enabledCount = loanFeeSettingDao.countEnabledByCarLicenseNum(addLoanFeeSettingParam.getCarLicenseNum());
+        if (enabledCount > 0) {
+            throw new AppException(SystemExceptionEnum.DUPLICATE_ENABLED_LOAN_FEE_SETTING);
+        }
+
         LoanFeeSetting loanFeeSetting = new LoanFeeSetting();
         loanFeeSetting.setCarLicenseNum(addLoanFeeSettingParam.getCarLicenseNum());
         loanFeeSetting.setLoanCompany(addLoanFeeSettingParam.getLoanCompany());
@@ -45,8 +51,16 @@ public class LoanFeeSettingService {
         loanFeeSetting.setTotalAmount(addLoanFeeSettingParam.getTotalAmount().doubleValue());
         loanFeeSetting.setMonthPayAmount(addLoanFeeSettingParam.getMonthPayAmount().doubleValue());
         loanFeeSetting.setNote(addLoanFeeSettingParam.getNote());
+        loanFeeSetting.setStatus("enable");
 
         loanFeeSettingDao.save(loanFeeSetting);
+    }
+    
+    @Transactional
+    public void updateLoanFeeSettingStatus(UpdateLoanFeeSettingStatusParam param) {
+        int updateCount = loanFeeSettingDao.updateLoanFeeSettingStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
     public static void main(String[] args) {
