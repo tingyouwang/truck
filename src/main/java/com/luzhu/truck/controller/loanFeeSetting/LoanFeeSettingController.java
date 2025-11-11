@@ -3,6 +3,7 @@ package com.luzhu.truck.controller.loanFeeSetting;
 import com.luzhu.truck.dto.loanfeesetting.AddLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.GetSingleLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.QueryAllByCarLicenseNumParam;
+import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingStatusParam;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
 import com.luzhu.truck.exception.AppException;
@@ -47,6 +48,15 @@ public class LoanFeeSettingController {
     @PostMapping("/updateLoanFeeSettingStatus")
     public ResponseModel<Object> updateLoanFeeSettingStatus(@RequestBody @Valid UpdateLoanFeeSettingStatusParam param) {
         loanFeeSettingService.updateLoanFeeSettingStatus(param);
+        return new ResponseModel<>();
+    }
+    
+    @PostMapping("/updateLoanFeeSetting")
+    public ResponseModel<Object> updateLoanFeeSetting(@RequestBody @Valid UpdateLoanFeeSettingParam param) {
+        LocalDate start = LocalDate.parse(param.getStartDate());
+        LocalDate end = LocalDate.parse(param.getEndDate());
+        if (!end.isAfter(start)) throw new AppException(END_DATE_EARLY_THAN_START_DATE);
+        loanFeeSettingService.updateLoanFeeSetting(param);
         return new ResponseModel<>();
     }
 }

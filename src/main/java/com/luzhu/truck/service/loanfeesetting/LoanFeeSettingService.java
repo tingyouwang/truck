@@ -4,6 +4,7 @@ import com.luzhu.truck.dao.loanfeesetting.LoanFeeSettingDao;
 import com.luzhu.truck.dto.loanfeesetting.AddLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.GetSingleLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.QueryAllByCarLicenseNumParam;
+import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingParam;
 import com.luzhu.truck.dto.loanfeesetting.UpdateLoanFeeSettingStatusParam;
 import com.luzhu.truck.entity.loanfeesetting.LoanFeeSetting;
 import com.luzhu.truck.exception.AppException;
@@ -65,6 +66,45 @@ public class LoanFeeSettingService {
     @Transactional
     public void updateLoanFeeSettingStatus(UpdateLoanFeeSettingStatusParam param) {
         int updateCount = loanFeeSettingDao.updateLoanFeeSettingStatus(param.getId(), param.getStatus());
+        Validator.isFalseThrow(1 == updateCount,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+    }
+    
+    @Transactional
+    public void updateLoanFeeSetting(UpdateLoanFeeSettingParam param) {
+        // 驗證記錄是否存在
+        LoanFeeSetting existing = loanFeeSettingDao.findById(param.getId())
+                .orElseThrow(() -> new AppException(SystemExceptionEnum.NO_DATA));
+        
+        // 驗證：如果更新為 enable 狀態，一台車只能有一筆 enable 的貸款（排除當前記錄）
+        if ("enable".equals(param.getStatus())) {
+            int enabledCount = loanFeeSettingDao.countEnabledByCarLicenseNumExcludingId(
+                    param.getCarLicenseNum(), param.getId());
+            if (enabledCount > 0) {
+                throw new AppException(SystemExceptionEnum.DUPLICATE_ENABLED_LOAN_FEE_SETTING);
+            }
+        }
+        
+        // 驗證日期
+        LocalDate start = LocalDate.parse(param.getStartDate());
+        LocalDate end = LocalDate.parse(param.getEndDate());
+        if (!end.isAfter(start)) {
+            throw new AppException(SystemExceptionEnum.END_DATE_EARLY_THAN_START_DATE);
+        }
+        
+        // 執行更新
+        int updateCount = loanFeeSettingDao.updateLoanFeeSetting(
+                param.getId(),
+                param.getCarLicenseNum(),
+                param.getLoanCompany(),
+                param.getStartDate(),
+                param.getEndDate(),
+                param.getTotalAmount(),
+                param.getMonthPayAmount(),
+                param.getNote(),
+                param.getStatus() != null ? param.getStatus() : existing.getStatus()
+        );
+        
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }

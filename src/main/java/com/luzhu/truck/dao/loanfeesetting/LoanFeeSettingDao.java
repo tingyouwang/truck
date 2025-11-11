@@ -35,7 +35,18 @@ public interface LoanFeeSettingDao extends BaseDao<LoanFeeSetting, Integer> {
     @Query(value = "UPDATE loan_fee_setting SET status = ?2 WHERE id = ?1", nativeQuery = true)
     int updateLoanFeeSettingStatus(Integer id, String status);
     
+    @Modifying
+    @Query(value = "UPDATE loan_fee_setting SET car_license_num = ?2, loan_company = ?3, start_date = ?4, " +
+            "end_date = ?5, total_amount = ?6, month_pay_amount = ?7, note = ?8, status = ?9 WHERE id = ?1", 
+            nativeQuery = true)
+    int updateLoanFeeSetting(Integer id, String carLicenseNum, String loanCompany, String startDate, 
+                             String endDate, BigDecimal totalAmount, BigDecimal monthPayAmount, 
+                             String note, String status);
+    
     @Query(value = "SELECT COUNT(1) FROM loan_fee_setting WHERE car_license_num = ?1 AND status = 'enable'", nativeQuery = true)
     int countEnabledByCarLicenseNum(String carLicenseNum);
+    
+    @Query(value = "SELECT COUNT(1) FROM loan_fee_setting WHERE car_license_num = ?1 AND status = 'enable' AND id != ?2", nativeQuery = true)
+    int countEnabledByCarLicenseNumExcludingId(String carLicenseNum, Integer id);
 
 }
