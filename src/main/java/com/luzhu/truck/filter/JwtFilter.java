@@ -8,9 +8,12 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //public class JwtFilter extends GenericFilterBean {
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
 //    @Override
@@ -59,6 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwtToken == null || !jwtToken.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Missing or invalid Authorization header");
+            log.info("不明 Request without token from: " + request.getRemoteAddr());
             return;
         }
 

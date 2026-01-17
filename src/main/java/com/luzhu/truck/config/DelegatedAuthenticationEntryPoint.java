@@ -22,6 +22,17 @@ public class DelegatedAuthenticationEntryPoint implements AuthenticationEntryPoi
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         //測試
+        log.info("exception Request from: " + request.getRemoteAddr());
+
+        //todo 回家測試手機?是否也會被掃, 或者把對外port關閉
+        String requestURI = request.getRequestURI();
+        String servletPath = request.getServletPath();
+        String contextPath = request.getContextPath();
+
+        log.info("Request URI: " + requestURI);
+        log.info("Servlet Path: " + servletPath);
+        log.info("Context Path: " + contextPath);
+
         log.info(authException.getMessage(), authException);
         resolver.resolveException(request, response, null, authException);
 

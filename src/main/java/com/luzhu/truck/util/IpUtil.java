@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class IpUtil {
     public static String getRemoteIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
+
+        //todo 未來 nginx 設定
+//        String ip = request.getHeader("x-forwarded-for");
+        String ip = request.getRemoteAddr();
         if (ip != null) {
             return ip.replace(" ", "").split(",")[0];
         } else {
