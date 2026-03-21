@@ -26,7 +26,6 @@ import com.luzhu.truck.dto.bill.*;
 import com.luzhu.truck.dto.givebackmoney.SumGiveBackMoneyAmountAndInterestDto;
 import com.luzhu.truck.dto.invoice.InvoiceSumAmountAndTaxDto;
 import com.luzhu.truck.dto.lendmoney.SumAmountAndTaxDto;
-import com.luzhu.truck.entity.Car;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.fuel.FuelTax;
 import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
@@ -52,6 +51,8 @@ import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.schedule.service.*;
 import com.luzhu.truck.service.insurancefeesetting.InsuranceFeeSettingService;
 import com.luzhu.truck.service.laborinsurance.LaborInsuranceService;
+import com.luzhu.truck.service.monthbillsnapshot.MonthBillSnapshotService;
+import com.luzhu.truck.entity.monthbillsnapshot.MonthBillSnapshot;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
 import lombok.extern.slf4j.Slf4j;
@@ -133,9 +134,39 @@ public class BillService {
     private ManageFeeService manageFeeService;
     @Autowired
     private UnionFeeService unionFeeService;
+    @Autowired
+    private MonthBillSnapshotService monthBillSnapshotService;
+    
     public MonthBillResponse getMonthBill(MonthBillReq req) {
-//        Car searchCar = carDao.getCarById(req.getId());
+        String billDate = req.getBillDate();
+        String carLicenseNum = req.getCarLicenseNum();
+        
+        DateTimeValidate.checkYearMonth(billDate);
+        
+        // 优先查询快照
+        Optional<MonthBillSnapshot> snapshotOpt = monthBillSnapshotService.getSnapshot(carLicenseNum, billDate);
+        if (snapshotOpt.isPresent()) {
+            log.info("从快照中读取账单: 车牌={}, 月份={}", carLicenseNum, billDate);
+            return monthBillSnapshotService.convertToResponse(snapshotOpt.get());
+        }
+        
+        // 快照不存在，执行即时计算
+        log.info("快照不存在，即时计算账单: 车牌={}, 月份={}", carLicenseNum, billDate);
+        return calculateMonthBill(req);
+    }
 
+    /**
+     * 忽略快照，始终以当前费用数据重新计算（供手动/排程生成快照使用）
+     */
+    public MonthBillResponse getMonthBillForceRecalculate(MonthBillReq req) {
+        String billDate = req.getBillDate();
+        String carLicenseNum = req.getCarLicenseNum();
+        DateTimeValidate.checkYearMonth(billDate);
+        log.info("强制即时计算账单（忽略快照）: 车牌={}, 月份={}", carLicenseNum, billDate);
+        return calculateMonthBill(req);
+    }
+    
+    private MonthBillResponse calculateMonthBill(MonthBillReq req) {
         MonthBillResponse res = new MonthBillResponse();
 
         String billDate = req.getBillDate();

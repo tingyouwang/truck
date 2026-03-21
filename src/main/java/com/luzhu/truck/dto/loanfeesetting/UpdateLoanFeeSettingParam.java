@@ -33,7 +33,7 @@ public class UpdateLoanFeeSettingParam {
     private BigDecimal monthPayAmount;
     
     private String note;
-     
+
     @Pattern(regexp = "^(enable|disable)$", message = "狀態只能是 enable 或 disable")
     private String status;
 }
