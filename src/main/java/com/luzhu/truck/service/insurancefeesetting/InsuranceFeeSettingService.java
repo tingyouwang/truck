@@ -43,8 +43,8 @@ public class InsuranceFeeSettingService {
         String yearMonth = localDate.format(formatter);
         try {
             int insertCount = insuranceFeeSettingDao.insertInsuranceFeeSetting(param.getCarLicenseNum(), param.getInsuranceCom(), param.getStartDate(),
-                    param.getEndDate(), param.getAmount(), param.getInsuranceType(), param.getInsuranceNum(), param.getInsuranceCardNum(),
-                    l, l);
+                    param.getEndDate(), param.getPayUsDate(), param.getAmount(), param.getInsuranceType(), param.getInsuranceNum(), param.getInsuranceCardNum(),
+                    param.getQuitDate(), l, l);
             Validator.isFalseThrow(1 == insertCount,
                     new AppException(SystemExceptionEnum.UPDATE_ERROR));
         } catch (DataIntegrityViolationException e) {

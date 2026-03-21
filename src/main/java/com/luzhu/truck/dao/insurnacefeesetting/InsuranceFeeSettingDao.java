@@ -19,14 +19,14 @@ public interface InsuranceFeeSettingDao extends BaseDao<InsuranceFeeSetting, Str
 //    @Query(value = "SELECT * FROM insurance_fee_setting WHERE ?1 BETWEEN start_date AND end_date",
 //    nativeQuery = true)
 //    List<LoanFeeSetting> getUsingLoanFeeSetting(LocalDate now);
-    @Query(value = "INSERT INTO insurance_fee_setting (car_license_num, insurance_com, start_date, end_date, amount" +
-            ", insurance_type, insurance_num, insurance_card_num, create_time, update_time) VALUES " +
-            "(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+    @Query(value = "INSERT INTO insurance_fee_setting (car_license_num, insurance_com, start_date, end_date, pay_us_date" +
+            ", amount, insurance_type, insurance_num, insurance_card_num, quit_date, create_time, update_time) VALUES " +
+            "(?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
     nativeQuery = true)
     @Modifying
     int insertInsuranceFeeSetting(String carLicenseNum, String insuranceCom, String startDate, String endDate,
-                                  double amount, String insuranceType, String insuranceNum, String insuranceCardNum, long createTime,
-                                  long updateTime);
+                                  String payUsDate, double amount, String insuranceType, String insuranceNum,
+                                  String insuranceCardNum, String quitDate, long createTime, long updateTime);
     @Query(value = "SELECT * FROM insurance_fee_setting WHERE car_license_num = ?1 ORDER BY start_date DESC",
             countQuery = " SELECT COUNT(1) FROM insurance_fee_setting WHERE car_license_num = ?1 ORDER BY start_date DESC"
             , nativeQuery = true)
