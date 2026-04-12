@@ -2,6 +2,8 @@ package com.luzhu.truck.service.invoice;
 
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.invoice.InvoiceDao;
+import com.luzhu.truck.dto.bill.MonthBillReq;
+import com.luzhu.truck.dto.bill.MonthBillResponse;
 import com.luzhu.truck.dto.car.CarFeeJoinInvoiceDto;
 import com.luzhu.truck.dto.invoice.AddInvoiceParam;
 import com.luzhu.truck.dto.invoice.GetInvoiceParam;
@@ -11,9 +13,13 @@ import com.luzhu.truck.entity.invoice.Invoice;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
+import com.luzhu.truck.service.bill.BillService;
+import com.luzhu.truck.service.monthbillsnapshot.MonthBillSnapshotService;
 import com.luzhu.truck.util.DateTimeUtil;
+import com.luzhu.truck.util.DateTimeValidate;
 import com.luzhu.truck.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +32,16 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class InvoiceService {
+    @Value("${env.time.offset}")
+    private String timeOffset;
     @Autowired
     private InvoiceDao invoiceDao;
     @Autowired
     private CarFeeDao carFeeDao;
+    @Autowired
+    private BillService billService;
+    @Autowired
+    private MonthBillSnapshotService monthBillSnapshotService;
     @Transactional
     public void addInvoice(AddInvoiceParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
@@ -88,6 +100,32 @@ public class InvoiceService {
                 param.getDisable(), param.getTaxMonth(), l);
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
+
+        refreshMonthBillSnapshotAfterInvoiceUpdate(carFeeByInvoiceId, param);
+    }
+
+    /**
+     * 發票異動後依稅額所屬月份重算帳單並寫入 month_bill_snapshot（與手動生成快照相同來源資料）。
+     * 若未帶 tax_month 則略過（無法對應帳單月份）。
+     */
+    private void refreshMonthBillSnapshotAfterInvoiceUpdate(CarFeeJoinInvoiceDto carFee,
+                                                            UpdateInvoiceParam param) {
+
+        //不要使用taxMonth, 請使用param.getInvoiceDate() 取得YYYY-MM-DD，再轉換為YYYY-MM
+        LocalDate invoiceDate = LocalDate.parse(param.getInvoiceDate());
+        String invoiceYearMonth = invoiceDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        DateTimeValidate.checkYearMonth(invoiceYearMonth);
+        String carLicenseNum = carFee.getCarLicenseNum();
+        if (carLicenseNum == null || carLicenseNum.isBlank()) {
+            return;
+        }
+        MonthBillReq req = new MonthBillReq();
+        req.setCarLicenseNum(carLicenseNum);
+        req.setBillDate(invoiceYearMonth);
+        MonthBillResponse monthBill = billService.getMonthBillForceRecalculate(req);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
+        monthBillSnapshotService.saveSnapshot(carLicenseNum, invoiceYearMonth, monthBill, "INVOICE", now, "發票更新");
     }
 
     public PageResult<Invoice> getInvoiceByType(GetInvoiceParam param) {
