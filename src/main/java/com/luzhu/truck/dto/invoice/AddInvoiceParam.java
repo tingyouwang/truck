@@ -22,7 +22,7 @@ public class AddInvoiceParam {
     @NotBlank(message = "發票日期不可為空")
     @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String invoiceDate;
-    @NotBlank(message = "發票號碼不可為空")
+//    @NotBlank(message = "發票號碼不可為空")
     private String invoiceNum;
     @NotNull(message = "銷貨金額")
     private BigDecimal amount;
