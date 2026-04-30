@@ -193,6 +193,11 @@ public class MonthBillSnapshotService {
 
         response.setTotalSum(snapshot.getTotalSum());
 
+        // 统一输出取整：先取整组成字段，再重新计算 totalSum，最后再取整一次
+        response.roundAllFieldsToInteger();
+        response.calculateTotalSum();
+        response.roundAllFieldsToInteger();
+
         return response;
     }
 }

@@ -3,6 +3,7 @@ package com.luzhu.truck.dto.bill;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Data
 public class MonthBillResponse {
@@ -66,6 +67,49 @@ public class MonthBillResponse {
     private BigDecimal returnMoney;
     //本月欠款
     private BigDecimal totalSum;
+
+    /**
+     * 将所有 BigDecimal 金额四捨五入到 0 位小数（整數）。
+     * <p>
+     * 注意：此方法不改變計算邏輯，只是輸出金額的取整規則统一。
+     * </p>
+     */
+    public void roundAllFieldsToInteger() {
+        this.lastMonthOweAmount = roundNullable(this.lastMonthOweAmount);
+        this.manageFee = roundNullable(this.manageFee);
+        this.unionFee = roundNullable(this.unionFee);
+        this.loanFee = roundNullable(this.loanFee);
+        this.laborInsuranceFee = roundNullable(this.laborInsuranceFee);
+        this.healthFee = roundNullable(this.healthFee);
+        this.insuranceFee = roundNullable(this.insuranceFee);
+        this.licenseTaxFee = roundNullable(this.licenseTaxFee);
+        this.fuelTaxFee = roundNullable(this.fuelTaxFee);
+
+        this.invoiceSaleAmount = roundNullable(this.invoiceSaleAmount);
+        this.invoiceSaleAmountTax = roundNullable(this.invoiceSaleAmountTax);
+        this.invoiceOffsetAmount = roundNullable(this.invoiceOffsetAmount);
+        this.invoiceOffsetAmountTax = roundNullable(this.invoiceOffsetAmountTax);
+        this.invoiceGasAmount = roundNullable(this.invoiceGasAmount);
+        this.invoiceGasAmountTax = roundNullable(this.invoiceGasAmountTax);
+
+        this.lendMoney = roundNullable(this.lendMoney);
+        this.lendMoneyInterest = roundNullable(this.lendMoneyInterest);
+        this.giveBackMoney = roundNullable(this.giveBackMoney);
+        this.giveBackInterest = roundNullable(this.giveBackInterest);
+        this.otherLendMoneyAmount = roundNullable(this.otherLendMoneyAmount);
+        this.otherGiveBackMoneyAmount = roundNullable(this.otherGiveBackMoneyAmount);
+        this.trafficSum = roundNullable(this.trafficSum);
+        this.payInterest = roundNullable(this.payInterest);
+        this.receiveOffset = roundNullable(this.receiveOffset);
+        this.returnMoney = roundNullable(this.returnMoney);
+
+        this.totalSum = roundNullable(this.totalSum);
+    }
+
+    private static BigDecimal roundNullable(BigDecimal v) {
+        return v == null ? BigDecimal.ZERO : v.setScale(0, RoundingMode.HALF_UP);
+    }
+
     public void calculateTotalSum() {
         this.totalSum = BigDecimal.ZERO
                 .add(lastMonthOweAmount != null ? lastMonthOweAmount : BigDecimal.ZERO)

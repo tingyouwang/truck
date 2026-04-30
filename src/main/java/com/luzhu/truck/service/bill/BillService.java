@@ -244,8 +244,14 @@ public class BillService {
         BigDecimal returnMoneySum = returnMoneyDao.getSumAmount(req.getCarLicenseNum(), monthFirst, monthEnd);
         res.setReturnMoney(returnMoneySum);
 
+        // 先把组成字段统一取整，再计算 totalSum，确保 totalSum 与各字段显示一致
+        res.roundAllFieldsToInteger();
+
         //本月欠款
         res.calculateTotalSum();
+
+        // totalSum 再做一次取整（calculateTotalSum 可能产生小数）
+        res.roundAllFieldsToInteger();
 
         return res;
     }
