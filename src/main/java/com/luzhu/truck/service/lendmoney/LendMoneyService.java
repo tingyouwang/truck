@@ -3,7 +3,6 @@ package com.luzhu.truck.service.lendmoney;
 import com.luzhu.truck.dao.carfee.CarFeeDao;
 import com.luzhu.truck.dao.lendmoney.LendMoneyDao;
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
-import com.luzhu.truck.dto.car.CarFeeJoinInvoiceDto;
 import com.luzhu.truck.dto.lendmoney.AddLendMoneyParam;
 import com.luzhu.truck.dto.lendmoney.UpdateLendMoneyParam;
 import com.luzhu.truck.entity.carfee.CarFee;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class LendMoneyService {
@@ -40,7 +38,7 @@ public class LendMoneyService {
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = lendMoneyDao.insertLendMoney(param.getCarLicenseNum(), param.getLendDate(), param.getAmount(), param.getType(), param.getExpireDate(),
-                taxAmount, param.getNote(), l, l);
+                taxAmount, param.getDisable(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -55,7 +53,7 @@ public class LendMoneyService {
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int updateCount = lendMoneyDao.updateLendMoney(param.getCarLicenseNum(), param.getLendDate(), param.getAmount(), param.getType(),
-                param.getExpireDate(), taxAmount, param.getNote(), l, param.getId());
+                param.getExpireDate(), taxAmount, param.getDisable(), param.getNote(), l, param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));

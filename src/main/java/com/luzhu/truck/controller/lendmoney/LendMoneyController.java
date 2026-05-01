@@ -1,7 +1,6 @@
 package com.luzhu.truck.controller.lendmoney;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
-import com.luzhu.truck.dto.car.CarInfo;
 import com.luzhu.truck.dto.lendmoney.AddLendMoneyParam;
 import com.luzhu.truck.dto.lendmoney.UpdateLendMoneyParam;
 import com.luzhu.truck.entity.lendmoney.LendMoney;

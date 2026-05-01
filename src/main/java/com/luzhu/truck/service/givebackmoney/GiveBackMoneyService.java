@@ -7,7 +7,6 @@ import com.luzhu.truck.dto.givebackmoney.AddGiveBackMoneyParam;
 import com.luzhu.truck.dto.givebackmoney.UpdateGiveBackMoneyParam;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.givebackmoney.GiveBackMoney;
-import com.luzhu.truck.entity.lendmoney.LendMoney;
 import com.luzhu.truck.exception.AppException;
 import com.luzhu.truck.exception.SystemExceptionEnum;
 import com.luzhu.truck.response.PageResult;
@@ -42,7 +41,7 @@ public class GiveBackMoneyService {
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = giveBackMoneyDao.insertLendMoney(param.getCarLicenseNum(), param.getGiveBackDate(), param.getAmount(), param.getType(), param.getExpireDate(),
-                taxAmount, param.getNote(), l, l);
+                taxAmount, param.getDisable(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -58,7 +57,7 @@ public class GiveBackMoneyService {
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int updateCount = giveBackMoneyDao.updateGiveBackMoney(param.getCarLicenseNum(), param.getGiveBackDate(), param.getAmount(), param.getType(), param.getExpireDate(),
-                taxAmount, param.getNote(), l, param.getId());
+                taxAmount, param.getDisable(), param.getNote(), l, param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));

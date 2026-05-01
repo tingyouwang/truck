@@ -23,6 +23,7 @@ public class UpdateLendMoneyParam {
     private String expireDate;
 //    @NotNull(message = "借款利息")
 //    private BigDecimal interestAmount;
+    private int disable;
     private String note;
     @NotBlank(message = "借款方式")
     //check:支票, cash:現金
