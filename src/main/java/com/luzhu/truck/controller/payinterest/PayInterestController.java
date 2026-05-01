@@ -33,6 +33,6 @@ public class PayInterestController {
 
     @PostMapping("/getPayInterest")
     public ResponseModel<PageResult<PayInterest>> getPayInterestList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
-        return new ResponseModel<>(payInterestService.getLendMoneyList(param));
+        return new ResponseModel<>(payInterestService.getPayInterestList(param));
     }
 }

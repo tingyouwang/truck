@@ -16,5 +16,6 @@ public class AddPayInterestParam {
     private String payDate;
     @NotNull(message = "金額必填")
     private BigDecimal amount;
+    private int disable;
     private String note;
 }

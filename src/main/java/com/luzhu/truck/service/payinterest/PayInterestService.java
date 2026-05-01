@@ -30,7 +30,7 @@ public class PayInterestService {
     public void addPayInterest(AddPayInterestParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         int insertCount = payInterestDao.insertPayInterest(param.getCarLicenseNum(), param.getPayDate(),
-                param.getAmount(), param.getNote(), l, l);
+                param.getAmount(), param.getDisable(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -40,13 +40,13 @@ public class PayInterestService {
     public void updatePayInterest(UpdatePayInterestParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         int updateCount = payInterestDao.updatePayInterest(param.getCarLicenseNum(), param.getPayDate(),
-                param.getAmount(), param.getNote(), l, param.getId());
+                param.getAmount(), param.getDisable(), param.getNote(), l, param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
     }
 
-    public PageResult<PayInterest> getLendMoneyList(LicenseAndExpenseYearMonthParam param) {
+    public PageResult<PayInterest> getPayInterestList(LicenseAndExpenseYearMonthParam param) {
         String expenseYearMonth = param.getExpenseYearMonth();
         DateTimeValidate.checkYearMonth(expenseYearMonth);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
