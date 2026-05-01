@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "return_money")
@@ -25,6 +24,9 @@ public class ReturnMoney {
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "disable", nullable = false)
+    private int disable;
 
     @Column(name = "note", length = 150)
     private String note;

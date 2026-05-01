@@ -16,5 +16,6 @@ public class AddReturnMoneyParam {
     private String payDate;
     @NotNull(message = "抵收金額")
     private BigDecimal amount;
+    private int disable;
     private String note;
 }

@@ -28,7 +28,7 @@ public class ReturnMoneyService {
     @Transactional
     public void addReturnMoney(AddReturnMoneyParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-        int insertCount = returnMoneyDao.insertReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getNote(), l, l);
+        int insertCount = returnMoneyDao.insertReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getDisable(), param.getNote(), l, l);
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -37,7 +37,7 @@ public class ReturnMoneyService {
     @Transactional
     public void updateReturnMoney(UpdateReturnMoneyParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
-        int updateCount = returnMoneyDao.updateReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getNote(), l, param.getId());
+        int updateCount = returnMoneyDao.updateReturnMoney(param.getCarLicenseNum(), param.getPayDate(), param.getAmount(), param.getDisable(), param.getNote(), l, param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
