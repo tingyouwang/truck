@@ -18,13 +18,13 @@ public class OtherGiveBackMoneyController {
     @Autowired
     private OtherGiveBackMoneyService otherGiveBackMoneyService;
     @PostMapping("/addOtherGiveBackMoney")
-    public ResponseModel<Object> addOtherLendMoney(@RequestBody @Valid AddOtherGiveBackMoneyParam param) {
+    public ResponseModel<Object> addOtherGiveBackMoney(@RequestBody @Valid AddOtherGiveBackMoneyParam param) {
         otherGiveBackMoneyService.addOtherGiveBackMoney(param);
 
         return new ResponseModel<>();
     }
     @PostMapping("/updateOtherGiveBackMoney")
-    public ResponseModel<Object> updateOtherLendMoney(@RequestBody @Valid UpdateOtherGiveBackMoneyParam param) {
+    public ResponseModel<Object> updateOtherGiveBackMoney(@RequestBody @Valid UpdateOtherGiveBackMoneyParam param) {
         otherGiveBackMoneyService.updateOtherGiveBackMoney(param);
 
         return new ResponseModel<>();

@@ -16,5 +16,6 @@ public class AddOtherGiveBackMoneyParam {
     private String giveBackDate;
     @NotNull(message = "借款金額")
     private BigDecimal amount;
+    private int disable;
     private String note;
 }
