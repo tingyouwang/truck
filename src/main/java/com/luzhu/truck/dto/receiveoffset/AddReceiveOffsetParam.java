@@ -18,5 +18,6 @@ public class AddReceiveOffsetParam {
 //    private BigDecimal amount;
     @NotNull(message = "收據金額")
     private BigDecimal receiptAmount;
+    private int disable;
     private String note;
 }

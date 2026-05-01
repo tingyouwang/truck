@@ -39,7 +39,7 @@ public class ReceiveOffsetService {
         BigDecimal taxAmount = param.getReceiptAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = receiveOffsetDao.insertReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), taxAmount,
-                param.getReceiptAmount(), param.getNote(), l , l);
+                param.getReceiptAmount(), param.getDisable(), param.getNote(), l , l);
 
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
@@ -54,7 +54,7 @@ public class ReceiveOffsetService {
         BigDecimal taxAmount = param.getReceiptAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int updateCount = receiveOffsetDao.updateReceiveOffset(param.getCarLicenseNum(), param.getPayDate(), taxAmount,
-                param.getReceiptAmount(), param.getNote(), l , param.getId());
+                param.getReceiptAmount(), param.getDisable(), param.getNote(), l , param.getId());
 
         Validator.isFalseThrow(1 == updateCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));

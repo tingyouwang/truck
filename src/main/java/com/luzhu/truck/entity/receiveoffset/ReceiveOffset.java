@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "receive_offset")
@@ -28,6 +27,9 @@ public class ReceiveOffset {
 
     @Column(name = "receipt_amount", nullable = false)
     private BigDecimal receiptAmount;
+
+    @Column(name = "disable", nullable = false)
+    private int disable;
 
     @Column(name = "note", length = 150)
     private String note;
