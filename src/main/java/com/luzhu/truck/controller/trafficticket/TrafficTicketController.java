@@ -18,22 +18,22 @@ public class TrafficTicketController {
     @Autowired
     private TrafficTicketService trafficTicketService;
     @PostMapping("/addTrafficTicket")
-    public ResponseModel<Object> addTicket(@RequestBody @Valid AddTrafficTicketParam param) {
-        trafficTicketService.addTicket(param);
+    public ResponseModel<Object> addTrafficTicket(@RequestBody @Valid AddTrafficTicketParam param) {
+        trafficTicketService.addTrafficTicket(param);
 
         return new ResponseModel<>();
     }
 
     @PostMapping("/updateTrafficTicket")
-    public ResponseModel<Object> updateTicket(@RequestBody @Valid UpdateTrafficTicketParam param) {
-        trafficTicketService.updateTicket(param);
+    public ResponseModel<Object> updateTrafficTicket(@RequestBody @Valid UpdateTrafficTicketParam param) {
+        trafficTicketService.updateTrafficTicket(param);
 
         return new ResponseModel<>();
     }
 
     @PostMapping("/getTrafficTicket")
-    public ResponseModel<PageResult<TrafficTicket>> getTicketList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
-        return new ResponseModel<>(trafficTicketService.getTicketList(param));
+    public ResponseModel<PageResult<TrafficTicket>> getTrafficTicketList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
+        return new ResponseModel<>(trafficTicketService.getTrafficTicketList(param));
     }
 
 }

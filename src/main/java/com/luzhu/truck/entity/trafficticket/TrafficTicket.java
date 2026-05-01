@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "traffic_ticket")
@@ -35,6 +34,9 @@ public class TrafficTicket {
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
+
+    @Column(name = "disable", nullable = false)
+    private int disable;
 
     @Column(name = "note", length = 150)
     private String note;
