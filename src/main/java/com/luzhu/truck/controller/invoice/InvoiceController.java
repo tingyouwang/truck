@@ -3,6 +3,7 @@ package com.luzhu.truck.controller.invoice;
 import com.luzhu.truck.dto.invoice.AddInvoiceParam;
 import com.luzhu.truck.dto.invoice.GetInvoiceParam;
 import com.luzhu.truck.dto.invoice.UpdateInvoiceParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.entity.invoice.Invoice;
 import com.luzhu.truck.response.PageResult;
 import com.luzhu.truck.response.ResponseModel;
@@ -34,6 +35,12 @@ public class InvoiceController {
     public ResponseModel<Object> updateInvoice(@RequestBody @Valid UpdateInvoiceParam param) {
         invoiceService.updateInvoice(param);
 
+        return new ResponseModel<>();
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        invoiceService.voidAndRebillToMonth(param);
         return new ResponseModel<>();
     }
 

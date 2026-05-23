@@ -55,6 +55,7 @@ import com.luzhu.truck.service.monthbillsnapshot.MonthBillSnapshotService;
 import com.luzhu.truck.entity.monthbillsnapshot.MonthBillSnapshot;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
+import com.luzhu.truck.util.InvoiceTypeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -207,13 +208,16 @@ public class BillService {
         //三種發票
         LocalDate monthFirst = yearMonth.atDay(1);
         LocalDate monthEnd = yearMonth.atEndOfMonth();
-        InvoiceSumAmountAndTaxDto gasInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.GAS.getType(), 0);
+        InvoiceSumAmountAndTaxDto gasInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.GAS.getType(),
+                InvoiceTypeUtil.adjustmentTypeForBucket(InvoiceType.GAS), 0);
         res.setInvoiceGasAmount(gasInvoice.getSum());
         res.setInvoiceGasAmountTax(gasInvoice.getTaxSum());
-        InvoiceSumAmountAndTaxDto saleInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.SALE.getType(), 0);
+        InvoiceSumAmountAndTaxDto saleInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.SALE.getType(),
+                InvoiceTypeUtil.adjustmentTypeForBucket(InvoiceType.SALE), 0);
         res.setInvoiceSaleAmount(saleInvoice.getSum());
         res.setInvoiceSaleAmountTax(saleInvoice.getTaxSum());
-        InvoiceSumAmountAndTaxDto offsetInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.OFFSET.getType(), 0);
+        InvoiceSumAmountAndTaxDto offsetInvoice = invoiceDao.getSumAmountByType(req.getCarLicenseNum(), monthFirst, monthEnd, InvoiceType.OFFSET.getType(),
+                InvoiceTypeUtil.adjustmentTypeForBucket(InvoiceType.OFFSET), 0);
         res.setInvoiceOffsetAmount(offsetInvoice.getSum());
         res.setInvoiceOffsetAmountTax(offsetInvoice.getTaxSum());
 
@@ -311,15 +315,25 @@ public class BillService {
             //三種發票
             LocalDate monthFirst = yearMonth.atDay(1);
             LocalDate monthEnd = yearMonth.atEndOfMonth();
-            List<Invoice> invoices = invoiceDao.getDetailByInvoiceDate(req.getCarLicenseNum(), monthFirst, monthEnd, 0);
+            List<Invoice> invoices = invoiceDao.getDetailByInvoiceDate(req.getCarLicenseNum(), monthFirst, monthEnd);
             List<MonthsBillDetailDto> invoiceRes = invoices.stream().map(fee -> {
                 MonthsBillDetailDto.MonthsBillDetailDtoBuilder builder = MonthsBillDetailDto.builder();
-                if (fee.getType().equals("SALE")) {
+                String t = fee.getType();
+                if ("SALE".equals(t)) {
                     builder.name("銷發發票").receiveAmount(fee.getAmountTax().intValue());
-                } else if (fee.getType().equals("GAS")) {
+                } else if ("SALE_ADJUSTMENT".equals(t)) {
+                    builder.name("銷發發票(調整)").receiveAmount(fee.getAmountTax().intValue());
+                } else if ("GAS".equals(t)) {
                     builder.name("油單發票").offsetAmount(fee.getAmountTax().intValue());
-                } else if (fee.getType().equals("OFFSET")) {
+                } else if ("GAS_ADJUSTMENT".equals(t)) {
+                    builder.name("油單發票(調整)").offsetAmount(fee.getAmountTax().intValue());
+                } else if ("OFFSET".equals(t)) {
                     builder.name("抵發發票").offsetAmount(fee.getAmountTax().intValue());
+                } else if ("OFFSET_ADJUSTMENT".equals(t)) {
+                    builder.name("抵發發票(調整)").offsetAmount(fee.getAmountTax().intValue());
+                } else {
+                    int tax = fee.getAmountTax() != null ? fee.getAmountTax().intValue() : 0;
+                    builder.name("發票").receiveAmount(tax);
                 }
                 LocalDate parse = LocalDate.parse(fee.getInvoiceDate(), DateTimeFormatter.ISO_DATE);
                 return builder.expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getHandleDate())))

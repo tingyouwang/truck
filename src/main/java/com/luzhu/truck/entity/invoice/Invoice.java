@@ -50,5 +50,15 @@ public class Invoice {
     @Column(name = "taxMonth", nullable = false, length = 150)
     private String taxMonth;
     private String expenseYearMonth;
+    @Column(name = "type", length = 32, nullable = false)
     private String type;
+
+    @Column(name = "rebill_source_invoice_id")
+    private Integer rebillSourceInvoiceId;
+
+    @Column(name = "rebill_target_invoice_id")
+    private Integer rebillTargetInvoiceId;
+
+    @Column(name = "last_modify_time")
+    private Long lastModifyTime;
 }

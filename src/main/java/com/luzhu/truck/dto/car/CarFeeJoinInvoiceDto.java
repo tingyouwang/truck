@@ -14,4 +14,8 @@ public class CarFeeJoinInvoiceDto {
     private Double receipTax;
     private String type;
     private Integer disable;
+    /** 西元 yyyy-MM-dd */
+    private String handleDate;
+    private Integer rebillSourceInvoiceId;
+    private Integer rebillTargetInvoiceId;
 }

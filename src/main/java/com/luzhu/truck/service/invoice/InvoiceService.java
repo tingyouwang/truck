@@ -8,6 +8,7 @@ import com.luzhu.truck.dto.car.CarFeeJoinInvoiceDto;
 import com.luzhu.truck.dto.invoice.AddInvoiceParam;
 import com.luzhu.truck.dto.invoice.GetInvoiceParam;
 import com.luzhu.truck.dto.invoice.UpdateInvoiceParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.entity.carfee.CarFee;
 import com.luzhu.truck.entity.invoice.Invoice;
 import com.luzhu.truck.exception.AppException;
@@ -17,7 +18,9 @@ import com.luzhu.truck.service.bill.BillService;
 import com.luzhu.truck.service.monthbillsnapshot.MonthBillSnapshotService;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
+import com.luzhu.truck.util.InvoiceTypeUtil;
 import com.luzhu.truck.validator.Validator;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -27,8 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 public class InvoiceService {
@@ -42,56 +49,38 @@ public class InvoiceService {
     private BillService billService;
     @Autowired
     private MonthBillSnapshotService monthBillSnapshotService;
+
     @Transactional
     public void addInvoice(AddInvoiceParam param) {
+        Validator.isFalseThrow(InvoiceTypeUtil.isAllowedManualType(param.getType()),
+                new AppException(SystemExceptionEnum.PARAM_ERROR));
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 
         CarFee carFee = carFeeDao.getCarFeeByLicenseNum(param.getCarLicenseNum());
 
-        Double taxPercent = 0.0;
-        switch (param.getType().toUpperCase()) {
-            case "SALE":
-                taxPercent = carFee.getSaleTax();
-                break;
-            case "GAS" :
-                taxPercent = carFee.getGasTax();
-                break;
-            case "OFFSET":
-                taxPercent = carFee.getBuyTax();
-                break;
-        }
-
+        double taxPercent = InvoiceTypeUtil.taxPercentForCarFee(carFee, param.getType());
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = invoiceDao.insertInvoice(param.getInvoiceNum(), param.getInvoiceDate(), param.getHandleDate(),
                 param.getAmount(), taxAmount, param.getCarAgency(), param.getCarAgencyId(),
-                param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum()
-        , param.getType(), l);
+                param.getDisable(), param.getNote(), param.getTaxMonth(), param.getCarLicenseNum(),
+                param.getType(), null, null, l);
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.INSERT_ERROR));
+
+        refreshMonthBillSnapshotsForHandleMonths("發票新增", param.getCarLicenseNum(),
+                handleDateToBillYearMonth(param.getHandleDate()));
     }
 
     @Transactional
     public void updateInvoice(UpdateInvoiceParam param) {
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
 
-        CarFeeJoinInvoiceDto carFeeByInvoiceId = invoiceDao.getCarFeeByInvoiceId(param.getId());
-        Validator.isFalseThrow(0 == carFeeByInvoiceId.getDisable(),
+        CarFeeJoinInvoiceDto before = invoiceDao.getCarFeeByInvoiceId(param.getId());
+        Validator.isFalseThrow(0 == before.getDisable(),
                 new AppException(SystemExceptionEnum.INVOICE_DISABLE));
 
-        Double taxPercent = 0.0;
-        switch (carFeeByInvoiceId.getType().toUpperCase()) {
-            case "SALE":
-                taxPercent = carFeeByInvoiceId.getSaleTax();
-                break;
-            case "GAS" :
-                taxPercent = carFeeByInvoiceId.getGasTax();
-                break;
-            case "OFFSET":
-                taxPercent = carFeeByInvoiceId.getBuyTax();
-                break;
-        }
-
+        Double taxPercent = InvoiceTypeUtil.taxPercentForJoinDto(before, before.getType());
         BigDecimal taxAmount = param.getAmount().multiply(BigDecimal.valueOf(taxPercent));
 
         int insertCount = invoiceDao.updateInvoice(param.getId(), param.getHandleDate(),
@@ -101,36 +90,111 @@ public class InvoiceService {
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
-        refreshMonthBillSnapshotAfterInvoiceUpdate(carFeeByInvoiceId, param);
+        refreshMonthBillSnapshotsForHandleMonths("發票更新", before.getCarLicenseNum(),
+                handleDateToBillYearMonth(before.getHandleDate()),
+                handleDateToBillYearMonth(param.getHandleDate()));
     }
 
     /**
-     * 發票異動後依稅額所屬月份重算帳單並寫入 month_bill_snapshot（與手動生成快照相同來源資料）。
-     * 若未帶 tax_month 則略過（無法對應帳單月份）。
+     * 報廢轉月：原列 disable=1 並保留於原月明細；新增一筆 *_ADJUSTMENT 於目標月入帳。
      */
-    private void refreshMonthBillSnapshotAfterInvoiceUpdate(CarFeeJoinInvoiceDto carFee,
-                                                            UpdateInvoiceParam param) {
+    @Transactional
+    public void voidAndRebillToMonth(VoidAndRebillToMonthParam param) {
+        Invoice src = invoiceDao.findById(param.getId())
+                .orElseThrow(() -> new AppException(SystemExceptionEnum.NO_DATA));
+        Validator.isFalseThrow(0 == src.getDisable(),
+                new AppException(SystemExceptionEnum.INVOICE_DISABLE));
+        Validator.isFalseThrow(src.getRebillTargetInvoiceId() == null,
+                new AppException(SystemExceptionEnum.INVOICE_ALREADY_REBILLED));
+        Validator.isFalseThrow(src.getRebillSourceInvoiceId() == null,
+                new AppException(SystemExceptionEnum.INVOICE_ADJUSTMENT_NO_REBILL));
+        Validator.isFalseThrow(InvoiceTypeUtil.isAllowedManualType(src.getType()),
+                new AppException(SystemExceptionEnum.PARAM_ERROR));
 
-        //不要使用taxMonth, 請使用param.getInvoiceDate() 取得YYYY-MM-DD，再轉換為YYYY-MM
-        LocalDate invoiceDate = LocalDate.parse(param.getInvoiceDate());
-        String invoiceYearMonth = invoiceDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        DateTimeValidate.checkYearMonth(param.getTargetBillYearMonth());
+        YearMonth targetYm = YearMonth.parse(param.getTargetBillYearMonth(), DateTimeFormatter.ofPattern("yyyy-MM"));
+        String newHandleDate = targetYm.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
-        DateTimeValidate.checkYearMonth(invoiceYearMonth);
-        String carLicenseNum = carFee.getCarLicenseNum();
+        long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+
+        Invoice neu = new Invoice();
+        BeanUtils.copyProperties(src, neu, "id", "rebillSourceInvoiceId", "rebillTargetInvoiceId");
+        neu.setType(InvoiceTypeUtil.toAdjustmentType(src.getType()));
+        neu.setHandleDate(newHandleDate);
+        neu.setDisable(0);
+        neu.setRebillSourceInvoiceId(src.getId());
+        neu.setRebillTargetInvoiceId(null);
+        neu.setLastModifyTime(l);
+        if (param.getNote() != null && !param.getNote().isBlank()) {
+            neu.setNote(param.getNote());
+        }
+        neu = invoiceDao.save(neu);
+
+        int marked = invoiceDao.markOriginalInvoiceRebilled(src.getId(), neu.getId(), l);
+        Validator.isFalseThrow(marked == 1,
+                new AppException(SystemExceptionEnum.UPDATE_ERROR));
+
+        refreshMonthBillSnapshotsForHandleMonths("報廢轉月", src.getCarLicenseNum(),
+                handleDateToBillYearMonth(src.getHandleDate()),
+                param.getTargetBillYearMonth());
+    }
+
+    /**
+     * 依處理日期所屬帳單月份重算並寫入 month_bill_snapshot，並追加 month_bill_snapshot_history。
+     */
+    private void refreshMonthBillSnapshotsForHandleMonths(String historyRemark, String carLicenseNum, String... yearMonths) {
         if (carLicenseNum == null || carLicenseNum.isBlank()) {
             return;
         }
-        MonthBillReq req = new MonthBillReq();
-        req.setCarLicenseNum(carLicenseNum);
-        req.setBillDate(invoiceYearMonth);
-        MonthBillResponse monthBill = billService.getMonthBillForceRecalculate(req);
+        Set<String> months = new LinkedHashSet<>();
+        for (String ym : yearMonths) {
+            if (ym != null && !ym.isBlank()) {
+                months.add(ym);
+            }
+        }
+        if (months.isEmpty()) {
+            return;
+        }
         LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
-        monthBillSnapshotService.saveSnapshot(carLicenseNum, invoiceYearMonth, monthBill, "INVOICE", now, "發票更新");
+        for (String billDate : months) {
+            DateTimeValidate.checkYearMonth(billDate);
+            MonthBillReq req = new MonthBillReq();
+            req.setCarLicenseNum(carLicenseNum);
+            req.setBillDate(billDate);
+            MonthBillResponse monthBill = billService.getMonthBillForceRecalculate(req);
+            monthBillSnapshotService.saveSnapshot(carLicenseNum, billDate, monthBill, "INVOICE", now, historyRemark);
+        }
+    }
+
+    /**
+     * 處理日期字串（西元 yyyy-MM-dd 或民國 yyy-MM-dd）轉為帳單 yyyy-MM。
+     */
+    static String handleDateToBillYearMonth(String handleDateStr) {
+        if (handleDateStr == null || handleDateStr.isBlank()) {
+            return null;
+        }
+        try {
+            LocalDate d = LocalDate.parse(handleDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        } catch (DateTimeParseException ignored) {
+        }
+        String west = DateTimeUtil.transferWestDateStr(handleDateStr);
+        if (west == null || west.isEmpty()) {
+            return null;
+        }
+        if (west.length() >= 10) {
+            LocalDate d = LocalDate.parse(west.substring(0, 10), DateTimeFormatter.ISO_LOCAL_DATE);
+            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        }
+        LocalDate d = LocalDate.parse(west + "-01", DateTimeFormatter.ISO_LOCAL_DATE);
+        return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
     }
 
     public PageResult<Invoice> getInvoiceByType(GetInvoiceParam param) {
+        String base = param.getType().toUpperCase();
+        String adj = InvoiceTypeUtil.toAdjustmentType(base);
         Page<Invoice> invoices = invoiceDao.getAllByType(param.getCarLicenseNum(), DateTimeUtil.getMonthFirst(param.getExpenseYearMonth()),
-                DateTimeUtil.getMonthLastDate(param.getExpenseYearMonth()), param.getType(), param.getPageable());
+                DateTimeUtil.getMonthLastDate(param.getExpenseYearMonth()), base, adj, param.getPageable());
         return new PageResult<>(invoices);
     }
 }
