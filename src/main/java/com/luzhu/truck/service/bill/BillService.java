@@ -56,6 +56,7 @@ import com.luzhu.truck.entity.monthbillsnapshot.MonthBillSnapshot;
 import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
 import com.luzhu.truck.util.InvoiceTypeUtil;
+import com.luzhu.truck.util.LendMoneyTypeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -345,18 +346,24 @@ public class BillService {
 
             //借款金額
             List<LendMoney> lendMoneyList = lendMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
-                    .name("借款金額")
-                    .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
-                    .note(fee.getNote())
-                    .build()).toList());
-            res.addAll(lendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
-                    .name("借款利息")
-                    .receiveAmount(fee.getInterestAmount().intValue())
-                    .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(lendMoneyList.stream().map(fee -> {
+                String amountName = LendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "借款金額(調整)" : "借款金額";
+                return MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
+                        .name(amountName)
+                        .receiveAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
+            res.addAll(lendMoneyList.stream().map(fee -> {
+                String interestName = LendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "借款利息(調整)" : "借款利息";
+                return MonthsBillDetailDto.builder().expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
+                        .name(interestName)
+                        .receiveAmount(fee.getInterestAmount().intValue())
+                        .date(DateTimeUtil.parseToMinguoDate(LocalDate.parse(fee.getLendDate())))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
 
             //入款金額
             List<GiveBackMoney> giveBackMoneyList = giveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);

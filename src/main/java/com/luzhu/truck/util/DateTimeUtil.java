@@ -158,4 +158,28 @@ public class DateTimeUtil {
         return LocalDate.parse(fullDate, DateTimeFormatter.ISO_DATE).format(pattern);
     }
 
+    /**
+     * 帳務日期字串（西元 yyyy-MM-dd 或民國 yyy-MM-dd）轉為帳單月份 yyyy-MM。
+     */
+    public static String toBillYearMonth(String dateStr) {
+        if (dateStr == null || dateStr.isBlank()) {
+            return null;
+        }
+        try {
+            LocalDate d = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
+            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        } catch (DateTimeParseException ignored) {
+        }
+        String west = transferWestDateStr(dateStr);
+        if (west == null || west.isEmpty()) {
+            return null;
+        }
+        if (west.length() >= 10) {
+            LocalDate d = LocalDate.parse(west.substring(0, 10), DateTimeFormatter.ISO_LOCAL_DATE);
+            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        }
+        LocalDate d = LocalDate.parse(west + "-01", DateTimeFormatter.ISO_LOCAL_DATE);
+        return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+    }
+
 }

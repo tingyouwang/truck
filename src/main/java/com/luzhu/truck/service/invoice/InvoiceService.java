@@ -28,12 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -69,7 +67,7 @@ public class InvoiceService {
                 new AppException(SystemExceptionEnum.INSERT_ERROR));
 
         refreshMonthBillSnapshotsForHandleMonths("發票新增", param.getCarLicenseNum(),
-                handleDateToBillYearMonth(param.getHandleDate()));
+                DateTimeUtil.toBillYearMonth(param.getHandleDate()));
     }
 
     @Transactional
@@ -91,8 +89,8 @@ public class InvoiceService {
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
         refreshMonthBillSnapshotsForHandleMonths("發票更新", before.getCarLicenseNum(),
-                handleDateToBillYearMonth(before.getHandleDate()),
-                handleDateToBillYearMonth(param.getHandleDate()));
+                DateTimeUtil.toBillYearMonth(before.getHandleDate()),
+                DateTimeUtil.toBillYearMonth(param.getHandleDate()));
     }
 
     /**
@@ -135,7 +133,7 @@ public class InvoiceService {
                 new AppException(SystemExceptionEnum.UPDATE_ERROR));
 
         refreshMonthBillSnapshotsForHandleMonths("報廢轉月", src.getCarLicenseNum(),
-                handleDateToBillYearMonth(src.getHandleDate()),
+                DateTimeUtil.toBillYearMonth(src.getHandleDate()),
                 param.getTargetBillYearMonth());
     }
 
@@ -164,30 +162,6 @@ public class InvoiceService {
             MonthBillResponse monthBill = billService.getMonthBillForceRecalculate(req);
             monthBillSnapshotService.saveSnapshot(carLicenseNum, billDate, monthBill, "INVOICE", now, historyRemark);
         }
-    }
-
-    /**
-     * 處理日期字串（西元 yyyy-MM-dd 或民國 yyy-MM-dd）轉為帳單 yyyy-MM。
-     */
-    static String handleDateToBillYearMonth(String handleDateStr) {
-        if (handleDateStr == null || handleDateStr.isBlank()) {
-            return null;
-        }
-        try {
-            LocalDate d = LocalDate.parse(handleDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
-            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-        } catch (DateTimeParseException ignored) {
-        }
-        String west = DateTimeUtil.transferWestDateStr(handleDateStr);
-        if (west == null || west.isEmpty()) {
-            return null;
-        }
-        if (west.length() >= 10) {
-            LocalDate d = LocalDate.parse(west.substring(0, 10), DateTimeFormatter.ISO_LOCAL_DATE);
-            return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-        }
-        LocalDate d = LocalDate.parse(west + "-01", DateTimeFormatter.ISO_LOCAL_DATE);
-        return d.format(DateTimeFormatter.ofPattern("yyyy-MM"));
     }
 
     public PageResult<Invoice> getInvoiceByType(GetInvoiceParam param) {
