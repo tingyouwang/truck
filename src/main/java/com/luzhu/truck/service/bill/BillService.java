@@ -367,20 +367,26 @@ public class BillService {
 
             //入款金額
             List<GiveBackMoney> giveBackMoneyList = giveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(giveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
-                    .name("入款金額")
-                    .offsetAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
-            res.addAll(giveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
-                    .name("入票利息")
-                    .receiveAmount(fee.getInterestAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(giveBackMoneyList.stream().map(fee -> {
+                String amountName = LendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "入款金額(調整)" : "入款金額";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
+                        .name(amountName)
+                        .offsetAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
+            res.addAll(giveBackMoneyList.stream().map(fee -> {
+                String interestName = LendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "入票利息(調整)" : "入票利息";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
+                        .name(interestName)
+                        .receiveAmount(fee.getInterestAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
             //其他應收
             List<OtherLendMoney> otherLendMoneyList = otherLendMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
             res.addAll(otherLendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()

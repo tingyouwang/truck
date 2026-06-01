@@ -23,8 +23,14 @@ public class GiveBackMoney {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "type", nullable = false, length = 100)
+    @Column(name = "type", nullable = false, length = 32)
     private String type;
+
+    @Column(name = "rebill_source_give_back_money_id")
+    private Integer rebillSourceGiveBackMoneyId;
+
+    @Column(name = "rebill_target_give_back_money_id")
+    private Integer rebillTargetGiveBackMoneyId;
 
     @Column(name = "expire_date", nullable = false)
     private String expireDate;
