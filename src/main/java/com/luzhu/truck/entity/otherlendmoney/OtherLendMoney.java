@@ -23,6 +23,15 @@ public class OtherLendMoney {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Column(name = "rebill_source_other_lend_money_id")
+    private Integer rebillSourceOtherLendMoneyId;
+
+    @Column(name = "rebill_target_other_lend_money_id")
+    private Integer rebillTargetOtherLendMoneyId;
+
     @Column(name = "disable", nullable = false)
     private int disable;
 

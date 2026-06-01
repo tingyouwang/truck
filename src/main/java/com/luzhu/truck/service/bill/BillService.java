@@ -57,6 +57,7 @@ import com.luzhu.truck.util.DateTimeUtil;
 import com.luzhu.truck.util.DateTimeValidate;
 import com.luzhu.truck.util.InvoiceTypeUtil;
 import com.luzhu.truck.util.LendMoneyTypeUtil;
+import com.luzhu.truck.util.OtherLendMoneyTypeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -389,13 +390,16 @@ public class BillService {
             }).toList());
             //其他應收
             List<OtherLendMoney> otherLendMoneyList = otherLendMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(otherLendMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
-                    .name("其他應收")
-                    .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getLendDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(otherLendMoneyList.stream().map(fee -> {
+                String name = OtherLendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "其他應收(調整)" : "其他應收";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getLendDate())))
+                        .name(name)
+                        .receiveAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getLendDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
 
             //其他抵收
             List<OtherGiveBackMoney> otherGiveBackMoneyList = otherGiveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);

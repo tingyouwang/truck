@@ -29,7 +29,7 @@ public final class LendMoneyTypeUtil {
     }
 
     public static String toAdjustmentType(String baseType) {
-        String u = baseType(type);
+        String u = baseType(baseType);
         return switch (u) {
             case "CHECK" -> "CHECK_ADJUSTMENT";
             case "CASH" -> "CASH_ADJUSTMENT";

@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.otherlendmoney;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.otherlendmoney.AddOtherLendMoneyParam;
 import com.luzhu.truck.dto.otherlendmoney.UpdateOtherLendMoneyParam;
 import com.luzhu.truck.entity.otherlendmoney.OtherLendMoney;
@@ -34,5 +35,11 @@ public class OtherLendMoneyController {
     @PostMapping("/getOtherLendMoney")
     public ResponseModel<PageResult<OtherLendMoney>> getOtherLendMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(otherLendMoneyService.getOtherLendMoneyList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        otherLendMoneyService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 }
