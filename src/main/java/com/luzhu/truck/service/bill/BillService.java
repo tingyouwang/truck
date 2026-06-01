@@ -403,13 +403,16 @@ public class BillService {
 
             //其他抵收
             List<OtherGiveBackMoney> otherGiveBackMoneyList = otherGiveBackMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(otherGiveBackMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
-                    .name("其他抵收")
-                    .offsetAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(otherGiveBackMoneyList.stream().map(fee -> {
+                String name = OtherLendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "其他抵收(調整)" : "其他抵收";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getGiveBackDate())))
+                        .name(name)
+                        .offsetAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getGiveBackDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
 
             //罰單
             List<TrafficTicket> ticketList = trafficTicketDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);

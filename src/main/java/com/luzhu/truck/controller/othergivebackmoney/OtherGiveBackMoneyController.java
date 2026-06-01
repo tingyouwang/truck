@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.othergivebackmoney;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.othergivebackmoney.AddOtherGiveBackMoneyParam;
 import com.luzhu.truck.dto.othergivebackmoney.UpdateOtherGiveBackMoneyParam;
 import com.luzhu.truck.entity.othergivebackmoney.OtherGiveBackMoney;
@@ -33,5 +34,11 @@ public class OtherGiveBackMoneyController {
     @PostMapping("/getOtherGiveBackMoney")
     public ResponseModel<PageResult<OtherGiveBackMoney>> getOtherGiveBackMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(otherGiveBackMoneyService.getOtherGiveBackMoneyList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        otherGiveBackMoneyService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 }

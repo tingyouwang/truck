@@ -23,6 +23,15 @@ public class OtherGiveBackMoney {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Column(name = "rebill_source_other_give_back_money_id")
+    private Integer rebillSourceOtherGiveBackMoneyId;
+
+    @Column(name = "rebill_target_other_give_back_money_id")
+    private Integer rebillTargetOtherGiveBackMoneyId;
+
     @Column(name = "disable", nullable = false)
     private int disable;
 
