@@ -5,6 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<style name="Default" isDefault="true" fontName="STSong" fontSize="10"/>
 	<style name="style1" isBlankWhenNull="true" fontName="STSong" fontSize="20"/>
+	<parameter name="companyName" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
 	<parameter name="ownerName" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -24,13 +27,13 @@
 	</background>
 	<title>
 		<band height="39" splitType="Stretch">
-			<staticText>
+			<textField>
 				<reportElement x="181" y="0" width="200" height="39" uuid="43a51afb-97b2-416d-8891-7a8fcda7b3a9"/>
 				<textElement textAlignment="Center">
 					<font fontName="STSong" size="24"/>
 				</textElement>
-				<text><![CDATA[上義物流有限公司]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

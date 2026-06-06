@@ -28,6 +28,7 @@ public class ReportService {
         HashMap<String, Object> map = new HashMap<>();
         map.put("ownerName", carInfo.getOwnerName());
         map.put("carNum", req.getCarLicenseNum());
+        map.put("companyName", carInfo.getCarAgency() != null ? carInfo.getCarAgency() : "");
         map.put("printDate", DateTimeUtil.parseToMinguoDate(LocalDate.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)))));
         map.put("sum", billDetail.getSum());
         map.put("receiveSum", billDetail.getReceiveSum());

@@ -9,4 +9,5 @@ public class CarInfo {
     private long id;
     private String licenseNumber;
     private String ownerName;
+    private String carAgency;
 }

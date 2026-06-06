@@ -14,7 +14,7 @@ public interface CarDao extends BaseDao<Car, Integer> {
     @Query(value = "SELECT license_number FROM car WHERE is_using = 1 AND status = 'enable'",
     nativeQuery = true)
     List<String> getAllLicenseNumber();
-    @Query(value = "SELECT id, license_number as licenseNumber, owner_name as ownerName FROM car WHERE is_using = 1 AND status = 'enable'",
+    @Query(value = "SELECT id, license_number as licenseNumber, owner_name as ownerName, car_agency as carAgency FROM car WHERE is_using = 1 AND status = 'enable'",
             nativeQuery = true)
     List<CarInfo> getAllCarForDropDown();
     @Query(value = "SELECT * FROM car WHERE id = ?1",
