@@ -416,13 +416,16 @@ public class BillService {
 
             //罰單
             List<TrafficTicket> ticketList = trafficTicketDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(ticketList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getHandleDate())))
-                    .name("罰單")
-                    .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getHandleDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(ticketList.stream().map(fee -> {
+                String name = OtherLendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "罰單(調整)" : "罰單";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getHandleDate())))
+                        .name(name)
+                        .receiveAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getHandleDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
             //代支利息
             List<PayInterest> payInterestList = payInterestDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
             res.addAll(payInterestList.stream().map(fee -> {

@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.trafficticket;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.trafficticket.AddTrafficTicketParam;
 import com.luzhu.truck.dto.trafficticket.UpdateTrafficTicketParam;
 import com.luzhu.truck.entity.trafficticket.TrafficTicket;
@@ -34,6 +35,12 @@ public class TrafficTicketController {
     @PostMapping("/getTrafficTicket")
     public ResponseModel<PageResult<TrafficTicket>> getTrafficTicketList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(trafficTicketService.getTrafficTicketList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        trafficTicketService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 
 }

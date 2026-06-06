@@ -35,6 +35,15 @@ public class TrafficTicket {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Column(name = "rebill_source_traffic_ticket_id")
+    private Integer rebillSourceTrafficTicketId;
+
+    @Column(name = "rebill_target_traffic_ticket_id")
+    private Integer rebillTargetTrafficTicketId;
+
     @Column(name = "disable", nullable = false)
     private int disable;
 

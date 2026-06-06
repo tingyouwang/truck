@@ -15,10 +15,11 @@ import java.util.List;
 @Repository
 public interface TrafficTicketDao extends BaseDao<TrafficTicket, Integer> {
     @Modifying
-    @Query(value = "INSERT INTO `traffic_ticket` (`car_license_num`, `handle_date`, `ticket_date`, `go_police_date`, `pay_date`, `ticket_num`, `amount`, `disable`, `note`, `create_time`, `last_modify_time`) " +
-            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)", nativeQuery = true)
+    @Query(value = "INSERT INTO `traffic_ticket` (`car_license_num`, `handle_date`, `ticket_date`, `go_police_date`, `pay_date`, `ticket_num`, `amount`, `type`, `rebill_source_traffic_ticket_id`, `rebill_target_traffic_ticket_id`, `disable`, `note`, `create_time`, `last_modify_time`) " +
+            "VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14)", nativeQuery = true)
     int insertTicket(String carLicenseNum, String handleDate, String ticketDate, String goPoliceDate, String payDate, String ticketNum
-                        ,BigDecimal amount, int disable, String note, long createTime, long lastModifyTime);
+                        ,BigDecimal amount, String type, Integer rebillSourceTrafficTicketId, Integer rebillTargetTrafficTicketId,
+                     int disable, String note, long createTime, long lastModifyTime);
 
     @Modifying
     @Query(value = "UPDATE `traffic_ticket` " +
@@ -33,13 +34,21 @@ public interface TrafficTicketDao extends BaseDao<TrafficTicket, Integer> {
     @Query(value = "SELECT SUM(amount) FROM traffic_ticket WHERE car_license_num = ?1 AND " +
             "handle_date between ?2 AND ?3 AND disable = 0" , nativeQuery = true)
     BigDecimal getSumAmount(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
-    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 AND disable = 0"
+    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 " +
+            "AND (disable = 0 OR (disable = 1 AND rebill_target_traffic_ticket_id IS NOT NULL))"
             , nativeQuery = true)
     List<TrafficTicket> getDetailByDate(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate);
 
-    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 AND disable = 0"
+    @Query(value = "SELECT * FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 " +
+            "AND (disable = 0 OR (disable = 1 AND rebill_target_traffic_ticket_id IS NOT NULL))"
             , nativeQuery = true
-            , countQuery = "SELECT COUNT(1) FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 AND disable = 0")
+            , countQuery = "SELECT COUNT(1) FROM traffic_ticket WHERE car_license_num = ?1 AND handle_date between ?2 AND ?3 " +
+            "AND (disable = 0 OR (disable = 1 AND rebill_target_traffic_ticket_id IS NOT NULL))")
     Page<TrafficTicket> getList(String carLicenseNum, LocalDate monthFirstDate, LocalDate monthLastDate, Pageable pageable);
 
+    @Modifying
+    @Query(value = "UPDATE traffic_ticket SET disable = 1, rebill_target_traffic_ticket_id = ?2, last_modify_time = ?3 " +
+            "WHERE id = ?1 AND disable = 0 AND rebill_target_traffic_ticket_id IS NULL",
+            nativeQuery = true)
+    int markOriginalTrafficTicketRebilled(int trafficTicketId, int newTrafficTicketId, long lastModifyTime);
 }
