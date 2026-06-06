@@ -437,13 +437,16 @@ public class BillService {
             }).toList());
             //收據抵收
             List<ReceiveOffset> receiveOffsetList = receiveOffsetDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(receiveOffsetList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getPayDate())))
-                    .name("收據抵收")
-                    .offsetAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getPayDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(receiveOffsetList.stream().map(fee -> {
+                String name = OtherLendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "收據抵收(調整)" : "收據抵收";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getPayDate())))
+                        .name(name)
+                        .offsetAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getPayDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
             //入款退回
             List<ReturnMoney> returnMoneyList = returnMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
             res.addAll(returnMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()

@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.receiveoffset;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.receiveoffset.AddReceiveOffsetParam;
 import com.luzhu.truck.dto.receiveoffset.UpdateReceiveOffsetParam;
 import com.luzhu.truck.entity.receiveoffset.ReceiveOffset;
@@ -34,5 +35,11 @@ public class ReceiveOffsetController {
     @PostMapping("/getReceiveOffset")
     public ResponseModel<PageResult<ReceiveOffset>> getReceiveOffsetList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(receiveOffsetService.getReceiveOffsetList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        receiveOffsetService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 }

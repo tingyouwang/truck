@@ -28,6 +28,15 @@ public class ReceiveOffset {
     @Column(name = "receipt_amount", nullable = false)
     private BigDecimal receiptAmount;
 
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Column(name = "rebill_source_receive_offset_id")
+    private Integer rebillSourceReceiveOffsetId;
+
+    @Column(name = "rebill_target_receive_offset_id")
+    private Integer rebillTargetReceiveOffsetId;
+
     @Column(name = "disable", nullable = false)
     private int disable;
 
