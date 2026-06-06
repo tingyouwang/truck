@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.returnmoney;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.returnmoney.AddReturnMoneyParam;
 import com.luzhu.truck.dto.returnmoney.UpdateReturnMoneyParam;
 import com.luzhu.truck.entity.returnmoney.ReturnMoney;
@@ -34,5 +35,11 @@ public class ReturnMoneyController {
     @PostMapping("/getReturnMoney")
     public ResponseModel<PageResult<ReturnMoney>> getReturnMoneyList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(returnMoneyService.getReturnMoneyList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        returnMoneyService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 }

@@ -449,13 +449,16 @@ public class BillService {
             }).toList());
             //入款退回
             List<ReturnMoney> returnMoneyList = returnMoneyDao.getDetailByDate(req.getCarLicenseNum(), monthFirst, monthEnd);
-            res.addAll(returnMoneyList.stream().map(fee -> MonthsBillDetailDto.builder()
-                    .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getPayDate())))
-                    .name("入款退回")
-                    .receiveAmount(fee.getAmount().intValue())
-                    .date(DateTimeUtil.tryToMinguoDateStr(fee.getPayDate()))
-                    .note(fee.getNote())
-                    .build()).toList());
+            res.addAll(returnMoneyList.stream().map(fee -> {
+                String name = OtherLendMoneyTypeUtil.isAdjustmentRow(fee.getType()) ? "入款退回(調整)" : "入款退回";
+                return MonthsBillDetailDto.builder()
+                        .expenseYearMonth(DateTimeUtil.tryToMinguoDateStr(DateTimeUtil.fullDateToYearMonth(fee.getPayDate())))
+                        .name(name)
+                        .receiveAmount(fee.getAmount().intValue())
+                        .date(DateTimeUtil.tryToMinguoDateStr(fee.getPayDate()))
+                        .note(fee.getNote())
+                        .build();
+            }).toList());
         }
 
         int sum = res.stream().map(dto -> Math.subtractExact(dto.getReceiveAmount(), dto.getOffsetAmount()))
