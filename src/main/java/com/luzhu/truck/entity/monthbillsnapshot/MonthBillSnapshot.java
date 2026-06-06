@@ -109,7 +109,7 @@ public class MonthBillSnapshot {
     @Column(name = "update_time")
     private Long updateTime;
     
-    @Column(name = "snapshot_type")
+    @Column(name = "snapshot_type", length = 32)
     private String snapshotType;
     
     @Column(name = "remark")
