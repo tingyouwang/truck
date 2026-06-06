@@ -10,7 +10,7 @@ public class VoidAndRebillToMonthParam {
     @NotNull
     private Integer id;
     @NotBlank(message = "目標帳單月份不可為空")
-    @Pattern(regexp = "^\\d{4}-\\d{2}$", message = "目標月份格式應為 yyyy-MM")
+    @Pattern(regexp = "^\\d{3}-\\d{2}$", message = "目標月份格式應為 yyy-MM")
     private String targetBillYearMonth;
     /** 寫入新調整列的備註（可空） */
     private String note;

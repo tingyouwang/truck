@@ -47,7 +47,8 @@ public class MinguoDateTimeAspect extends BaseAop{
 
             Field[] fieldArr = paramObject.getClass().getDeclaredFields();
             for (Field field : fieldArr) {
-                if (field.getName().contains("Date") || field.getName().contains("date") || field.getName().equals("expenseYearMonth")) {
+                if (field.getName().contains("Date") || field.getName().contains("date") || field.getName().equals("expenseYearMonth")
+                        || field.getName().equals("targetBillYearMonth")) {
                     setField(paramObject, field);
                 }
 
