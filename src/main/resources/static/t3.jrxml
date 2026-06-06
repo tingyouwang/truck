@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="t1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ee2455dc-d028-46dc-bacc-d1f146ba2374">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Default" isDefault="true" fontName="STSong" fontSize="10"/>
+	<style name="style1" isBlankWhenNull="true" fontName="STSong" fontSize="20"/>
+	<parameter name="ownerName" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="carNum" class="java.lang.String"/>
+	<parameter name="printDate" class="java.lang.String"/>
+	<parameter name="sum" class="java.lang.Integer"/>
+	<parameter name="receiveSum" class="java.lang.Integer"/>
+	<parameter name="offsetSum" class="java.lang.Integer"/>
+	<field name="expenseYearMonth" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="receiveAmount" class="java.lang.Integer"/>
+	<field name="offsetAmount" class="java.lang.Integer"/>
+	<field name="note" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="181" y="0" width="200" height="39" uuid="43a51afb-97b2-416d-8891-7a8fcda7b3a9"/>
+				<textElement textAlignment="Center">
+					<font fontName="STSong" size="24"/>
+				</textElement>
+				<text><![CDATA[上義物流有限公司]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement x="233" y="0" width="101" height="29" uuid="9a775b5c-5faa-45ef-9302-a312d6f1b9c3"/>
+				<textElement>
+					<font fontName="STSong" size="15"/>
+				</textElement>
+				<text><![CDATA[車主帳款明細]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="29" y="29" width="88" height="20" uuid="b1c93f35-82bb-4c40-8392-93f732c336da"/>
+				<textFieldExpression><![CDATA[$P{ownerName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="29" width="29" height="20" uuid="f58752ea-dd29-4661-aa50-e53e042b0896"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[車主:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="129" y="29" width="25" height="20" uuid="11b58663-b708-44ac-96ed-07e975e003e3"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[車牌:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="29" width="62" height="20" uuid="3f91ff2a-cab2-40f4-9cde-5fdd9681316c"/>
+				<textFieldExpression><![CDATA[$P{carNum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="52" width="29" height="20" uuid="1a58adbd-9668-4248-8d52-10d062676a21"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[月份]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="52" width="25" height="20" uuid="46df91f4-d436-46a4-a55a-e3b02e87f4ec"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[日期]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="129" y="52" width="63" height="20" uuid="da2196a3-69c1-4e20-b355-d97ef0f74feb"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[費用名稱]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="52" width="48" height="20" uuid="40404399-013c-4138-9254-c2ad09afa832"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[應收金額]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="52" width="48" height="20" uuid="d8df66f3-f310-48d9-a406-d704bea41f91"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[抵收金額]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="54" width="25" height="18" uuid="190fe6b6-694c-4e45-8a0e-d691d975299c"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[備註]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="49" width="555" height="1" uuid="93a50225-57a2-4f48-846a-e3e4029de039"/>
+			</line>
+			<staticText>
+				<reportElement x="381" y="0" width="47" height="16" uuid="a844749f-b9f3-4707-b14a-b7daa1ed663b"/>
+				<textElement>
+					<font fontName="STSong" size="10"/>
+				</textElement>
+				<text><![CDATA[列印日期:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="428" y="0" width="62" height="20" uuid="b4291d80-2610-4f16-a27b-5e99b38adc79"/>
+				<textFieldExpression><![CDATA[$P{printDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="334" y="23" width="70" height="29" uuid="48477708-7705-42f9-94ac-da8b947b39b5"/>
+				<textElement>
+					<font fontName="STSong" size="15"/>
+				</textElement>
+				<text><![CDATA[月底尚欠:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="404" y="23" width="62" height="20" uuid="c2d5dfca-84d0-414c-bf0d-3896ac461492"/>
+				<textElement>
+					<font fontName="STSong" size="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{sum}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="3" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="49" height="15" uuid="89ed9a8d-2569-47ec-aaee-8c19dabca8c3"/>
+				<textElement>
+					<paragraph lineSpacing="Fixed"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expenseYearMonth}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="65" y="0" width="52" height="15" uuid="1f59ca9c-4527-4bcf-bf63-0a1c82831a29"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="129" y="0" width="63" height="15" uuid="8a3c59ed-4877-48f4-9f7b-13ebcf890af3"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="239" y="0" width="63" height="15" uuid="dd8ba622-1d5d-4bd2-95e2-c5cd36f3b979"/>
+				<textFieldExpression><![CDATA[$F{receiveAmount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="334" y="0" width="63" height="15" uuid="218ef639-714c-486d-aae6-eed508c65d81"/>
+				<textFieldExpression><![CDATA[$F{offsetAmount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="438" y="0" width="63" height="15" uuid="89f81c42-c9a9-4802-9056-0741a8b5949f"/>
+				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="22" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="36" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="240" y="11" width="62" height="20" uuid="b3cbb8c1-d5c1-4669-87db-1bf9b8df03d1"/>
+				<textElement>
+					<font fontName="STSong" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{receiveSum}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="333" y="11" width="62" height="20" uuid="bb9553f7-46e4-40bd-a0dd-570241cea5fe"/>
+				<textElement>
+					<font fontName="STSong" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{offsetSum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="239" y="0" width="48" height="20" uuid="9a8280e1-7ba9-4fe4-9745-9702ca2c1df4"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[--------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="0" width="48" height="20" uuid="85f3d827-b4b2-414a-b39d-9c9b821e1065"/>
+				<textElement>
+					<font fontName="STSong"/>
+				</textElement>
+				<text><![CDATA[--------]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
