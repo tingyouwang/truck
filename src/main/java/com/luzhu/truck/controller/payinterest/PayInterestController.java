@@ -1,6 +1,7 @@
 package com.luzhu.truck.controller.payinterest;
 
 import com.luzhu.truck.dto.LicenseAndExpenseYearMonthParam;
+import com.luzhu.truck.dto.invoice.VoidAndRebillToMonthParam;
 import com.luzhu.truck.dto.payinterest.AddPayInterestParam;
 import com.luzhu.truck.dto.payinterest.UpdatePayInterestParam;
 import com.luzhu.truck.entity.payinterest.PayInterest;
@@ -34,5 +35,11 @@ public class PayInterestController {
     @PostMapping("/getPayInterest")
     public ResponseModel<PageResult<PayInterest>> getPayInterestList(@RequestBody @Valid LicenseAndExpenseYearMonthParam param) {
         return new ResponseModel<>(payInterestService.getPayInterestList(param));
+    }
+
+    @PostMapping("/voidAndRebillToMonth")
+    public ResponseModel<Object> voidAndRebillToMonth(@RequestBody @Valid VoidAndRebillToMonthParam param) {
+        payInterestService.voidAndRebillToMonth(param);
+        return new ResponseModel<>();
     }
 }

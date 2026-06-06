@@ -25,6 +25,15 @@ public class PayInterest {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "type", nullable = false, length = 32)
+    private String type;
+
+    @Column(name = "rebill_source_pay_interest_id")
+    private Integer rebillSourcePayInterestId;
+
+    @Column(name = "rebill_target_pay_interest_id")
+    private Integer rebillTargetPayInterestId;
+
     @Column(name = "disable", nullable = false)
     private int disable;
 
