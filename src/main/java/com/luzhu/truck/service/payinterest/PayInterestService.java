@@ -95,10 +95,24 @@ public class PayInterestService {
                 new AppException(SystemExceptionEnum.PAY_INTEREST_ADJUSTMENT_NO_REBILL));
 
         DateTimeValidate.checkYearMonth(param.getTargetBillYearMonth());
-        YearMonth targetYm = YearMonth.parse(param.getTargetBillYearMonth(), DateTimeFormatter.ofPattern("yyyy-MM"));
-        String newPayDate = targetYm.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String srcBillYearMonth = DateTimeUtil.toBillYearMonth(src.getPayDate());
 
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+
+        // 目標月份與來源月份相同：僅作廢原列，不新增調整列（否則兩筆相抵等於未報廢）
+        if (param.getTargetBillYearMonth().equals(srcBillYearMonth)) {
+            src.setDisable(1);
+            src.setLastModifyTime(l);
+            if (param.getNote() != null && !param.getNote().isBlank()) {
+                src.setNote(param.getNote());
+            }
+            payInterestDao.save(src);
+            refreshMonthBillSnapshotsForPayMonths("代支利息報廢", src.getCarLicenseNum(), srcBillYearMonth);
+            return;
+        }
+
+        YearMonth targetYm = YearMonth.parse(param.getTargetBillYearMonth(), DateTimeFormatter.ofPattern("yyyy-MM"));
+        String newPayDate = targetYm.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         PayInterest neu = new PayInterest();
         BeanUtils.copyProperties(src, neu, "id", "rebillSourcePayInterestId", "rebillTargetPayInterestId");

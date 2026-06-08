@@ -94,10 +94,24 @@ public class OtherGiveBackMoneyService {
                 new AppException(SystemExceptionEnum.OTHER_GIVE_BACK_MONEY_ADJUSTMENT_NO_REBILL));
 
         DateTimeValidate.checkYearMonth(param.getTargetBillYearMonth());
-        YearMonth targetYm = YearMonth.parse(param.getTargetBillYearMonth(), DateTimeFormatter.ofPattern("yyyy-MM"));
-        String newGiveBackDate = targetYm.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        String srcBillYearMonth = DateTimeUtil.toBillYearMonth(src.getGiveBackDate());
 
         long l = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+
+        // 目標月份與來源月份相同：僅作廢原列，不新增調整列（否則兩筆相抵等於未報廢）
+        if (param.getTargetBillYearMonth().equals(srcBillYearMonth)) {
+            src.setDisable(1);
+            src.setLastModifyTime(l);
+            if (param.getNote() != null && !param.getNote().isBlank()) {
+                src.setNote(param.getNote());
+            }
+            otherGiveBackMoneyDao.save(src);
+            refreshMonthBillSnapshotsForGiveBackMonths("其他抵收報廢", src.getCarLicenseNum(), srcBillYearMonth);
+            return;
+        }
+
+        YearMonth targetYm = YearMonth.parse(param.getTargetBillYearMonth(), DateTimeFormatter.ofPattern("yyyy-MM"));
+        String newGiveBackDate = targetYm.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         OtherGiveBackMoney neu = new OtherGiveBackMoney();
         BeanUtils.copyProperties(src, neu, "id", "rebillSourceOtherGiveBackMoneyId", "rebillTargetOtherGiveBackMoneyId");
