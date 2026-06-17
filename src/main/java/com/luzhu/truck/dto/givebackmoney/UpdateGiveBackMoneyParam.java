@@ -18,8 +18,7 @@ public class UpdateGiveBackMoneyParam {
     private String giveBackDate;
     @NotNull(message = "入款金額")
     private BigDecimal amount;
-    @NotBlank(message = "過期日期不可為空")
-    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
+    @Pattern(regexp = "^$|^\\d{3}-\\d{2}-\\d{2}$", message = "日期格式錯誤，應為yyy-MM-dd")
     private String expireDate;
 //    @NotNull(message = "借款利息")
 //    private BigDecimal interestAmount;
