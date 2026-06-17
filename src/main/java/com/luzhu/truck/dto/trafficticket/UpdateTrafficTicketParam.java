@@ -27,7 +27,6 @@ public class UpdateTrafficTicketParam {
     @NotNull(message = "罰單金額")
     private BigDecimal amount;
     private int disable;
-    @NotBlank(message = "代繳日期不可為空")
     private String payDate;
     private String note;
 }
