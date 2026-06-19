@@ -43,4 +43,8 @@ public class LoanFeeSetting {
     @Column(name = "status", nullable = false)
     private String status = "enable";
 
+    // 是否入帳 Y:計入本月帳單 N:不計入本月帳單
+    @Column(name = "include_in_bill", nullable = false)
+    private String includeInBill = "Y";
+
 }

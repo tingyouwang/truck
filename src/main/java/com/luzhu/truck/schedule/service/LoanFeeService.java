@@ -10,9 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +22,9 @@ public class LoanFeeService {
     public int monthlyInsertFee(String yearMonth, LocalDate now, List<LoanFeeSetting> loanFeeSettings) {
         long utcEpochSecond = DateTimeUtil.toUtcEpochSecond(now);
 
-        List<LoanFee> loanFees = loanFeeSettings.stream().map(dto -> {
+        List<LoanFee> loanFees = loanFeeSettings.stream()
+                .filter(setting -> "Y".equals(setting.getIncludeInBill()))
+                .map(dto -> {
             LoanFee loanFee = new LoanFee();
             loanFee.setAmount(BigDecimal.valueOf(dto.getMonthPayAmount()));
             loanFee.setCarLicenseNum(dto.getCarLicenseNum());
@@ -34,6 +33,10 @@ public class LoanFeeService {
 
             return loanFee;
         }).collect(Collectors.toList());
+
+        if (loanFees.isEmpty()) {
+            return 0;
+        }
 
         return loanFeeDao.saveAll(loanFees).size();
     }
