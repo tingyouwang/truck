@@ -66,8 +66,12 @@ public class InvoiceService {
         Validator.isFalseThrow(1 == insertCount,
                 new AppException(SystemExceptionEnum.INSERT_ERROR));
 
+        // 補開立月份可能早於實際處理當下的月份（例如六月初拿五月發票來請款），
+        // 此時除了發票所屬的入帳月份外，也要連同更新「現在」這個月的帳單快照。
+        String currentBillYearMonth = YearMonth.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM"));
         refreshMonthBillSnapshotsForHandleMonths("發票新增", param.getCarLicenseNum(),
-                DateTimeUtil.toBillYearMonth(param.getHandleDate()));
+                DateTimeUtil.toBillYearMonth(param.getHandleDate()), currentBillYearMonth);
     }
 
     @Transactional
