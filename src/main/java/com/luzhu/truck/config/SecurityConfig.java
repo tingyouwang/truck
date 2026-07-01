@@ -3,6 +3,7 @@ package com.luzhu.truck.config;
 import com.luzhu.truck.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -51,6 +52,9 @@ public class SecurityConfig {
     @Qualifier("delegatedAuthenticationEntryPoint")
     AuthenticationEntryPoint authEntryPoint;
 
+    @Value("${env.token.secret}")
+    private String tokenSecret;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -69,7 +73,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authEntryPoint);
 
 
-        http.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(tokenSecret), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

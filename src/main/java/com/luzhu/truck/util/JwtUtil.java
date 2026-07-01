@@ -14,11 +14,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class JwtUtil {
-    public static DecodedJWT verify(String token) {
-//        DecodedJWT decode = JWT.decode(token);
-
-        //暫時hard code secret key
-        Algorithm algorithm = Algorithm.HMAC256("kib0939rhfg52a1vc6044g20zq1wh03m");
+    public static DecodedJWT verify(String token, String secret) {
+        // secret 需與 sign 使用的 env.token.secret 一致
+        Algorithm algorithm = Algorithm.HMAC256(secret);
         JWTVerifier verifier = JWT.require(algorithm).build();
         return verifier.verify(token);
     }

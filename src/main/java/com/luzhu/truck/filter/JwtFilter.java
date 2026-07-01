@@ -47,6 +47,13 @@ public class JwtFilter extends OncePerRequestFilter {
     // 定義公開路徑
     private static final List<String> PUBLIC_PATHS = List.of("/user/register", "/user/login", "/authentication/login", "/key/getKey");
 
+    // JWT 簽章密鑰，由 SecurityConfig 以 env.token.secret 注入，須與 sign 端一致
+    private final String tokenSecret;
+
+    public JwtFilter(String tokenSecret) {
+        this.tokenSecret = tokenSecret;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -72,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = jwtToken.replace("Bearer ", "");
 
             // 驗證 JWT
-            DecodedJWT decodedJWT = JwtUtil.verify(token);
+            DecodedJWT decodedJWT = JwtUtil.verify(token, tokenSecret);
 
             // 檢查是否過期
             boolean expired = decodedJWT.getExpiresAtAsInstant().isBefore(Instant.now());
