@@ -155,7 +155,7 @@ public class BillController {
                 return new ResponseModel<>(ResponseEnum.DATA_IS_EMPTY);
             }
             LocalDateTime now = LocalDateTime.now(ZoneOffset.ofHours(Integer.parseInt(timeOffset)));
-            monthBillSnapshotService.saveSnapshot(
+            monthBillSnapshotService.saveSnapshotAndCascadeForward(
                     req.getCarLicenseNum(),
                     req.getBillDate(),
                     req.getBillData(),

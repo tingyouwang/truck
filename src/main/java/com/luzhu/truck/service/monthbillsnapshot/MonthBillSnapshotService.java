@@ -2,10 +2,12 @@ package com.luzhu.truck.service.monthbillsnapshot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.luzhu.truck.dao.lastmonthowe.LastMonthOweDao;
 import com.luzhu.truck.dao.monthbillsnapshot.MonthBillSnapshotDao;
 import com.luzhu.truck.dao.monthbillsnapshot.MonthBillSnapshotHistoryDao;
 import com.luzhu.truck.dto.bill.MonthBillResponse;
 import com.luzhu.truck.dto.bill.MonthBillSnapshotHistoryItemDto;
+import com.luzhu.truck.entity.lastmonthowe.LastMonthOwe;
 import com.luzhu.truck.entity.monthbillsnapshot.MonthBillSnapshot;
 import com.luzhu.truck.entity.monthbillsnapshot.MonthBillSnapshotHistory;
 import com.luzhu.truck.util.DateTimeUtil;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,8 @@ public class MonthBillSnapshotService {
     private MonthBillSnapshotDao monthBillSnapshotDao;
     @Autowired
     private MonthBillSnapshotHistoryDao monthBillSnapshotHistoryDao;
+    @Autowired
+    private LastMonthOweDao lastMonthOweDao;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -116,6 +121,52 @@ public class MonthBillSnapshotService {
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("快照歷程 JSON 序列化失敗", e);
         }
+    }
+
+    /**
+     * 保存快照，並將本次修改往後同步至該車已存在快照的月份：
+     * 後續每個月的「上月欠款」改為上一個月調整後的「本月欠款」，並依此重新計算該月「本月欠款」，
+     * 其餘欄位維持不變。同時同步更新 last_month_owe（供尚未產生快照的月份於重算時取用）。
+     */
+    @Transactional
+    public MonthBillSnapshot saveSnapshotAndCascadeForward(String carLicenseNum, String billYearMonth,
+                                                            MonthBillResponse billResponse,
+                                                            String snapshotType, LocalDateTime now, String remark) {
+        billResponse.roundAllFieldsToInteger();
+        billResponse.calculateTotalSum();
+        billResponse.roundAllFieldsToInteger();
+
+        MonthBillSnapshot saved = saveSnapshot(carLicenseNum, billYearMonth, billResponse, snapshotType, now, remark);
+
+        long epoch = DateTimeUtil.toUtcEpochSecond(now);
+        updateLastMonthOwe(carLicenseNum, billYearMonth, saved.getTotalSum(), epoch);
+
+        BigDecimal carryOverTotal = saved.getTotalSum();
+        List<MonthBillSnapshot> futureSnapshots =
+                monthBillSnapshotDao.findByCarAndMonthAfterOrderByMonthAsc(carLicenseNum, billYearMonth);
+        String cascadeRemark = "因 " + billYearMonth + " 帳單修改，自動同步調整上月欠款/本月欠款";
+        for (MonthBillSnapshot future : futureSnapshots) {
+            MonthBillResponse futureResponse = convertToResponse(future);
+            futureResponse.setLastMonthOweAmount(carryOverTotal);
+            futureResponse.roundAllFieldsToInteger();
+            futureResponse.calculateTotalSum();
+            futureResponse.roundAllFieldsToInteger();
+
+            MonthBillSnapshot updated = saveSnapshot(carLicenseNum, future.getBillYearMonth(),
+                    futureResponse, snapshotType, now, cascadeRemark);
+            updateLastMonthOwe(carLicenseNum, future.getBillYearMonth(), updated.getTotalSum(), epoch);
+            carryOverTotal = updated.getTotalSum();
+        }
+        return saved;
+    }
+
+    private void updateLastMonthOwe(String carLicenseNum, String expenseYearMonth, BigDecimal amount, long epoch) {
+        LastMonthOwe lastMonthOwe = new LastMonthOwe();
+        lastMonthOwe.setCarLicenseNum(carLicenseNum);
+        lastMonthOwe.setExpenseYearMonth(expenseYearMonth);
+        lastMonthOwe.setAmount(amount);
+        lastMonthOwe.setCreateTime(epoch);
+        lastMonthOweDao.save(lastMonthOwe);
     }
 
     /**

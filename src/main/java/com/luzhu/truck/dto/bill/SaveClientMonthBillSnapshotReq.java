@@ -13,7 +13,7 @@ public class SaveClientMonthBillSnapshotReq {
     @NotBlank(message = "帳單日期不可為空")
     private String billDate;
 
-    /** 前端帶入的帳單各欄位，將原樣寫入快照（不經後端重算） */
+    /** 前端帶入的帳單各欄位；totalSum 由後端依組成欄位重新計算後寫入快照，不採前端帶入的值 */
     @NotNull(message = "帳單明細不可為空")
     @Valid
     private MonthBillResponse billData;
