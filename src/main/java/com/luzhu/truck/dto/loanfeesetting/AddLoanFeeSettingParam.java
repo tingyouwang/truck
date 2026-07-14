@@ -27,4 +27,7 @@ public class AddLoanFeeSettingParam {
     private BigDecimal monthPayAmount;
     private String note;
 
+    @Pattern(regexp = "^(Y|N)$", message = "是否入帳只能是 Y 或 N")
+    private String includeInBill = "Y";
+
 }

@@ -34,6 +34,9 @@ public class UpdateLoanFeeSettingParam {
     
     private String note;
 
+    @Pattern(regexp = "^(Y|N)$", message = "是否入帳只能是 Y 或 N")
+    private String includeInBill;
+
     @Pattern(regexp = "^(enable|disable)$", message = "狀態只能是 enable 或 disable")
     private String status;
 }

@@ -59,6 +59,8 @@ public class LoanFeeSettingService {
         loanFeeSetting.setMonthPayAmount(addLoanFeeSettingParam.getMonthPayAmount().doubleValue());
         loanFeeSetting.setNote(addLoanFeeSettingParam.getNote());
         loanFeeSetting.setStatus("enable");
+        loanFeeSetting.setIncludeInBill(
+                addLoanFeeSettingParam.getIncludeInBill() != null ? addLoanFeeSettingParam.getIncludeInBill() : "Y");
 
         loanFeeSettingDao.save(loanFeeSetting);
     }
@@ -102,7 +104,8 @@ public class LoanFeeSettingService {
                 param.getTotalAmount(),
                 param.getMonthPayAmount(),
                 param.getNote(),
-                param.getStatus() != null ? param.getStatus() : existing.getStatus()
+                param.getStatus() != null ? param.getStatus() : existing.getStatus(),
+                param.getIncludeInBill() != null ? param.getIncludeInBill() : existing.getIncludeInBill()
         );
         
         Validator.isFalseThrow(1 == updateCount,
